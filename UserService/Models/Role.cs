@@ -31,6 +31,6 @@ namespace UserService.Models
         /// <summary>
         /// A list of all the permissions the role has
         /// </summary>
-        public virtual List<Guid> Permissions { get; set; }
+        public List<int> Permissions { get; set; }
     }
 }

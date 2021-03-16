@@ -39,6 +39,7 @@ namespace UserService.Models
         /// Refrences to a Role class
         /// </summary>
         [Required]
-        public int roleId { get; set; }
+        [Column("RoleId")]
+        public Guid Role { get; set; }
     }
 }
