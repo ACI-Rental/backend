@@ -16,7 +16,7 @@ namespace ProductService.Models
         /// </summary>
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Used to sort the product according to the catelognumber entry 
         /// </summary>

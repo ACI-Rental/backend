@@ -18,7 +18,7 @@ namespace ImageService.Models
         /// </summary>
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// [Required]: cannot be null
         /// Used to store the byte array value of an image to store the image

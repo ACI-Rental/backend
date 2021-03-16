@@ -18,7 +18,7 @@ namespace ProductService.Models
         /// </summary>
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// [Required]: cannot be null
         /// Displays the category's name

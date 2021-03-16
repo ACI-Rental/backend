@@ -13,16 +13,41 @@ namespace NoteService.Models
     /// </summary>
     public class Note
     {
+        /// <summary>
+        /// [Key]: Identification key for a Note entry in the Note table
+        /// [Required]: cannot be null
+        /// Identification key
+        /// </summary>
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Textual content of the note
+        /// </summary>
         [Required]
         public string Content { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Date of when the note was placed
+        /// </summary>
         [Required]
         public DateTime Date { get; set; }
 
-        public int ProductId { get; set; }
-       
-        public int ReservationId { get; set; }
+        /// <summary>
+        /// [Column] gives the colomn a specific name
+        /// Refrence to the Item, the note is attached to
+        /// </summary>
+        [Column("ItemId")]
+        public int Item { get; set; }
+
+        /// <summary>
+        /// [Column] gives the colomn a specific name
+        /// Refrence to the Reservation, the note is attached to
+        /// </summary>
+        [Column("ReservationId")]
+        public int Reserveration { get; set; }
     }
 }
