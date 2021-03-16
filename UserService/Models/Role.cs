@@ -7,15 +7,30 @@ using System.Threading.Tasks;
 
 namespace UserService.Models
 {
+    /// <summary>
+    /// <b>Role</b> class used for EF Core to map its landscape for the database.
+    /// </summary>
     public class Role
     {
+        /// <summary>
+        /// [Key]: Identification key for a Role entry in the Role table
+        /// [Required]: cannot be null
+        /// Identification key
+        /// </summary>
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Discribes the role
+        /// </summary>
         [Required]
         public string Name { get; set; }
 
-        [InverseProperty("CreatedBy")]
-        public virtual List<Permission> Permissions { get; set; }
+        /// <summary>
+        /// A list of all the permissions the role has
+        /// </summary>
+        public virtual List<Guid> Permissions { get; set; }
     }
 }
