@@ -41,13 +41,13 @@ namespace NoteService.Models
         /// Refrence to the Item, the note is attached to
         /// </summary>
         [Column("ItemId")]
-        public virtual Guid Item { get; set; }
+        public Guid Item { get; set; }
 
         /// <summary>
         /// [Column] gives the colomn a specific name
         /// Refrence to the Reservation, the note is attached to
         /// </summary>
         [Column("ReservationId")]
-        public virtual Guid Reserveration { get; set; }
+        public Guid Reserveration { get; set; }
     }
 }

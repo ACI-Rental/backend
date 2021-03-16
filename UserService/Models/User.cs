@@ -40,6 +40,6 @@ namespace UserService.Models
         /// </summary>
         [Required]
         [Column("RoleId")]
-        public virtual Guid Role { get; set; }
+        public Guid Role { get; set; }
     }
 }
