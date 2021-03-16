@@ -18,7 +18,7 @@ namespace ReservationService.Models
         /// </summary>
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// [Required]: cannot be null
         /// Used to display the int value of what state the reservation is in.

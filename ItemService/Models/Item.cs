@@ -19,7 +19,7 @@ namespace ItemService.Models
         /// </summary>
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Used to sort the item according to the catelognumber entry 
         /// </summary>
