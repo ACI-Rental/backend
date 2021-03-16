@@ -8,21 +8,46 @@ using System.Threading.Tasks;
 namespace NoteService.Models
 {
     /// <summary>
-    /// A note that can be either for an item or a reservation.
+    /// <b>Note</b> class used for EF Core to map its landscape for the database.
     /// It contains a Id, content, date when placed and a reffrence to either item or reservation.
     /// </summary>
     public class Note
     {
+        /// <summary>
+        /// [Key]: Identification key for a Note entry in the Note table
+        /// [Required]: cannot be null
+        /// Identification key
+        /// </summary>
         [Key]
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Textual content of the note
+        /// </summary>
         [Required]
         public string Content { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Date of when the note was placed
+        /// </summary>
         [Required]
         public DateTime Date { get; set; }
 
-        public int  ItemId { get; set; }
-       
-        public int  ReservationId { get; set; }
+        /// <summary>
+        /// [Column] gives the colomn a specific name
+        /// Refrence to the Item, the note is attached to
+        /// </summary>
+        [Column("ItemId")]
+        public virtual Guid Item { get; set; }
+
+        /// <summary>
+        /// [Column] gives the colomn a specific name
+        /// Refrence to the Reservation, the note is attached to
+        /// </summary>
+        [Column("ReservationId")]
+        public virtual Guid Reserveration { get; set; }
     }
 }
