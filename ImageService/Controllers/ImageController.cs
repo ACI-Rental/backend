@@ -13,7 +13,7 @@ namespace ImageService.Controllers
     /// Image controller this controller is used for the calls between API and frontend for managing the images in the ACI Rental system
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ImageController : ControllerBase
     {
         /// <summary>
@@ -30,10 +30,22 @@ namespace ImageService.Controllers
             _dbContext = dbContext;
         }
 
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Image>>> GetCategories()
+        //{
+        //    return await _dbContext.Images.ToListAsync();
+        //}
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Image>>> GetCategories()
+        public IEnumerable<string> Get()
         {
-            return await _dbContext.Images.ToListAsync();
+            return new string[] { "image", "image2" };
+        }
+
+        [HttpGet("{id}", Name = "Get")]
+        public string Get(int id)
+        {
+            return "image3";
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ItemService.Controllers
     /// Item controller this controller is used for the calls between API and frontend for managing the items in the ACI Rental system
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ItemController : ControllerBase
     {
         /// <summary>
@@ -31,9 +31,15 @@ namespace ItemService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        public IEnumerable<string> Get()
         {
-            return await _dbContext.Items.ToListAsync();
+            return new string[] { "Camera canon", "Camera sony" };
+        }
+
+        [HttpGet("{id}", Name = "Get")]
+        public string Get(int id)
+        {
+            return "Camera1";
         }
     }
 }

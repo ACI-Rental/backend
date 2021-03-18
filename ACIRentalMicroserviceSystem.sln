@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageService", "ImageService\ImageService.csproj", "{F995E3A8-6147-4788-B8C7-7F9766059A4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageService", "ImageService\ImageService.csproj", "{F995E3A8-6147-4788-B8C7-7F9766059A4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemService", "ItemService\ItemService.csproj", "{B7A4974C-85F7-4B96-8667-F77F8897711D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItemService", "ItemService\ItemService.csproj", "{B7A4974C-85F7-4B96-8667-F77F8897711D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservationService", "ReservationService\ReservationService.csproj", "{68AC3E54-EE24-451E-92A7-322FB3377425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReservationService", "ReservationService\ReservationService.csproj", "{68AC3E54-EE24-451E-92A7-322FB3377425}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteService", "NoteService\NoteService.csproj", "{77C2B208-1074-4231-A94C-F4FE8F4649A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteService", "NoteService\NoteService.csproj", "{77C2B208-1074-4231-A94C-F4FE8F4649A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService\UserService.csproj", "{C0F236D5-470A-466B-9C92-01236E30F031}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\UserService.csproj", "{C0F236D5-470A-466B-9C92-01236E30F031}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "APIGateway\APIGateway.csproj", "{DD81A7EF-D596-4B15-B4AF-146F16A93599}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotAPIGateway", "OcelotAPIGateway\OcelotAPIGateway.csproj", "{FB1CCC2A-7FF1-46A7-8C97-AC5829EDCDED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{C0F236D5-470A-466B-9C92-01236E30F031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F236D5-470A-466B-9C92-01236E30F031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0F236D5-470A-466B-9C92-01236E30F031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD81A7EF-D596-4B15-B4AF-146F16A93599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD81A7EF-D596-4B15-B4AF-146F16A93599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD81A7EF-D596-4B15-B4AF-146F16A93599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD81A7EF-D596-4B15-B4AF-146F16A93599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB1CCC2A-7FF1-46A7-8C97-AC5829EDCDED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB1CCC2A-7FF1-46A7-8C97-AC5829EDCDED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB1CCC2A-7FF1-46A7-8C97-AC5829EDCDED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB1CCC2A-7FF1-46A7-8C97-AC5829EDCDED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
