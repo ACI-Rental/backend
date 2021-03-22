@@ -1,0 +1,30 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/item",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64807
+        }
+      ],
+      "UpstreamPathTemplate": "/api/item"
+    },
+    {
+      "DownstreamPathTemplate": "/item/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64807
+        }
+      ],
+      "UpstreamPathTemplate": "/api/item/{id}"
+    }
+    
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:56005"
+  }
+}
