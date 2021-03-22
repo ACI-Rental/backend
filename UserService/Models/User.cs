@@ -22,7 +22,6 @@ namespace UserService.Models
         public DateTime BannedUntil { get; set; }
 
         [Required]
-        [ForeignKey("roleId")]
-        public virtual Role Role { get; set; }
+        public int roleId { get; set; }
     }
 }

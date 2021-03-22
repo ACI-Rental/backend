@@ -21,10 +21,8 @@ namespace NoteService.Models
         [Required]
         public DateTime Date { get; set; }
 
-        [ForeignKey("ItemId")]
-        public virtual Item Item { get; set; }
-
-        [ForeignKey("ReservationId")]
-        public virtual Reservation Reserveration { get; set; }
+        public int  ItemId { get; set; }
+       
+        public int  ReservationId { get; set; }
     }
 }

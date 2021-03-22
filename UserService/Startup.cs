@@ -33,15 +33,7 @@ namespace UserService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserService", Version = "v1" });
             });
-            services.AddDbContext<RoleServiceDatabaseContext>();
-            services.AddDbContext<PermissionServiceDatabaseContext>();
             services.AddDbContext<UserServiceDatabaseContext>();
-
-            using var roleContext = new RoleServiceDatabaseContext();
-            roleContext.Database.EnsureCreated();
-
-            using var permissionContext = new PermissionServiceDatabaseContext();
-            permissionContext.Database.EnsureCreated();
 
             using var userContext = new UserServiceDatabaseContext();
             userContext.Database.EnsureCreated();

@@ -1,4 +1,5 @@
 using ItemService.DBContexts;
+using ItemService.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,14 +35,9 @@ namespace ItemService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ItemService", Version = "v1" });
             });
             services.AddDbContext<ItemServiceDatabaseContext>();
-            services.AddDbContext<CategoryServiceDatabaseContext>();
-
+            
             using var itemContext = new ItemServiceDatabaseContext();
             itemContext.Database.EnsureCreated();
-
-            using var categoryContext = new CategoryServiceDatabaseContext();
-            categoryContext.Database.EnsureCreated();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

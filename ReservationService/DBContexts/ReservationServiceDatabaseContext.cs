@@ -22,7 +22,7 @@ namespace ReservationService.DBContexts
         /// <param name="optionsBuilder">Used for adding options to the database to configure the connection between it and the API</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=mssql.fhict.local;Database=dbi331842;User Id=dbi331842;Password=xRqMZgWy76GrxM2;");
+            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=ReservationService;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
     }

@@ -13,20 +13,20 @@ namespace UserService.Controllers
     /// <summary>
     /// PermissionController this controller is used for managing the permissions in the ACI Rental system.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class PermissionController : ControllerBase
     {
         /// <summary>
         /// Database context for Permissions, this is used to make calls to the database.
         /// </summary>
-        public readonly PermissionServiceDatabaseContext _dbContext;
+        public readonly UserServiceDatabaseContext _dbContext;
 
         /// <summary>
         /// Constructer is used for receiving the database context at the creation of the PermissionController.
         /// </summary>
         /// <param name="dbContext">Context of the database</param>
-        public PermissionController(PermissionServiceDatabaseContext dbContext)
+        public PermissionController(UserServiceDatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }

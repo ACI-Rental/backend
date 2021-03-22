@@ -16,6 +16,8 @@ namespace UserService.DBContexts
         /// List of all the users in the database.
         /// </summary>
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         /// <summary>
         /// Creates a connection with the database.
@@ -23,7 +25,7 @@ namespace UserService.DBContexts
         /// <param name="optionsBuilder">ContextBuilder</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=mssql.fhict.local;Database=dbi331842;User Id=dbi331842;Password=xRqMZgWy76GrxM2;");
+            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=UserService;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
     }

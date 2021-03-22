@@ -13,7 +13,7 @@ namespace NoteService.Controllers
     /// NoteController this controller is used for managing the notes in the ACI Rental system.
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class NoteController : ControllerBase
     {
         /// <summary>
