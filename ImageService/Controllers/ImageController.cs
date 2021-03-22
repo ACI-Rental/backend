@@ -30,12 +30,6 @@ namespace ImageService.Controllers
             _dbContext = dbContext;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Image>>> GetCategories()
-        //{
-        //    return await _dbContext.Images.ToListAsync();
-        //}
-
         [HttpGet]
         public IEnumerable<string> Get()
         {
