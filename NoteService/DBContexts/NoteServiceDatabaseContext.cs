@@ -23,7 +23,7 @@ namespace NoteService.DBContexts
         /// <param name="optionsBuilder">ContextBuilder</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=mssql.fhict.local;Database=dbi331842;User Id=dbi331842;Password=xRqMZgWy76GrxM2;");
+            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=NoteService;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
     }

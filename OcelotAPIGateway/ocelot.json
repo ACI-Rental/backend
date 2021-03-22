@@ -12,6 +12,28 @@
       "UpstreamPathTemplate": "/api/item"
     },
     {
+      "DownstreamPathTemplate": "/category",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64807
+        }
+      ],
+      "UpstreamPathTemplate": "/api/category"
+    },
+    {
+      "DownstreamPathTemplate": "/image",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64799
+        }
+      ],
+      "UpstreamPathTemplate": "/api/image"
+    },
+    {
       "DownstreamPathTemplate": "/item/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -22,7 +44,7 @@
       ],
       "UpstreamPathTemplate": "/api/item/{id}"
     }
-    
+
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:56005"

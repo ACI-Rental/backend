@@ -13,20 +13,20 @@ namespace UserService.Controllers
     /// <summary>
     /// RoleController this controller is used for managing the roles in the ACI Rental system.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
     {
         /// <summary>
         /// Database context for roles, this is used to make calls to the database.
         /// </summary>
-        public readonly RoleServiceDatabaseContext _dbContext;
+        public readonly UserServiceDatabaseContext _dbContext;
 
         /// <summary>
         /// Constructer is used for receiving the database context at the creation of the RoleController.
         /// </summary>
         /// <param name="dbContext">Context of the database</param>
-        public RoleController(RoleServiceDatabaseContext dbContext)
+        public RoleController(UserServiceDatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }

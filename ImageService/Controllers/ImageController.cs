@@ -31,15 +31,9 @@ namespace ImageService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<Image>>> GetCategories()
         {
-            return new string[] { "image", "image2" };
-        }
-
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "image3";
+            return await _dbContext.Images.ToListAsync();
         }
     }
 }

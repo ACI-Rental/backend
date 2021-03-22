@@ -15,6 +15,7 @@ namespace ItemService.DBContexts
         /// a DbContext using the DbContext.Set method.
         /// </summary>
         public DbSet<Item> Items { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         /// <summary>
         /// OnConfiguring builds the connection between the database and the API using the given connection string
@@ -22,7 +23,7 @@ namespace ItemService.DBContexts
         /// <param name="optionsBuilder">Used for adding options to the database to configure the connection between it and the API</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=mssql.fhict.local;Database=dbi331842;User Id=dbi331842;Password=xRqMZgWy76GrxM2;");
+            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=ItemService;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
     }

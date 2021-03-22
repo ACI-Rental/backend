@@ -13,7 +13,7 @@ namespace ReservationService.Controllers
     /// Reservation controller this controller is used for the calls between API and frontend for managing the reservations in the ACI Rental system
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ReservationController : ControllerBase
     {
         /// <summary>

@@ -15,7 +15,6 @@ namespace UserService.Models
         [Required]
         public string Name { get; set; }
 
-        [InverseProperty("CreatedBy")]
-        public virtual List<Permission> Permissions { get; set; }
+        public int PermissionId { get; set; }
     }
 }

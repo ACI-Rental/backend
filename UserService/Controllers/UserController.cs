@@ -13,7 +13,7 @@ namespace UserService.Controllers
     /// <summary>
     /// UserController this controller is used for managing the users in the ACI Rental system.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {

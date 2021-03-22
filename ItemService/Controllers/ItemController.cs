@@ -31,15 +31,9 @@ namespace ItemService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
-            return new string[] { "Camera canon", "Camera sony" };
-        }
-
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "Camera1";
+            return await _dbContext.Items.ToListAsync();
         }
     }
 }
