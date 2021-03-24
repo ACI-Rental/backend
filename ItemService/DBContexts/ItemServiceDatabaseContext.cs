@@ -14,8 +14,8 @@ namespace ItemService.DBContexts
         /// or that can be queried from the database, of a given type. DbSet objects are created from 
         /// a DbContext using the DbContext.Set method.
         /// </summary>
-        public DbSet<Item> Items { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
 
         /// <summary>
         /// OnConfiguring builds the connection between the database and the API using the given connection string
