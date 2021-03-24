@@ -33,7 +33,8 @@ namespace ItemService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _dbContext.Categories.ToListAsync();
+            var result = await _dbContext.Categories.ToListAsync();
+            return Ok(result);
         }
     }
 }
