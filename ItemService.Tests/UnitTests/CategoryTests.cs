@@ -8,6 +8,7 @@ using ItemService.DBContexts;
 using Moq;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Data.Entity.Infrastructure;
 
 namespace ItemService.Tests.UnitTests
 {
@@ -26,7 +27,15 @@ namespace ItemService.Tests.UnitTests
             }.AsQueryable();
 
             var mockDbSet = new Mock<DbSet<Category>>();
-            mockDbSet.As<IQueryable<Category>>().Setup(m => m.Provider).Returns(data.Provider);
+
+            mockDbSet.As<IDbAsyncEnumerable<Category>>()
+            .Setup(m => m.GetAsyncEnumerator())
+            .Returns(new TestDbAsyncEnumerator<Category>(data.GetEnumerator()));
+
+            mockDbSet.As<IQueryable<Category>>()
+            .Setup(m => m.Provider)
+            .Returns(new TestDbAsyncQueryProvider<Category>(data.Provider));
+
             mockDbSet.As<IQueryable<Category>>().Setup(m => m.Expression).Returns(data.Expression);
             mockDbSet.As<IQueryable<Category>>().Setup(m => m.ElementType).Returns(data.ElementType);
             mockDbSet.As<IQueryable<Category>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
@@ -38,7 +47,7 @@ namespace ItemService.Tests.UnitTests
         }
 
         [Fact]
-        public async void DoesCategories_ExistInDatabase_ReturnNotNull()
+        public async void GetCategories_WhenCalled_ReturnListOfCategories()
         {
             Setup();
             var categories = await categoryController.GetCategories();
