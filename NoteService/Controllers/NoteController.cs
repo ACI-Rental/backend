@@ -33,7 +33,8 @@ namespace NoteService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Note>>> GetNotes()
         {
-            return await _dbContext.Notes.ToListAsync();
+            var result = await _dbContext.Notes.ToListAsync();
+            return Ok(result);
         }
     }
 }

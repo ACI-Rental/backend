@@ -34,7 +34,8 @@ namespace UserService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _dbContext.Users.ToListAsync();
+            var result = await _dbContext.Users.ToListAsync();
+            return Ok(result);
         }
     }
 }

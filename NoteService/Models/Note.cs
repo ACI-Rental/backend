@@ -20,7 +20,7 @@ namespace NoteService.Models
         /// </summary>
         [Key]
         [Required]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// [Required]: cannot be null

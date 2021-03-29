@@ -1,46 +1,47 @@
-using System;
-using Xunit;
-using ItemService;
 using ItemService.Controllers;
-using ItemService.Models;
 using ItemService.DBContexts;
-using Moq;
+using ItemService.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace ItemService.Tests.UnitTests
 {
-    public class ItemTest
+    public class ItemTests
     {
-        ItemController itemController;
-        Mock<ItemServiceDatabaseContext> mockDbContext;
-
-        internal void Setup()
+        [Fact]
+        public async Task GetProducts_WhenCalled_ReturnListOfProducts()
         {
-            //var itemMock = new Mock<Item>();
-            //itemMock.Setup(item => item.Name).Returns("Canon EOS R5");
+            var options = new DbContextOptionsBuilder<ItemServiceDatabaseContext>().UseInMemoryDatabase(databaseName: "InMemoryProductDb").Options;
 
-            //List<Item> items = new List<Item>()
-            //{
-            //    itemMock.Object
-            //};
+            var context = new ItemServiceDatabaseContext(options);
+            SeedProductInMemoryDatabaseWithData(context);
+            var controller = new ItemController(context);
+            var result = await controller.GetItems();
 
-            var mockDbSet = new Mock<DbSet<Item>>();
+            var objectresult = Assert.IsType<OkObjectResult>(result.Result);
+            var products = Assert.IsAssignableFrom<IEnumerable<Item>>(objectresult.Value);
 
-            mockDbContext = new Mock<ItemServiceDatabaseContext>();
-            mockDbContext.Setup(m => m.Items).Returns(mockDbSet.Object);
-            itemController = new ItemController(mockDbContext.Object);
+            Assert.Equal(3, products.Count());
+            Assert.Equal("BBB", products.ElementAt(0).Name);
+            Assert.Equal("ZZZ", products.ElementAt(1).Name);
+            Assert.Equal("AAA", products.ElementAt(2).Name);
         }
 
-        [Fact]
-        public void DoesItems_ExistInDatabase_ReturnNotNull()
+        private static void SeedProductInMemoryDatabaseWithData(ItemServiceDatabaseContext context)
         {
-            Setup();
-            var result = itemController.GetItems();
+            var data = new List<Item>
+                {
+                    new Item { Name = "BBB" },
+                    new Item { Name = "ZZZ" },
+                    new Item { Name = "AAA" },
+                };
+            context.Items.AddRange(data);
+            context.SaveChanges();
 
-            mockDbContext.Verify((m => m.Items), Times.Once());
-
-            Assert.NotNull(result);
         }
     }
 }

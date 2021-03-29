@@ -12,6 +12,14 @@ namespace UserService.DBContexts
     /// </summary>
     public class UserServiceDatabaseContext : DbContext
     {
+        public UserServiceDatabaseContext()
+        {
+        }
+
+        public UserServiceDatabaseContext(DbContextOptions<UserServiceDatabaseContext> options) : base(options)
+        {
+        }
+
         /// <summary>
         /// DbSet for the User class, A DbSet represents the collection of all entities in the context. 
         /// DbSet objects are created from a DbContext using the DbContext.Set method.
@@ -26,8 +34,14 @@ namespace UserService.DBContexts
         /// <param name="optionsBuilder">Used for adding options to the database to configure the connection.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=UserService;Trusted_Connection=True;");
+            if (!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=UserService;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace UserService.Models
         /// </summary>
         [Key]
         [Required]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// [Required]: cannot be null
@@ -26,5 +26,10 @@ namespace UserService.Models
         /// </summary>
         [Required]
         public string Name { get; set; }
+
+        /// <summary>
+        /// A list of all the Roles this permission is added to
+        /// </summary>
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }

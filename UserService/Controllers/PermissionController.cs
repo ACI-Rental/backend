@@ -34,7 +34,8 @@ namespace UserService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Permission>>> GetPermissions()
         {
-            return await _dbContext.Permissions.ToListAsync();
+            var result = await _dbContext.Permissions.ToListAsync();
+            return Ok(result);
         }
     }
 }
