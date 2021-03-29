@@ -20,7 +20,7 @@ namespace NoteService.Models
         /// </summary>
         [Key]
         [Required]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// [Required]: cannot be null
@@ -41,13 +41,13 @@ namespace NoteService.Models
         /// Refrence to the Item, the note is attached to
         /// </summary>
         [Column("ItemId")]
-        public Guid Item { get; set; }
+        public int Item { get; set; }
 
         /// <summary>
         /// [Column] gives the colomn a specific name
         /// Refrence to the Reservation, the note is attached to
         /// </summary>
         [Column("ReservationId")]
-        public Guid Reserveration { get; set; }
+        public int Reserveration { get; set; }
     }
 }

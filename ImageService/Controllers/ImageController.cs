@@ -33,7 +33,8 @@ namespace ImageService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Image>>> GetCategories()
         {
-            return await _dbContext.Images.ToListAsync();
+            var result = await _dbContext.Images.ToListAsync();
+            return Ok(result);
         }
     }
 }

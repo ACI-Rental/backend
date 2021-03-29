@@ -31,9 +31,10 @@ namespace ReservationService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetItems()
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
         {
-            return await _dbContext.Reservations.ToListAsync();
+            var result = await _dbContext.Reservations.ToListAsync();
+            return Ok(result);
         }
     }
 }

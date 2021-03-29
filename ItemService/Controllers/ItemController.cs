@@ -33,7 +33,8 @@ namespace ItemService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
-            return await _dbContext.Items.ToListAsync();
+            var result = await _dbContext.Items.ToListAsync();
+            return Ok(result);
         }
     }
 }

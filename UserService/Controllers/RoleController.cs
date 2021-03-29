@@ -32,9 +32,10 @@ namespace UserService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Role>>> GetItems()
+        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
-            return await _dbContext.Roles.ToListAsync();
+            var result = await _dbContext.Roles.ToListAsync();
+            return Ok(result);
         }
     }
 }

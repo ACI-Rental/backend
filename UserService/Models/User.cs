@@ -19,7 +19,7 @@ namespace UserService.Models
         /// </summary>
         [Key]
         [Required]
-        public Guid StudentNumber { get; set; }
+        public int StudentNumber { get; set; }
 
         /// <summary>
         /// Token used to refresh the login session of the user.
@@ -30,7 +30,7 @@ namespace UserService.Models
         /// A date will be set when the user is banned
         /// Will be null when the user is not banned
         /// </summary>
-        public DateTime BannedUntil { get; set; }
+        public DateTime? BannedUntil { get; set; }
 
         /// <summary>
         /// [Required]: cannot be null
@@ -40,6 +40,6 @@ namespace UserService.Models
         /// </summary>
         [Required]
         [Column("RoleId")]
-        public Guid Role { get; set; }
+        public int Role { get; set; }
     }
 }

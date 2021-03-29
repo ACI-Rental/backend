@@ -18,31 +18,57 @@ namespace ReservationService.Models
         /// </summary>
         [Key]
         [Required]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+
         /// <summary>
         /// [Required]: cannot be null
         /// Used to display the int value of what state the reservation is in.
         /// </summary>
         [Required]
         public int State { get; set; }
+
         /// <summary>
         /// [Required]: cannot be null
         /// Used to display the starting date when the reservation can be picked up
         /// </summary>
         [Required]
         public DateTime StartDate { get; set; }
+
         /// <summary>
         /// [Required]: cannot be null
         /// Used to display the end date when the reservation need to be brought back
         /// </summary>
         [Required]
         public DateTime EndDate { get; set; }
+
         /// <summary>
-        /// [Required]: cannot be null
         /// Used to display the return date of the reservation
         /// </summary>
+        public DateTime? ReturnDate { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Id of the person that mode the reservation
+        /// </summary>
         [Required]
-        public DateTime ReturnDate { get; set; }
+        public int RenterId { get; set; }
+
+        /// <summary>
+        /// Id of the person that made the review of the reservation
+        /// </summary>
+        public int? ReviewerId { get; set; }
+
+        /// <summary>
+        /// Used to know if the reservation is approved or not
+        /// </summary>
+        public Boolean IsApproved { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Used to know what product is being rented
+        /// </summary>
+        [Required]
+        public int ProductId { get; set; }
 
 
     }

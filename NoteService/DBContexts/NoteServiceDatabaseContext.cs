@@ -12,6 +12,14 @@ namespace NoteService.DBContexts
     /// </summary>
     public class NoteServiceDatabaseContext : DbContext
     {
+        public NoteServiceDatabaseContext()
+        {
+
+        }
+        public NoteServiceDatabaseContext(DbContextOptions<NoteServiceDatabaseContext> options) : base(options)
+        {
+        }
+
         /// <summary>
         /// DbSet for the Note class, A DbSet represents the collection of all entities in the context. 
         /// DbSet objects are created from a DbContext using the DbContext.Set method.
@@ -24,7 +32,8 @@ namespace NoteService.DBContexts
         /// <param name="optionsBuilder">Used for adding options to the database to configure the connection.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=NoteService;Trusted_Connection=True;");
+            if (!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=NoteService;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
     }
