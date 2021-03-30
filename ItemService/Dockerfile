@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["ItemService.csproj", "ItemService/"]
-RUN dotnet restore "ItemService/ItemService.csproj"
-WORKDIR "/src/ItemService"
+COPY ["ProductService.csproj", "ProductService/"]
+RUN dotnet restore "ProductService/ProductService.csproj"
+WORKDIR "/src/ProductService"
 COPY . .
-RUN dotnet build "ItemService.csproj" -c Release -o /app/build
+RUN dotnet build "ProductService.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ItemService.csproj" -c Release -o /app/publish
+RUN dotnet publish "ProductService.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ItemService.dll"]
+ENTRYPOINT ["dotnet", "ProductService.dll"]

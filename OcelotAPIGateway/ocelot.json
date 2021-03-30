@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/item",
+      "DownstreamPathTemplate": "/product",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -9,7 +9,29 @@
           "Port": 64807
         }
       ],
-      "UpstreamPathTemplate": "/api/item"
+      "UpstreamPathTemplate": "/api/product"
+    },
+    {
+      "DownstreamPathTemplate": "/product/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64807
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/{id}"
+    },
+    {
+      "DownstreamPathTemplate": "/product/lastcatalog",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64807
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/lastcatalog"
     },
     {
       "DownstreamPathTemplate": "/category",
@@ -32,17 +54,6 @@
         }
       ],
       "UpstreamPathTemplate": "/api/image"
-    },
-    {
-      "DownstreamPathTemplate": "/item/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 64807
-        }
-      ],
-      "UpstreamPathTemplate": "/api/item/{id}"
     }
 
   ],

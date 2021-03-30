@@ -19,7 +19,7 @@ namespace NoteService.Controllers
         /// <summary>
         /// Database context for notes, this is used to make calls to the database.
         /// </summary>
-        public readonly NoteServiceDatabaseContext _dbContext;
+        private readonly NoteServiceDatabaseContext _dbContext;
 
         /// <summary>
         /// Constructer is used for receiving the database context at the creation of the NoteController.
@@ -31,7 +31,7 @@ namespace NoteService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Note>>> GetItems()
+        public async Task<ActionResult<IEnumerable<Note>>> GetNotes()
         {
             return await _dbContext.Notes.ToListAsync();
         }

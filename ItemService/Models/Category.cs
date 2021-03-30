@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ItemService.Models
+namespace ProductService.Models
 {
     /// <summary>
     /// Category class used for EF Core to map its landscape for the database.
@@ -12,7 +12,7 @@ namespace ItemService.Models
     public class Category
     {
         /// <summary>
-        /// [Key]: Identification key for a image entry in the image table
+        /// [Key]: Identification key for a category entry in the category table
         /// [Required]: cannot be null
         /// Identification key
         /// </summary>

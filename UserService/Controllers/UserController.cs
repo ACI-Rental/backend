@@ -20,7 +20,7 @@ namespace UserService.Controllers
         /// <summary>
         /// Database context for users, this is used to make calls to the database.
         /// </summary>
-        public readonly UserServiceDatabaseContext _dbContext;
+        private readonly UserServiceDatabaseContext _dbContext;
 
         /// <summary>
         /// Constructer is used for receiving the database context at the creation of the UserController.
@@ -32,7 +32,7 @@ namespace UserService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetItems()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _dbContext.Users.ToListAsync();
         }

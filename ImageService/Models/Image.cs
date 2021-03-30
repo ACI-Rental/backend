@@ -12,7 +12,7 @@ namespace ImageService.Models
     public class Image
     {
         /// <summary>
-        /// [Key]: Identification key for a image entry in the image table
+        /// [Key]: Identification key for an image entry in the image table
         /// [Required]: cannot be null
         /// Identification key
         /// </summary>
@@ -25,5 +25,19 @@ namespace ImageService.Models
         /// </summary>
         [Required]
         public byte[] Blob { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Foreign key linked to the item in another table (table type is defined in LinkedTableType)
+        /// </summary>
+        [Required]
+        public int LinkedKey { get; set; }
+
+        /// <summary>
+        /// [Required]: cannot be null
+        /// Contains enum to which table the LinkedKey (foreign key) links to
+        /// </summary>
+        [Required]
+        public LinkedTableType LinkedTableType { get; set; }
     }
 }

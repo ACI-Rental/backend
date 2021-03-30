@@ -20,7 +20,7 @@ namespace UserService.Controllers
         /// <summary>
         /// Database context for roles, this is used to make calls to the database.
         /// </summary>
-        public readonly UserServiceDatabaseContext _dbContext;
+        private readonly UserServiceDatabaseContext _dbContext;
 
         /// <summary>
         /// Constructer is used for receiving the database context at the creation of the RoleController.
@@ -32,7 +32,7 @@ namespace UserService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Role>>> GetItems()
+        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
             return await _dbContext.Roles.ToListAsync();
         }

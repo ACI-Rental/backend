@@ -1,4 +1,4 @@
-using ItemService.DBContexts;
+using ProductService.DBContexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ItemService
+namespace ProductService
 {
     public class Program
     {

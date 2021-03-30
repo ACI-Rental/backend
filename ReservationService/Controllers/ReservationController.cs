@@ -19,7 +19,7 @@ namespace ReservationService.Controllers
         /// <summary>
         /// Database context for the reservation service, this is used to make calls to the reservation table
         /// </summary>
-        public readonly ReservationServiceDatabaseContext _dbContext;
+        private readonly ReservationServiceDatabaseContext _dbContext;
 
         /// <summary>
         /// Constructor is used for receiving the database context at the creation of the image controller
@@ -31,7 +31,7 @@ namespace ReservationService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetItems()
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
         {
             return await _dbContext.Reservations.ToListAsync();
         }

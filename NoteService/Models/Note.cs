@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace NoteService.Models
 {
     /// <summary>
-    /// A note that can be either for an item or a reservation.
-    /// It contains a Id, content, date when placed and a reffrence to either item or reservation.
+    /// A note that can be either for a product or a reservation.
+    /// It contains a Id, content, date when placed and a reffrence to either product or reservation.
     /// </summary>
     public class Note
     {
@@ -21,8 +21,8 @@ namespace NoteService.Models
         [Required]
         public DateTime Date { get; set; }
 
-        public int  ItemId { get; set; }
+        public int ProductId { get; set; }
        
-        public int  ReservationId { get; set; }
+        public int ReservationId { get; set; }
     }
 }

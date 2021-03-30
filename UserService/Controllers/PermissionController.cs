@@ -20,7 +20,7 @@ namespace UserService.Controllers
         /// <summary>
         /// Database context for Permissions, this is used to make calls to the database.
         /// </summary>
-        public readonly UserServiceDatabaseContext _dbContext;
+        private readonly UserServiceDatabaseContext _dbContext;
 
         /// <summary>
         /// Constructer is used for receiving the database context at the creation of the PermissionController.
@@ -32,7 +32,7 @@ namespace UserService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Permission>>> GetItems()
+        public async Task<ActionResult<IEnumerable<Permission>>> GetPermissions()
         {
             return await _dbContext.Permissions.ToListAsync();
         }
