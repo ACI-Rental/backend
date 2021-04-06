@@ -119,5 +119,12 @@ namespace ImageService.Controllers
 
             return Ok();
         }
+        
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Image>>> GetCategories()
+        {
+            var result = await _dbContext.Images.ToListAsync();
+            return Ok(result);
+        }
     }
 }
