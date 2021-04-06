@@ -34,12 +34,10 @@ namespace UserService.Models
 
         /// <summary>
         /// [Required]: cannot be null
-        /// [Column] gives the colomn a specific name
         /// Used to know what role the users has
         /// Refrences to a Role class
         /// </summary>
         [Required]
-        [Column("RoleId")]
-        public int Role { get; set; }
+        public Role Role { get; set; }
     }
 }

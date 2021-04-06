@@ -37,17 +37,14 @@ namespace NoteService.Models
         public DateTime Date { get; set; }
 
         /// <summary>
-        /// [Column] gives the colomn a specific name
         /// Refrence to the Item, the note is attached to
         /// </summary>
-        [Column("ItemId")]
-        public int Item { get; set; }
+        public int ItemId { get; set; }
 
         /// <summary>
         /// [Column] gives the colomn a specific name
         /// Refrence to the Reservation, the note is attached to
         /// </summary>
-        [Column("ReservationId")]
-        public int Reserveration { get; set; }
+        public int ReserverationId { get; set; }
     }
 }
