@@ -15,15 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotAPIGateway", "OcelotAPIGateway\OcelotAPIGateway.csproj", "{FB1CCC2A-7FF1-46A7-8C97-AC5829EDCDED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemService.Tests", "ItemService.Tests\ItemService.Tests.csproj", "{C2AD7114-0EBC-4B23-8D30-260182B6B397}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Tests", "ItemService.Tests\ProductService.Tests.csproj", "{C2AD7114-0EBC-4B23-8D30-260182B6B397}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageService.Tests", "ImageService.Tests\ImageService.Tests.csproj", "{7560BACB-265D-46C0-83F5-1B271DB2440E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageService.Tests", "ImageService.Tests\ImageService.Tests.csproj", "{7560BACB-265D-46C0-83F5-1B271DB2440E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservationService.Tests", "ReservationService.Tests\ReservationService.Tests.csproj", "{A98416B2-CA03-4DBC-B355-CE6252A54F23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReservationService.Tests", "ReservationService.Tests\ReservationService.Tests.csproj", "{A98416B2-CA03-4DBC-B355-CE6252A54F23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteService.Tests", "NoteService.Tests\NoteService.Tests.csproj", "{E062F40E-740B-49EF-9AFC-685E8C19C3BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteService.Tests", "NoteService.Tests\NoteService.Tests.csproj", "{E062F40E-740B-49EF-9AFC-685E8C19C3BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Tests", "UserService.Tests\UserService.Tests.csproj", "{B36E7B2C-BB25-4F9D-8AAC-9AC9761D6593}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Tests", "UserService.Tests\UserService.Tests.csproj", "{B36E7B2C-BB25-4F9D-8AAC-9AC9761D6593}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

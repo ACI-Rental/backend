@@ -1,25 +1,25 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
-using ItemService;
-using ItemService.Controllers;
-using ItemService.Models;
-using ItemService.DBContexts;
+using ProductService;
+using ProductService.Controllers;
+using ProductService.Models;
+using ProductService.DBContexts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ItemService.Tests.UnitTests
+namespace ProductService.Tests.UnitTests
 {
     public class CategoryTests
     {
         [Fact]
         public async Task GetCategories_WhenCalled_ReturnListOfCategories()
         {
-            var options = new DbContextOptionsBuilder<ItemServiceDatabaseContext>().UseInMemoryDatabase(databaseName: "InMemoryProductDb").Options;
+            var options = new DbContextOptionsBuilder<ProductServiceDatabaseContext>().UseInMemoryDatabase(databaseName: "InMemoryProductDb").Options;
 
-            var context = new ItemServiceDatabaseContext(options);
+            var context = new ProductServiceDatabaseContext(options);
             SeedCategoryInMemoryDatabaseWithData(context);
             var controller = new CategoryController(context);
             var result = await controller.GetCategories();
@@ -33,7 +33,7 @@ namespace ItemService.Tests.UnitTests
             Assert.Equal("AAA", categories.ElementAt(2).Name);
         }
 
-        private static void SeedCategoryInMemoryDatabaseWithData(ItemServiceDatabaseContext context)
+        private static void SeedCategoryInMemoryDatabaseWithData(ProductServiceDatabaseContext context)
         {
             var data = new List<Category>
                 {

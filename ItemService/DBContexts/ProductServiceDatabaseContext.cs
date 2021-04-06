@@ -23,8 +23,18 @@ namespace ProductService.DBContexts
         /// <param name="optionsBuilder">Used for adding options to the database to configure the connection between it and the API</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=ProductService;Trusted_Connection=True;");
+            if (!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=ProductService;Trusted_Connection=True;");
+
             base.OnConfiguring(optionsBuilder);
+        }
+
+        public ProductServiceDatabaseContext()
+        {
+
+        }
+        public ProductServiceDatabaseContext(DbContextOptions<ProductServiceDatabaseContext> options) : base(options)
+        {
         }
 
         internal bool AnyAsync()

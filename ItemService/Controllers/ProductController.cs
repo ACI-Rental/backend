@@ -37,7 +37,8 @@ namespace ProductService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return await _dbContext.Products.ToListAsync();
+            var result = await _dbContext.Products.ToListAsync();
+            return Ok(result);
         }
 
         /// <summary>
