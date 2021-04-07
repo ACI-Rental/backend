@@ -31,10 +31,15 @@ namespace UserService.Controllers
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Get all the permissions from the database
+        /// </summary>
+        /// <returns>All Permissions in Db</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Permission>>> GetPermissions()
         {
-            return await _dbContext.Permissions.ToListAsync();
+            var result = await _dbContext.Permissions.ToListAsync();
+            return Ok(result);
         }
     }
 }

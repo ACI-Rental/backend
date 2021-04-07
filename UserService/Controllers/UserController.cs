@@ -31,10 +31,15 @@ namespace UserService.Controllers
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Get all the Users from the database
+        /// </summary>
+        /// <returns>All Users in Db</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _dbContext.Users.ToListAsync();
+            var result = await _dbContext.Users.ToListAsync();
+            return Ok(result);
         }
     }
 }

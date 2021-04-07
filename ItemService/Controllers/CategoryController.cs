@@ -31,10 +31,15 @@ namespace ProductService.Controllers
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Get all the Categroies from the database
+        /// </summary>
+        /// <returns>All Categories in Db</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _dbContext.Categories.ToListAsync();
+            var result = await _dbContext.Categories.ToListAsync();
+            return Ok(result);
         }
     }
 }

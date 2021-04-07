@@ -13,17 +13,36 @@ namespace NoteService.DBContexts
     public class NoteServiceDatabaseContext : DbContext
     {
         /// <summary>
-        /// List of all the notes in the database.
+        /// Constructor of the NoteServiceDatabaseContext class
+        /// </summary>
+        public NoteServiceDatabaseContext()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor of the NoteServiceDatabaseContext class with options, used for Unittesting
+        /// Database options can be given, to switch between local and remote database
+        /// </summary>
+        /// <param name="options">Database options</param>
+        public NoteServiceDatabaseContext(DbContextOptions<NoteServiceDatabaseContext> options) : base(options)
+        {
+        }
+
+        /// <summary>
+        /// DbSet for the Note class, A DbSet represents the collection of all entities in the context. 
+        /// DbSet objects are created from a DbContext using the DbContext.Set method.
         /// </summary>
         public DbSet<Note> Notes { get; set; }
 
         /// <summary>
-        /// Creates a connection with the database.
+        /// OnConfiguring builds the connection between the database and the API using the given connection string
         /// </summary>
-        /// <param name="optionsBuilder">ContextBuilder</param>
+        /// <param name="optionsBuilder">Used for adding options to the database to configure the connection.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=NoteService;Trusted_Connection=True;");
+            if (!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=NoteService;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
     }
