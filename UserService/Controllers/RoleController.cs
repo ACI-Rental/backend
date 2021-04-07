@@ -31,6 +31,10 @@ namespace UserService.Controllers
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Get all the Roles from the database
+        /// </summary>
+        /// <returns>All Roles in Db</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {

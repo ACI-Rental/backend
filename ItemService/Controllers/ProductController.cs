@@ -34,6 +34,10 @@ namespace ProductService.Controllers
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Get all the users from the database
+        /// </summary>
+        /// <returns>All Users in Db</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {

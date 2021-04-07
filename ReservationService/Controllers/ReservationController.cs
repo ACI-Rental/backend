@@ -30,6 +30,10 @@ namespace ReservationService.Controllers
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Get all the Reservations from the database
+        /// </summary>
+        /// <returns>All Reservations in Db</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
         {

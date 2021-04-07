@@ -7,12 +7,24 @@ using System.Threading.Tasks;
 
 namespace ReservationService.DBContexts
 {
+    /// <summary>
+    /// Context of the database, used to communicate with the database.
+    /// </summary>
     public class ReservationServiceDatabaseContext : DbContext
     {
+        /// <summary>
+        /// Constructor of the RaservationServiceDatabaseContext class
+        /// </summary>
         public ReservationServiceDatabaseContext()
         {
 
         }
+
+        /// <summary>
+        /// Constructor of the ReservationServiceDatabaseContext class with options, used for Unittesting
+        /// Database options can be given, to switch between local and remote database
+        /// </summary>
+        /// <param name="options">Database options</param>
         public ReservationServiceDatabaseContext(DbContextOptions<ReservationServiceDatabaseContext> options) : base(options)
         {
         }

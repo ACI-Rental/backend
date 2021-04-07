@@ -7,12 +7,23 @@ using System.Threading.Tasks;
 
 namespace ImageService.DBContexts
 {
+    /// <summary>
+    /// Context of the database, used to communicate with the database.
+    /// </summary>
     public class ImageServiceDatabaseContext : DbContext
     {
+        /// <summary>
+        /// Constructor of the ImageServiceDatabaseContext class
+        /// </summary>
         public ImageServiceDatabaseContext()
         {
         }
 
+        /// <summary>
+        /// Constructor of the ImageServiceDatabaseContext class with options, used for Unittesting
+        /// Database options can be given, to switch between local and remote database
+        /// </summary>
+        /// <param name="options">Database options</param>
         public ImageServiceDatabaseContext(DbContextOptions<ImageServiceDatabaseContext> options) : base(options)
         {
         }

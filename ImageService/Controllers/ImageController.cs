@@ -120,9 +120,13 @@ namespace ImageService.Controllers
 
             return Ok();
         }
-        
+
+        /// <summary>
+        /// Get all the Images from the database
+        /// </summary>
+        /// <returns>All Images in Db</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Image>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
         {
             var result = await _dbContext.Images.ToListAsync();
             return Ok(result);

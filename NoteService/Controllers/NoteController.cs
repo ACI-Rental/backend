@@ -30,6 +30,10 @@ namespace NoteService.Controllers
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Get all the Notes from the database
+        /// </summary>
+        /// <returns>All Notes in Db</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Note>>> GetNotes()
         {

@@ -12,10 +12,19 @@ namespace NoteService.DBContexts
     /// </summary>
     public class NoteServiceDatabaseContext : DbContext
     {
+        /// <summary>
+        /// Constructor of the NoteServiceDatabaseContext class
+        /// </summary>
         public NoteServiceDatabaseContext()
         {
 
         }
+
+        /// <summary>
+        /// Constructor of the NoteServiceDatabaseContext class with options, used for Unittesting
+        /// Database options can be given, to switch between local and remote database
+        /// </summary>
+        /// <param name="options">Database options</param>
         public NoteServiceDatabaseContext(DbContextOptions<NoteServiceDatabaseContext> options) : base(options)
         {
         }
