@@ -28,7 +28,6 @@ namespace ProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Maybe place this in env.IsDevelopment() because allowing all hosts is a no-no
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -43,6 +42,7 @@ namespace ProductService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductService", Version = "v1" });
             });
+
             services.AddDbContext<ProductServiceDatabaseContext>();
             
             using var productContext = new ProductServiceDatabaseContext();

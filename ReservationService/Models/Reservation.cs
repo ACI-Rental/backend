@@ -61,15 +61,14 @@ namespace ReservationService.Models
         /// <summary>
         /// Used to know if the reservation is approved or not
         /// </summary>
-        public Boolean IsApproved { get; set; }
+        public bool IsApproved { get; set; }
 
         /// <summary>
         /// [Required]: cannot be null
-        /// Used to know what product is being rented
+        /// Used to represent the product that is being reserved
         /// </summary>
         [Required]
         public int ProductId { get; set; }
-
 
     }
 }

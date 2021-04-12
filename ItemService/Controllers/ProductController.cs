@@ -46,13 +46,60 @@ namespace ProductService.Controllers
         }
 
         /// <summary>
+        /// Get a single inventory page containing products
+        /// </summary>
+        /// <param name="pageIndex">Which page is being requested. If 0 or lower returns first page. If higher than amount of pages returns the last page </param>
+        /// <param name="pageSize">The amount of products that are being requested</param>
+        /// <returns>Object containing count of all products, current page and a collection of products</returns>
+        [HttpGet("page/{pageIndex}/{pageSize}")]
+        public async Task<InventoryPage> GetInventoryItems(int pageIndex, int pageSize)
+        {
+            var page = new InventoryPage();
+
+            var query = from product in _dbContext.Products
+                        orderby product.CatalogNumber ascending
+                        select new InventoryProduct()
+                        {
+                            Id = product.Id,
+                            Name = product.Name,
+                            Location = product.InventoryLocation,
+                            RequiresApproval = product.RequiresApproval,
+                            Status = product.IsAvailable ? InventoryProductStatus.Available : InventoryProductStatus.Unavailable
+                        };
+
+            page.TotalProductCount = await query.CountAsync();
+
+            // Last page calculation goes wrong if the totalcount is 0
+            // also no point in trying to get 0 products from DB
+            if (page.TotalProductCount == 0)
+            {
+                page.CurrentPage = 0;
+                page.Products = new List<InventoryProduct>(0);
+                return page;
+            }
+
+            // calculate how many pages there are given de current pageSize
+            int lastPage = (int)Math.Ceiling((double)page.TotalProductCount / pageSize) - 1;
+
+            // pageIndex below 0 is non-sensical, bringing the value to closest sane value
+            if (pageIndex < 0)
+                pageIndex = 0;
+
+            // use lastpage if requested page is higher
+            page.CurrentPage = Math.Min(pageIndex, lastPage);
+
+            page.Products = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
+            return page;
+        }
+
+        /// <summary>
         /// Get latest catalog item so the front-end knows what the max is
         /// </summary>
         /// <returns>Latest catalog item</returns>
         [HttpGet("lastcatalog")]
         public async Task<ActionResult<int>> GetLastCatalog()
         {
-            if(!await _dbContext.Products.AnyAsync())
+            if (!await _dbContext.Products.AnyAsync())
             {
                 return 0;
             }
@@ -69,12 +116,12 @@ namespace ProductService.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProduct(AddProductModel addProductModel)
         {
-            if(addProductModel == default)
+            if (addProductModel == default)
             {
                 return BadRequest("PRODUCT.ADD.NO_DATA");
             }
 
-            if(string.IsNullOrWhiteSpace(addProductModel.Name))
+            if (string.IsNullOrWhiteSpace(addProductModel.Name))
             {
                 return BadRequest("PRODUCT.ADD.NO_NAME");
             }
@@ -89,17 +136,17 @@ namespace ProductService.Controllers
                 return BadRequest("PRODUCT.ADD.NO_DESCRIPTION");
             }
 
-            if(addProductModel.CatalogNumber < 0)
-            {                
+            if (addProductModel.CatalogNumber < 0)
+            {
                 return BadRequest("PRODUCT.ADD.CATALOG_NUMBER_INCORRECT");
             }
 
-            if(addProductModel.CategoryId < 0)
+            if (addProductModel.CategoryId < 0)
             {
                 return BadRequest("PRODUCT.ADD.NO_CATEGORY");
             }
 
-            if(await _dbContext.Products.AnyAsync(x => x.Name.Trim().ToLower() == addProductModel.Name.Trim().ToLower()))
+            if (await _dbContext.Products.AnyAsync(x => x.Name.Trim().ToLower() == addProductModel.Name.Trim().ToLower()))
             {
                 return BadRequest("PRODUCT.ADD.NAME_ALREADY_EXISTS");
             }
@@ -116,12 +163,12 @@ namespace ProductService.Controllers
                 Category = await _dbContext.Categories.FirstOrDefaultAsync(x => x.Id == addProductModel.CategoryId)
             };
 
-            if(newProduct.Category == default)
+            if (newProduct.Category == default)
             {
                 return BadRequest("PRODUCT.ADD.NO_CATEGORY");
             }
 
-            if(!await MakeCatalogPlace(newProduct.CatalogNumber))
+            if (!await MakeCatalogPlace(newProduct.CatalogNumber))
             {
                 return BadRequest("PRODUCT.ADD.CATALOG_NUMBER_INCORRECT");
             }
@@ -129,10 +176,10 @@ namespace ProductService.Controllers
             _dbContext.Products.Add(newProduct);
             await _dbContext.SaveChangesAsync();
 
-            if(addProductModel.Images != default && addProductModel.Images.Any())
+            if (addProductModel.Images != default && addProductModel.Images.Any())
             {
                 var addImagesObject = new AddImageModel(newProduct.Id, LinkedTableType.PRODUCT, addProductModel.Images);
-                if((await $"https://localhost:44372/api/image".AllowAnyHttpStatus().PostJsonAsync(addImagesObject)).StatusCode != 201)
+                if ((await $"https://localhost:44372/api/image".AllowAnyHttpStatus().PostJsonAsync(addImagesObject)).StatusCode != 201)
                 {
                     _dbContext.Products.Remove(newProduct);
                     await _dbContext.SaveChangesAsync();
@@ -150,13 +197,13 @@ namespace ProductService.Controllers
         /// <returns>true if success, false if failed</returns>
         private async Task<bool> MakeCatalogPlace(int catalogNumber)
         {
-            if(catalogNumber < 0)
+            if (catalogNumber < 0)
             {
                 return false;
             }
 
             var lastCatalogNumber = 1;
-            if(await _dbContext.Products.AnyAsync())
+            if (await _dbContext.Products.AnyAsync())
             {
                 lastCatalogNumber = await _dbContext.Products.MaxAsync(x => x.CatalogNumber);
             }

@@ -44,6 +44,7 @@ namespace ReservationService.DBContexts
         {
             if (!optionsBuilder.IsConfigured)
                 optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=ReservationService;Trusted_Connection=True;");
+
             base.OnConfiguring(optionsBuilder);
         }
     }

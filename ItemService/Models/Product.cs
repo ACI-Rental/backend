@@ -46,7 +46,8 @@ namespace ProductService.Models
         [Required]
         public bool RequiresApproval { get; set; }
         /// <summary>
-        /// Used to check when the product was archived
+        /// Used to check when the item was archived
+        /// Null if not archived
         /// </summary>
         public DateTime? ArchivedSince { get; set; }
 
