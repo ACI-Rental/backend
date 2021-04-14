@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Flurl.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ReservationService.DBContexts;
 using ReservationService.Models;
+using ReservationService.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +42,122 @@ namespace ReservationService.Controllers
         {
             var result = await _dbContext.Reservations.ToListAsync();
             return Ok(result);
+        }
+        /// <summary>
+        /// Saves a reservation for a product.
+        /// </summary>
+        /// <param name="reserveProductModel">Model containing a list of product models.</param>
+        /// <returns>Returns BadRequest with a list of errors, returns Ok if successful</returns>
+        [HttpPost("reserveproducts")]
+        public async Task<IActionResult> ReserveProducts(ReserveProductModel reserveProductModel)
+        {
+            var revervations = new List<Reservation>();
+            var productModelsErrorList = new List<KeyValuePair<ProductModel, string>>();
+            if (reserveProductModel.ProductModels == null || reserveProductModel.ProductModels.Count <= 0)
+            {
+                return BadRequest("PRODUCT.RESERVE.NO_PRODUCTS");
+            }
+
+
+            foreach (var product in reserveProductModel.ProductModels)
+            {
+                if (product.Id <= 0)
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NO_ID"));
+                }
+                if (product.StartDate < DateTime.Now)
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_INVALID_STARTDATE"));
+                }
+                if (product.EndDate < DateTime.Now)
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_INVALID_ENDDATE"));
+                }
+                if (product.EndDate < product.StartDate)
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_ENDDATE_BEFORE_STARTDATE"));
+                }
+                if (product.StartDate.DayOfWeek == DayOfWeek.Saturday || product.StartDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.STARTDATE_IN_WEEKEND"));
+                }
+                if (product.EndDate.DayOfWeek == DayOfWeek.Saturday || product.EndDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.ENDDATE_IN_WEEKEND"));
+                }
+                int weekenddays = AmountOfWeekendDays(product.StartDate, product.EndDate);
+                double totalamountofdays = (product.EndDate - product.StartDate).TotalDays - weekenddays;
+                if (totalamountofdays > 5)
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.RESERVATION_TIME_TO_LONG"));
+                }
+                // https://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods
+                var foundReservation = await _dbContext.Reservations.Where(x => x.StartDate <= product.EndDate && product.StartDate < x.EndDate).FirstOrDefaultAsync();
+                if (foundReservation != null)
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_ALREADY_RESERVED_IN_PERIOD"));
+                }
+                var result =  await $"https://localhost:44372/api/product/{product.Id}".AllowAnyHttpStatus().GetStringAsync();
+                if (string.IsNullOrWhiteSpace(result))
+                {
+                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_FOUND"));
+                }
+                else
+                {
+                    var foundProduct = JsonConvert.DeserializeObject<Product>(result);
+                    if (foundProduct == null)
+                    {
+                        productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_FOUND"));
+                    }
+                    else
+                    {
+                        if (foundProduct.ProductState != ProductState.AVAILABLE)
+                        {
+                            productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_AVAILABLE"));
+                        }
+                        if (productModelsErrorList.Count <= 0)
+                        {
+                            //TODO: Add RenterID with JWT claims
+                            var reservation = new Reservation()
+                            {
+                                ProductId = product.Id,
+                                StartDate = product.StartDate,
+                                EndDate = product.EndDate,
+                                IsApproved = foundProduct.RequiresApproval ? false : null,
+                            };
+                            revervations.Add(reservation);
+                        }
+                    }
+                }
+            }
+            if (productModelsErrorList.Count > 0)
+            {
+                return BadRequest(productModelsErrorList);
+            }
+            foreach (var item in revervations)
+            {
+                _dbContext.Reservations.Add(item);
+            }
+            await _dbContext.SaveChangesAsync();
+            return Ok();
+        }
+        /// <summary>
+        /// Counts the amount of weekend days between two dates.
+        /// </summary>
+        /// <param name="startDate">The starting date</param>
+        /// <param name="endDate">The end date</param>
+        /// <returns>The amount days that are weekend days found</returns>
+        private int AmountOfWeekendDays(DateTime startDate, DateTime endDate)
+        {
+            int amountOfWeekendDays = 0;
+            for (DateTime i = startDate; i < endDate; i = i.AddDays(1))
+            {
+                if (i.DayOfWeek == DayOfWeek.Saturday || i.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    amountOfWeekendDays++;
+                }
+            }
+            return amountOfWeekendDays;
         }
     }
 }

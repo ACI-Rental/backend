@@ -29,6 +29,6 @@ namespace ProductService.Models.DTO
         /// <summary>
         /// The availability status of the product
         /// </summary>
-        public InventoryProductStatus Status { get; set; }
+        public ProductState Status { get; set; }
     }
 }

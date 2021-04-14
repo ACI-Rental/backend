@@ -19,14 +19,6 @@ namespace ReservationService.Models
         [Key]
         [Required]
         public int Id { get; set; }
-
-        /// <summary>
-        /// [Required]: cannot be null
-        /// Used to display the int value of what state the reservation is in.
-        /// </summary>
-        [Required]
-        public int State { get; set; }
-
         /// <summary>
         /// [Required]: cannot be null
         /// Used to display the starting date when the reservation can be picked up
@@ -61,7 +53,7 @@ namespace ReservationService.Models
         /// <summary>
         /// Used to know if the reservation is approved or not
         /// </summary>
-        public bool IsApproved { get; set; }
+        public bool? IsApproved { get; set; }
 
         /// <summary>
         /// [Required]: cannot be null
@@ -69,6 +61,5 @@ namespace ReservationService.Models
         /// </summary>
         [Required]
         public int ProductId { get; set; }
-
     }
 }
