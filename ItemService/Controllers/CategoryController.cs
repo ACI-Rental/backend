@@ -32,9 +32,44 @@ namespace ProductService.Controllers
         }
 
         /// <summary>
-        /// Get all the Categroies from the database
+        /// Method for adding a new category that will be available to use on a product, 
         /// </summary>
-        /// <returns>All Categories in Db</returns>
+        /// <param name="addCategoryModel"></param>
+        /// <returns>Id of the new added category</returns>
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(AddCategoryModel addCategoryModel)
+        {
+            if (addCategoryModel == default)
+            {
+                return BadRequest("CATEGORY.ADD.NO_DATA");
+            }
+            if (string.IsNullOrWhiteSpace(addCategoryModel.Name))
+            {
+                return BadRequest("CATEGORY.ADD.NO_NAME");
+            }
+
+            if (_dbContext.Categories.Any(o => o.Name == addCategoryModel.Name))
+            {
+                return BadRequest("PRODUCT.ADD.NAME_ALREADY_EXISTS");
+            }
+
+            Category newCategory = new()
+            {
+                Name = addCategoryModel.Name
+            };
+
+            _dbContext.Categories.Add(newCategory);
+            await _dbContext.SaveChangesAsync();
+
+            int id = newCategory.Id;
+
+            return Ok(id);
+        }
+
+        /// <summary>
+        /// Gets all categories from the database
+        /// </summary>
+        /// <returns>a list of categories</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
