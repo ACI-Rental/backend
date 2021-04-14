@@ -61,19 +61,28 @@ namespace ReservationService.Controllers
 
             foreach (var product in reserveProductModel.ProductModels)
             {
+                // Later we will add time slots
+                var tempStartDate = product.StartDate.AddHours(23 - product.StartDate.Hour);
+                tempStartDate = tempStartDate.AddMinutes(59 - product.StartDate.Minute);
+                tempStartDate = tempStartDate.AddSeconds(58 - product.StartDate.Second);
+
+                var tempEndDate = product.EndDate.AddHours(23 - product.EndDate.Hour);
+                tempEndDate = tempEndDate.AddMinutes(59 - product.EndDate.Minute);
+                tempEndDate = tempEndDate.AddSeconds(59 - product.EndDate.Second);
+
                 if (product.Id <= 0)
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NO_ID"));
                 }
-                if (product.StartDate < DateTime.Now)
+                if (tempStartDate < DateTime.Now)
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_INVALID_STARTDATE"));
                 }
-                if (product.EndDate < DateTime.Now)
+                if (tempEndDate < DateTime.Now)
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_INVALID_ENDDATE"));
                 }
-                if (product.EndDate < product.StartDate)
+                if (tempEndDate < tempStartDate)
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_ENDDATE_BEFORE_STARTDATE"));
                 }
@@ -158,6 +167,17 @@ namespace ReservationService.Controllers
                 }
             }
             return amountOfWeekendDays;
+        }
+
+        /// <summary>
+        /// Get all reservations that are linked to a product
+        /// </summary>
+        /// <param name="productId">productId used to find the reservations</param>
+        /// <returns>All found reservations</returns>
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationsByProductId(int productId)
+        {
+            return await _dbContext.Reservations.Where(x => x.ProductId == productId).ToListAsync();
         }
     }
 }

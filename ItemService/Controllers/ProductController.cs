@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
-using System.IO;
-using System.Drawing;
 
 namespace ProductService.Controllers
 {
@@ -44,6 +42,7 @@ namespace ProductService.Controllers
             var result = await _dbContext.Products.ToListAsync();
             return Ok(result);
         }
+
         /// <summary>
         /// Get the product with a certain id
         /// </summary>
@@ -100,6 +99,38 @@ namespace ProductService.Controllers
 
             page.Products = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
             return page;
+        }
+
+        /// <summary>
+        /// Used to receive a very basic/stripped product class with minimal data based on productId
+        /// </summary>
+        /// <param name="productId">Id of the product to look for</param>
+        /// <returns>Found (and stripped) product</returns>
+        [HttpGet("flat/{productId}")]
+        public async Task<IActionResult> GetFlatProductById(int productId)
+        {
+            var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
+
+            if (product == default)
+            {
+                return NotFound("API_RESPONSES.PRODUCT.GET_PRODUCT_BY_ID.NOT_FOUND");
+            }
+
+            var cartProduct = new ProductFlatModel()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                ProductState = product.ProductState
+            };
+
+            var image = await $"https://localhost:44372/api/image/{product.Id}".AllowAnyHttpStatus().GetJsonAsync<ImageBlobModel>();
+            if(image != default && image.Blob != default)
+            {
+                cartProduct.Image = Convert.ToBase64String(image.Blob);
+            }
+
+            return Ok(cartProduct);
         }
 
         /// <summary>

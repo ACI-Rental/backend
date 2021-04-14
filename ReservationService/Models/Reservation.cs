@@ -53,7 +53,7 @@ namespace ReservationService.Models
         /// <summary>
         /// Used to know if the reservation is approved or not
         /// </summary>
-        public bool? IsApproved { get; set; }
+        public Nullable<bool> IsApproved { get; set; }
 
         /// <summary>
         /// [Required]: cannot be null

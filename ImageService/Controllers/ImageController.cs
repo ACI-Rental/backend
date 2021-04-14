@@ -33,6 +33,19 @@ namespace ImageService.Controllers
         }
 
         /// <summary>
+        /// Return the first image based on productId
+        /// </summary>
+        /// <param name="productId">productId linked to the image</param>
+        /// <returns>Null or the first image</returns>
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetFirstImageByProductId(int productId)
+        {
+            var image = await _dbContext.Images.FirstOrDefaultAsync(x => x.LinkedKey == productId && x.LinkedTableType == LinkedTableType.PRODUCT);
+
+            return Ok(new ImageBlobModel() { Blob = image?.Blob });
+        }
+
+        /// <summary>
         /// Adds image to the database
         /// </summary>
         /// <param name="addImageModel">The API call data object</param>
