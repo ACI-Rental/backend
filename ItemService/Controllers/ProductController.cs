@@ -269,5 +269,32 @@ namespace ProductService.Controllers
             return true;
         }
 
+        /// <summary>
+        /// Archives a product so it can't be used anymore
+        /// </summary>
+        /// <param name="archiveProductId">The id for the product that needs to be archived</param>
+        /// <returns>BadRequest if data is incorrect, success message if successful</returns>
+        [HttpDelete("{archiveProductId}")]
+        public async Task<IActionResult> ArchiveProduct(int archiveProductId)
+        {
+            if (archiveProductId <= 0)
+            {
+                return BadRequest("PRODUCT.ARCHIVE.NO_VALID_ID");
+            }
+            var foundProduct = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == archiveProductId);
+            if (foundProduct == null)
+            {
+                return BadRequest("PRODUCT.ARCHIVE.NO_PRODUCT_FOUND");
+            }
+            if (foundProduct.ProductState == ProductState.ARCHIVED)
+            {
+                return BadRequest("PRODUCT.ARCHIVE.PRODUCT_ALREADY_ARCHIVED");
+            }
+            //TODO: Sends mail to all persons that have already rented this product.
+            foundProduct.ProductState = ProductState.ARCHIVED;
+            await _dbContext.SaveChangesAsync();
+            return Ok();
+        }
+
     }
 }
