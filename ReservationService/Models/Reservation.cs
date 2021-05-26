@@ -34,8 +34,14 @@ namespace ReservationService.Models
         public DateTime EndDate { get; set; }
 
         /// <summary>
+        /// Used to display the pickup date of the reservation
+        /// </summary>
+        public DateTime? PickedUpDate { get; set; }
+
+        /// <summary>
         /// Used to display the return date of the reservation
         /// </summary>
+        /// 
         public DateTime? ReturnDate { get; set; }
 
         /// <summary>

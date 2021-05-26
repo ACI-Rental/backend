@@ -208,5 +208,46 @@ namespace ReservationService.Controllers
         {
             return await _dbContext.Reservations.Where(x => x.ProductId == productId).ToListAsync();
         }
+
+        /// <summary>
+        /// A action that can be done on a reservation, updating the database
+        /// Actions that can be done are: Cancel, Pickup and Return
+        /// </summary>
+        /// <param name="reservationActionModel">Action Object with Reservation Id and Action number</param>
+        /// <returns>Ok</returns>
+        [HttpPost("reservationaction")]
+        public async Task<IActionResult> ReservationAction(ReservationActionModel reservationActionModel)
+        {
+            if (reservationActionModel == null)
+            {
+                return BadRequest("");
+            }
+
+            if (reservationActionModel.ReservationId < 0)
+            {
+                return BadRequest("RESERVATION.ACTION.INVALID.ID");
+            }
+
+            var result = _dbContext.Reservations.SingleOrDefault(b => b.Id == reservationActionModel.ReservationId);
+            if (result != null)
+            {
+                switch (reservationActionModel.ActionNumber)
+                {
+                    case 0:
+                        //Verwijderen reservering? pickup return date zelfde data?
+                        break;
+                    case 1:
+                        result.PickedUpDate = DateTime.Now;
+                        break;
+                    case 2:
+                        result.ReturnDate = DateTime.Now;
+                        break;
+                    default:
+                        return BadRequest("RESERVATION.ACTION.INVALID.ACTION");
+                }
+            }
+            await _dbContext.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
