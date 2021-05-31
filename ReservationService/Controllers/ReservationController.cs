@@ -184,7 +184,7 @@ namespace ReservationService.Controllers
             var query = _dbContext.Reservations.Where(x => x.ProductId == productId);
             if (excludeHistory)
             {
-                query = query.Where(x => x.EndDate >= DateTime.Now);
+                query = query.Where(x => x.EndDate >= DateTime.Today);
             }
 
             return await query.ToListAsync();
