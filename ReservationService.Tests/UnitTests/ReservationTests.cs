@@ -223,6 +223,48 @@ namespace ReservationService.Tests.UnitTests
             }
             Assert.Equal(1, _context.Reservations.Count());
         }
+
+        [Fact]
+        private async Task GetReservationsByProductId_ShouldReturnCurrentReservation()
+        {
+            _context.Reservations.Add(new Reservation() { Id = 1, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            await _context.SaveChangesAsync();
+
+            var reservation = (await _controller.GetReservationsByProductId(1, false));
+            Assert.Single(reservation.Value);
+        }
+
+        [Fact]
+        private async Task GetReservationsByProductId_ShouldNotReturnPastReservation()
+        {
+            _context.Reservations.Add(new Reservation() { Id = 1, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(-1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            await _context.SaveChangesAsync();
+
+            var reservation = (await _controller.GetReservationsByProductId(1, true));
+            Assert.Empty(reservation.Value);
+        }
+
+        [Fact]
+        private async Task GetReservationsByProductId_ShouldOnlyReturnCurrentReservation()
+        {
+            _context.Reservations.Add(new Reservation() { Id = 1, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 2, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(-1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            await _context.SaveChangesAsync();
+
+            var reservation = (await _controller.GetReservationsByProductId(1, true));
+            Assert.Single(reservation.Value);
+        }
+
+        [Fact]
+        private async Task GetReservationsByProductId_ShouldReturnPastReservation()
+        {
+            _context.Reservations.Add(new Reservation() { Id = 1, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(-1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            await _context.SaveChangesAsync();
+
+            var reservation = (await _controller.GetReservationsByProductId(1, false));
+            Assert.Single(reservation.Value);
+        }
+
         /// <summary>
         /// Gets error from a badrequest error for the Reserve Products tests
         /// </summary>
