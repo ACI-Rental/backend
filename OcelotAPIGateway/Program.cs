@@ -22,12 +22,10 @@ namespace OcelotAPIGateway
             .ConfigureAppConfiguration((host, config) =>
             {
                 config.AddJsonFile("ocelot.json");
-                //config.AddJsonFile("ocelots.json");
             })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseUrls("http://localhost:56005");
-                    webBuilder.UseStartup<Startup>();
-                });
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

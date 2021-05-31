@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReservationService.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ReservationService.DBContexts
 {
@@ -43,7 +40,15 @@ namespace ReservationService.DBContexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=ReservationService;Trusted_Connection=True;");
+            {
+                var dbString = Environment.GetEnvironmentVariable("aci_db_string");
+                if (string.IsNullOrWhiteSpace(dbString))
+                {
+                    throw new MissingFieldException("Database environment variable not found.");
+                }
+
+                optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("aci_db_string").Replace("DATABASE_NAME", "ReservationService"));
+            }
 
             base.OnConfiguring(optionsBuilder);
         }

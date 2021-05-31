@@ -1,9 +1,6 @@
 ﻿using ProductService.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProductService.DBContexts
 {
@@ -49,7 +46,15 @@ namespace ProductService.DBContexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=ProductService;Trusted_Connection=True;");
+            {
+                var dbString = Environment.GetEnvironmentVariable("aci_db_string");
+                if (string.IsNullOrWhiteSpace(dbString))
+                {
+                    throw new MissingFieldException("Database environment variable not found.");
+                }
+
+                optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("aci_db_string").Replace("DATABASE_NAME", "ProductService"));
+            }
 
             base.OnConfiguring(optionsBuilder);
         }
