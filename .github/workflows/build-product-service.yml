@@ -5,21 +5,21 @@ on:
     branches:
       - main
     paths:
-      - "ItemService/**"
-      - "ItemService.Tests/**"
+      - "ProductService/**"
+      - "ProductService.Tests/**"
       - ".github/workflows/build-product-service.yml"
   pull_request:
     branches: 
       - main
       - dev
     paths:
-      - "ItemService/**"
-      - "ItemService.Tests/**"
+      - "ProductService/**"
+      - "ProductService.Tests/**"
       - ".github/workflows/build-product-service.yml"
 
 env:
-  PROJECT_PATH: 'ItemService/ProductService.csproj'
-  TEST_PATH: 'ItemService.Tests/ProductService.Tests.csproj'
+  PROJECT_PATH: 'ProductService/ProductService.csproj'
+  TEST_PATH: 'ProductService.Tests/ProductService.Tests.csproj'
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PRODUCT_SERVICE }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -51,5 +51,5 @@ jobs:
         sonarProjectKey: siebrum_aci-backend-product-service
         sonarProjectName:  aci-backend-product-service
         sonarOrganization: siebrum
-        dotnetBuildArguments: ./ItemService
-        dotnetTestArguments: ./ItemService.Tests
+        dotnetBuildArguments: ./ProductService
+        dotnetTestArguments: ./ProductService.Tests
