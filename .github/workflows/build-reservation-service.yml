@@ -1,0 +1,55 @@
+name: Build the ReservationService
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "ReservationService/**"
+      - "ReservationService.Tests/**"
+      - ".github/workflows/build-reservation-service.yml"
+  pull_request:
+    branches: 
+      - main
+      - dev
+    paths:
+      - "ReservationService/**"
+      - "ReservationService.Tests/**"
+      - ".github/workflows/build-reservation-service.yml"
+
+env:
+  PROJECT_PATH: 'ReservationService/ReservationService.csproj'
+  TEST_PATH: 'ReservationService.Tests/ReservationService.Tests.csproj'
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_RESERVATION_SERVICE }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Install dotnet'
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+
+    - name: 'Restore packages'
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+
+    - name: 'Build project'
+      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
+
+    - name: Run tests
+      run: dotnet test ${{ env.TEST_PATH }}
+
+    # https://github.com/highbyte/sonarscan-dotnet
+    - name: SonarScanner for .NET 5
+      uses: highbyte/sonarscan-dotnet@2.0
+      with:
+        sonarProjectKey: siebrum_aci-backend-reservation-service
+        sonarProjectName:  aci-backend-reservation-service
+        sonarOrganization: siebrum
+        dotnetBuildArguments: ./NoteService
+        dotnetTestArguments: ./NoteService.Tests
