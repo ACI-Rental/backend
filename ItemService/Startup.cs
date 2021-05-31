@@ -20,6 +20,7 @@ namespace ProductService
     {
         public Startup(IConfiguration configuration)
         {
+
             Configuration = configuration;
         }
 
@@ -44,6 +45,7 @@ namespace ProductService
             });
 
             services.AddDbContext<ProductServiceDatabaseContext>();
+            services.Configure<AppConfig>(Configuration.GetSection("Config"));
             
             using var productContext = new ProductServiceDatabaseContext();
             productContext.Database.EnsureCreated();

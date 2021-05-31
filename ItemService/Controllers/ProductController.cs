@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
+using Microsoft.Extensions.Options;
 
 namespace ProductService.Controllers
 {
@@ -22,14 +23,16 @@ namespace ProductService.Controllers
         /// Database context for the product service, this is used to make calls to the product table
         /// </summary>
         private readonly ProductServiceDatabaseContext _dbContext;
+        private readonly IOptions<AppConfig> _config;
 
         /// <summary>
         /// Constructor is used for receiving the database context at the creation of the product controller
         /// </summary>
         /// <param name="dbContext">Database context param used for calls to the products table</param>
-        public ProductController(ProductServiceDatabaseContext dbContext)
+        public ProductController(ProductServiceDatabaseContext dbContext, IOptions<AppConfig> config)
         {
             _dbContext = dbContext;
+            _config = config;
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace ProductService.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var result = await _dbContext.Products.ToListAsync();
-            return Ok(result);
+            return Ok(_config);
         }
 
         /// <summary>
@@ -124,7 +127,7 @@ namespace ProductService.Controllers
                 ProductState = product.ProductState
             };
 
-            var image = await $"https://localhost:44372/api/image/{product.Id}".AllowAnyHttpStatus().GetJsonAsync<ImageBlobModel>();
+            var image = await $"{_config.Value.ApiGatewayBaseUrl}/api/image/{product.Id}".AllowAnyHttpStatus().GetJsonAsync<ImageBlobModel>();
             if(image != default && image.Blob != default)
             {
                 cartProduct.Image = Convert.ToBase64String(image.Blob);
@@ -219,7 +222,7 @@ namespace ProductService.Controllers
             if (addProductModel.Images != default && addProductModel.Images.Any())
             {
                 var addImagesObject = new AddImageModel(newProduct.Id, LinkedTableType.PRODUCT, addProductModel.Images);
-                if ((await $"https://localhost:44372/api/image".AllowAnyHttpStatus().PostJsonAsync(addImagesObject)).StatusCode != 201)
+                if ((await $"{_config.Value.ApiGatewayBaseUrl}/api/image".AllowAnyHttpStatus().PostJsonAsync(addImagesObject)).StatusCode != 201)
                 {
                     _dbContext.Products.Remove(newProduct);
                     await _dbContext.SaveChangesAsync();

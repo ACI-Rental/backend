@@ -1,6 +1,7 @@
 ﻿using Flurl.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ReservationService.DBContexts;
 using ReservationService.Models;
@@ -23,14 +24,16 @@ namespace ReservationService.Controllers
         /// Database context for the reservation service, this is used to make calls to the reservation table
         /// </summary>
         private readonly ReservationServiceDatabaseContext _dbContext;
+        private readonly IOptions<AppConfig> _config;
 
         /// <summary>
         /// Constructor is used for receiving the database context at the creation of the image controller
         /// </summary>
         /// <param name="dbContext">Database context param used for calls to the reservation table</param>
-        public ReservationController(ReservationServiceDatabaseContext dbContext)
+        public ReservationController(ReservationServiceDatabaseContext dbContext, IOptions<AppConfig> config)
         {
             _dbContext = dbContext;
+            _config = config;
         }
 
         /// <summary>
@@ -106,7 +109,7 @@ namespace ReservationService.Controllers
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_ALREADY_RESERVED_IN_PERIOD"));
                 }
-                var result =  await $"https://localhost:44372/api/product/{product.Id}".AllowAnyHttpStatus().GetStringAsync();
+                var result =  await $"{_config.Value.ApiGatewayBaseUrl}/api/product/{product.Id}".AllowAnyHttpStatus().GetStringAsync();
                 if (string.IsNullOrWhiteSpace(result))
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_FOUND"));

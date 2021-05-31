@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using ReservationService.DBContexts;
+using ReservationService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,7 @@ namespace ReservationService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ReservationService", Version = "v1" });
             });
             services.AddDbContext<ReservationServiceDatabaseContext>();
+            services.Configure<AppConfig>(Configuration.GetSection("Config"));
 
             using var reservationContext = new ReservationServiceDatabaseContext();
             reservationContext.Database.EnsureCreated();
