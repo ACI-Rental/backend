@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageService", "ImageService\ImageService.csproj", "{F995E3A8-6147-4788-B8C7-7F9766059A4A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService", "ItemService\ProductService.csproj", "{B7A4974C-85F7-4B96-8667-F77F8897711D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService", "ProductService\ProductService.csproj", "{B7A4974C-85F7-4B96-8667-F77F8897711D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReservationService", "ReservationService\ReservationService.csproj", "{68AC3E54-EE24-451E-92A7-322FB3377425}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotAPIGateway", "OcelotAPIGateway\OcelotAPIGateway.csproj", "{FB1CCC2A-7FF1-46A7-8C97-AC5829EDCDED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Tests", "ItemService.Tests\ProductService.Tests.csproj", "{C2AD7114-0EBC-4B23-8D30-260182B6B397}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Tests", "ProductService.Tests\ProductService.Tests.csproj", "{C2AD7114-0EBC-4B23-8D30-260182B6B397}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageService.Tests", "ImageService.Tests\ImageService.Tests.csproj", "{7560BACB-265D-46C0-83F5-1B271DB2440E}"
 EndProject
