@@ -16,10 +16,11 @@ using Microsoft.Extensions.Options;
 
 namespace ReservationService.Tests.UnitTests
 {
-    public class ReservationTests
+    public class ReservationTests : IDisposable
     {
         private readonly ReservationController _controller;
         private readonly ReservationServiceDatabaseContext _context;
+        private bool disposedValue;
 
         public ReservationTests()
         {
@@ -227,5 +228,30 @@ namespace ReservationService.Tests.UnitTests
             var errorList = errorIEnumerable.ToList();
             return errorList;
         } 
+
+        /// <summary>
+        /// Disposes resource
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing && _context != null)
+                {
+                    _context.Reservations.RemoveRange(_context.Reservations.ToList());
+                    _context.SaveChanges();
+                    _context.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
