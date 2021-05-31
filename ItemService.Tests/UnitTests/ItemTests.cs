@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace ProductService.Tests.UnitTests
 {
@@ -21,7 +22,7 @@ namespace ProductService.Tests.UnitTests
 
             var context = new ProductServiceDatabaseContext(options);
             SeedProductInMemoryDatabaseWithData(context);
-            var controller = new ProductController(context);
+            var controller = new ProductController(context, Options.Create(new AppConfig() { ApiGatewayBaseUrl = "http://fake-url.com" }));
             var result = await controller.GetProducts();
 
             var objectresult = Assert.IsType<OkObjectResult>(result.Result);

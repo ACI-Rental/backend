@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace ProductService.Tests.UnitTests
 {
@@ -21,7 +22,7 @@ namespace ProductService.Tests.UnitTests
             var options = new DbContextOptionsBuilder<ProductServiceDatabaseContext>().UseInMemoryDatabase(databaseName: "InMemoryReservationDb").Options;
 
             _context = new ProductServiceDatabaseContext(options);
-            _controller = new ProductController(_context);
+            _controller = new ProductController(_context, Options.Create(new AppConfig() { ApiGatewayBaseUrl = "http://fake-url.com" }));
 
             SeedProductsInMemoryDatabase();
         }

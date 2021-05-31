@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Flurl.Http.Testing;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 
 namespace ReservationService.Tests.UnitTests
 {
@@ -25,7 +26,7 @@ namespace ReservationService.Tests.UnitTests
             var options = new DbContextOptionsBuilder<ReservationServiceDatabaseContext>().UseInMemoryDatabase(databaseName: "InMemoryReservationDb").Options;
 
             _context = new ReservationServiceDatabaseContext(options);
-            _controller = new ReservationController(_context);
+            _controller = new ReservationController(_context, Options.Create(new AppConfig() { ApiGatewayBaseUrl = "http://fake-url.com" }));
         }
         [Fact]
         private async Task ReserveProducts_ShouldReturnStartDateBeforeCurrentDateError()

@@ -43,7 +43,7 @@ namespace ProductService.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var result = await _dbContext.Products.ToListAsync();
-            return Ok(_config);
+            return Ok(result);
         }
 
         /// <summary>
