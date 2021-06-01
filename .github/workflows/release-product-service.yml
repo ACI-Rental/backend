@@ -5,10 +5,10 @@ on:
     branches:
       - main
     paths:
-      - "ItemService/**"
+      - "ProductService/**"
       - ".github/workflows/release-product-service.yml"
 env:
-  PROJECT_PATH: 'ItemService/ProductService.csproj'
+  PROJECT_PATH: 'ProductService/ProductService.csproj'
 
 jobs:
   build:
@@ -40,6 +40,6 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v2
       with:
-        context: ItemService
+        context: ProductService
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/aci-product-service:latest
