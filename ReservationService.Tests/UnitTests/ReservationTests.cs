@@ -35,7 +35,7 @@ namespace ReservationService.Tests.UnitTests
         {
             var monday = GetNextMonday();
             var model = new ReserveProductModel() { ProductModels = new List<ProductModel>() };
-            var pm1 = new ProductModel { Id = 6, StartDate = monday.AddDays(-3), EndDate = monday };
+            var pm1 = new ProductModel { Id = 6, StartDate = monday.AddDays(-14), EndDate = monday.AddDays(-13) };
             model.ProductModels.Add(pm1);
             var product = new Product() { Id = 1, ProductState = ProductState.AVAILABLE, RequiresApproval = true };
             string serializedObject = JsonConvert.SerializeObject(product);
@@ -44,9 +44,10 @@ namespace ReservationService.Tests.UnitTests
             httpTest.RespondWith(serializedObject);
             var result = await _controller.ReserveProducts(model);
             var errorList = GetErrorList(result);
-            Assert.Single(errorList);
+            Assert.Equal(2, errorList.Count);
             Assert.Equal(pm1, errorList[0].Key);
             Assert.Equal("PRODUCT.RESERVE.PRODUCT_INVALID_STARTDATE", errorList[0].Value);
+            Assert.Equal("PRODUCT.RESERVE.PRODUCT_INVALID_ENDDATE", errorList[1].Value);
         }
 
         [Fact]
@@ -62,11 +63,9 @@ namespace ReservationService.Tests.UnitTests
             httpTest.RespondWith(serializedObject);
             var result = await _controller.ReserveProducts(model);
             var errorList = GetErrorList(result);
-            Assert.Equal(2, errorList.Count);
+            Assert.Single(errorList);
             Assert.Equal(pm1, errorList[0].Key);
-            Assert.Equal(pm1, errorList[1].Key);
-            Assert.Equal("PRODUCT.RESERVE.PRODUCT_INVALID_ENDDATE", errorList[0].Value);
-            Assert.Equal("PRODUCT.RESERVE.PRODUCT_ENDDATE_BEFORE_STARTDATE", errorList[1].Value);
+            Assert.Equal("PRODUCT.RESERVE.PRODUCT_ENDDATE_BEFORE_STARTDATE", errorList[0].Value);
         }
 
         [Fact]
