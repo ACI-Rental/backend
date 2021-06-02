@@ -16,7 +16,7 @@ using System.Runtime.CompilerServices;
 
 namespace ProductService.Tests.UnitTests
 {
-    public class ItemTests
+    public class ProductTests
     { 
 
         /// <summary>
@@ -92,6 +92,7 @@ namespace ProductService.Tests.UnitTests
             Assert.Equal(0, resultValue.CurrentPage);
         }
 
+        [Fact]
         private async Task GetInventoryProducts_ShouldReturnLastPage()
         {
             var controller = Initialize();
@@ -104,7 +105,7 @@ namespace ProductService.Tests.UnitTests
 
             Assert.Equal(3, resultValue.Products.Count());
             Assert.Equal(9, resultValue.TotalProductCount);
-            Assert.Equal(3, resultValue.CurrentPage);
+            Assert.Equal(2, resultValue.CurrentPage);
         }
 
         [Fact]
