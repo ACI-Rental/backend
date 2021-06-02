@@ -9,28 +9,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Flurl.Http.Testing;
+using System.Runtime.CompilerServices;
 
 namespace ProductService.Tests.UnitTests
 {
-    public class ItemTests : IDisposable
-    {
-        private readonly ProductServiceDatabaseContext _context;
-        private readonly ProductController _controller;
-        private bool disposedValue;
-        private readonly static object _lock = new object();
-        public ItemTests()
-        {
-            var options = new DbContextOptionsBuilder<ProductServiceDatabaseContext>().UseInMemoryDatabase(databaseName: "InMemoryProductDb").Options;
+    public class ItemTests
+    { 
 
-            _context = new ProductServiceDatabaseContext(options);
-            _controller = new ProductController(_context, Options.Create(new AppConfig() { ApiGatewayBaseUrl = "http://fake-url.com" }));
-            SeedProductInMemoryDatabaseWithData();
+        private ProductController Initialize(bool seed = true, [CallerMemberName]string callerName = "")
+        {
+            var options = new DbContextOptionsBuilder<ProductServiceDatabaseContext>().UseInMemoryDatabase(databaseName: "InMemoryProductDb_" + callerName).Options;
+            var context = new ProductServiceDatabaseContext(options);
+            if (seed)
+            {
+                SeedProductInMemoryDatabaseWithData(context);
+            }
+
+            return new ProductController(context, Options.Create(new AppConfig() { ApiGatewayBaseUrl = "http://fake-url.com" }));
         }
 
         [Fact]
         private async Task GetInventoryProducts_ShouldReturnFirstPageIfIndexZero()
         {
-            var result = await _controller.GetInventoryItems(0, 3);
+            var controller = Initialize();
+            var result = await controller.GetInventoryItems(0, 3);
 
             Assert.IsType<OkObjectResult>(result);
             var actionResult = (OkObjectResult)result;
@@ -41,12 +44,14 @@ namespace ProductService.Tests.UnitTests
             Assert.Equal(3, resultValue.Products.Count());
             Assert.Equal(0, resultValue.CurrentPage);
             Assert.Equal(1, resultValue.Products.First().Id);
+
         }
 
         [Fact]
         private async Task GetInventoryProducts_ShouldReturnSecondPageIfIndexOne()
         {
-            var result = await _controller.GetInventoryItems(1, 2);
+            var controller = Initialize();
+            var result = await controller.GetInventoryItems(1, 2);
             Assert.IsType<OkObjectResult>(result);
             var actionResult = (OkObjectResult)result;
 
@@ -64,7 +69,8 @@ namespace ProductService.Tests.UnitTests
         [Fact]
         private async Task GetInventoryProducts_ShouldReturnAllProducts()
         {
-            var result = await _controller.GetInventoryItems(0, 100);
+            var controller = Initialize();
+            var result = await controller.GetInventoryItems(0, 100);
             Assert.IsType<OkObjectResult>(result);
             var actionResult = (OkObjectResult)result;
 
@@ -78,7 +84,8 @@ namespace ProductService.Tests.UnitTests
 
         private async Task GetInventoryProducts_ShouldReturnLastPage()
         {
-            var result = await _controller.GetInventoryItems(50, 3);
+            var controller = Initialize();
+            var result = await controller.GetInventoryItems(50, 3);
             Assert.IsType<OkObjectResult>(result);
             var actionResult = (OkObjectResult)result;
 
@@ -93,21 +100,44 @@ namespace ProductService.Tests.UnitTests
         [Fact]
         private async Task GetInventoryProducts_ShouldReturnBadObjectResultIfPageSizeIsNegative()
         {
-            var result = await _controller.GetInventoryItems(0, -3);
+            var controller = Initialize(seed: false);
+            var result = await controller.GetInventoryItems(0, -3);
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
         private async Task GetInventoryProducts_ShouldReturnBadObjectResultIfPageIndexIsNegative()
         {
-            var result = await _controller.GetInventoryItems(-3, 1);
+            var controller = Initialize(seed: false);
+            var result = await controller.GetInventoryItems(-3, 1);
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
-        private async Task GetInventoryProducts_ShouldReturnNotFound()
+        private async Task GetLastCatalog_ShouldReturn0IfCatalogEmpty()
         {
-            var result = await _controller.GetFlatProductById(100);
+            var controller = Initialize(seed: false);
+            var result = await controller.GetLastCatalog();
+
+            var resultValue = result.Value;
+
+            Assert.Equal(0, resultValue);
+        }
+
+        private async Task GetLastCatalog_ShouldReturnLastCatalogNumber()
+        {
+            var controller = Initialize();
+            var result = await controller.GetLastCatalog();
+
+            var resultValue = result.Value;
+
+            Assert.Equal(9, resultValue);
+        }
+
+        private async Task GetFlatProductById_ShouldReturnNotFoundError()
+        {
+            var controller = Initialize();
+            var result = await controller.GetFlatProductById(100);
 
             Assert.IsType<NotFoundObjectResult>(result);
         }
@@ -115,13 +145,14 @@ namespace ProductService.Tests.UnitTests
         [Fact]
         private async Task GetFlatProductById_ShouldReturnCorrectProduct()
         {
+            var controller = Initialize();
             using var httpTest = new HttpTest();
             httpTest.RespondWithJson(new ImageBlobModel
             {
                 Blob = null
             });
 
-            var result = await _controller.GetFlatProductById(7);
+            var result = await controller.GetFlatProductById(7);
 
             Assert.IsType<OkObjectResult>(result);
             var actionResult = (OkObjectResult)result;
@@ -133,64 +164,49 @@ namespace ProductService.Tests.UnitTests
             Assert.Equal("Microphone 1", resultValue.Name);
         }
 
-        private void SeedProductInMemoryDatabaseWithData()
+
+        [Fact]
+        private async Task GetInventoryProducts_ShouldReturnNotFound()
         {
-            lock (_lock)
-            {
-                var categories = new List<Category>
-                {
-                    new Category { Id = 1, Name = "Camera" },
-                    new Category { Id = 2, Name = "Sound" },
-                    new Category { Id = 3, Name = "Recording" },
-                };
-                if (!_context.Categories.Any())
-                {
-                    _context.Categories.AddRange(categories);
-                }
+            var controller = Initialize(false);
+            var result = await controller.GetFlatProductById(100);
 
-                var data = new List<Product>
-                {
-                   new Product { Id = 1, Name = "Canon EOS R5", CatalogNumber = 1, Category = categories[0], Description = "Dit is tekst", InventoryLocation="Balie", ProductState = ProductState.AVAILABLE, RequiresApproval = false},
-                   new Product { Id = 2, Name = "Canon 80D", CatalogNumber = 2, Category = categories[0], Description = "Dit is tekst", InventoryLocation="Balie", ProductState = ProductState.UNAVAILABLE, RequiresApproval = false},
-                   new Product { Id = 3, Name = "XA 15 prof Camcorder", CatalogNumber = 3, Category = categories[0], Description = "Dit is tekst", InventoryLocation="Balie", ProductState = ProductState.ARCHIVED, RequiresApproval = false},
-
-                   new Product { Id = 4, Name = "DJ Set", CatalogNumber = 6, Category = categories[1], Description = "Dit is tekst", InventoryLocation="A3.5", ProductState = ProductState.AVAILABLE, RequiresApproval = true},
-                   new Product { Id = 5, Name = "Speakers", CatalogNumber = 4, Category = categories[1], Description = "Dit is tekst", InventoryLocation="Plank A2", ProductState = ProductState.UNAVAILABLE, RequiresApproval = true},
-                   new Product { Id = 6, Name = "Headset", CatalogNumber = 5, Category = categories[1], Description = "Dit is tekst", InventoryLocation="Plank 1", ProductState = ProductState.ARCHIVED, RequiresApproval = true},
-
-                   new Product { Id = 7, Name = "Microphone 1", CatalogNumber = 9, Category = categories[2], Description = "Dit is tekst", InventoryLocation="A3.5", ProductState = ProductState.AVAILABLE, RequiresApproval = false},
-                   new Product { Id = 8, Name = "Microphone 2", CatalogNumber = 7, Category = categories[2], Description = "Dit is tekst", InventoryLocation="Plank A2", ProductState = ProductState.UNAVAILABLE, RequiresApproval = true},
-                   new Product { Id = 9, Name = "Microphone 3", CatalogNumber = 8, Category = categories[2], Description = "Dit is tekst", InventoryLocation="Plank 1", ProductState = ProductState.ARCHIVED, RequiresApproval = false},
-                };
-                if (!_context.Products.Any())
-                {
-                    _context.Products.AddRange(data);
-                }
-                _context.SaveChanges();
-            }
+            Assert.IsType<NotFoundObjectResult>(result);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void SeedProductInMemoryDatabaseWithData(ProductServiceDatabaseContext context)
         {
-            if (!disposedValue)
+            var categories = new List<Category>
             {
-                if (disposing && _context != null)
-                {
-                    _context.Products.RemoveRange(_context.Products.ToList());
-                    _context.Categories.RemoveRange(_context.Categories.ToList());
-                    _context.SaveChanges();
-                    _context.Dispose();
-                }
-
-                disposedValue = true;
+                new Category { Id = 1, Name = "Camera" },
+                new Category { Id = 2, Name = "Sound" },
+                new Category { Id = 3, Name = "Recording" },
+            };
+            if (!context.Categories.Any())
+            {
+                context.Categories.AddRange(categories);
             }
-        }
 
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            var data = new List<Product>
+            {
+               new Product { Id = 1, Name = "Canon EOS R5", CatalogNumber = 1, Category = categories[0], Description = "Dit is tekst", InventoryLocation="Balie", ProductState = ProductState.AVAILABLE, RequiresApproval = false},
+               new Product { Id = 2, Name = "Canon 80D", CatalogNumber = 2, Category = categories[0], Description = "Dit is tekst", InventoryLocation="Balie", ProductState = ProductState.UNAVAILABLE, RequiresApproval = false},
+               new Product { Id = 3, Name = "XA 15 prof Camcorder", CatalogNumber = 3, Category = categories[0], Description = "Dit is tekst", InventoryLocation="Balie", ProductState = ProductState.ARCHIVED, RequiresApproval = false},
+
+               new Product { Id = 4, Name = "DJ Set", CatalogNumber = 6, Category = categories[1], Description = "Dit is tekst", InventoryLocation="A3.5", ProductState = ProductState.AVAILABLE, RequiresApproval = true},
+               new Product { Id = 5, Name = "Speakers", CatalogNumber = 4, Category = categories[1], Description = "Dit is tekst", InventoryLocation="Plank A2", ProductState = ProductState.UNAVAILABLE, RequiresApproval = true},
+               new Product { Id = 6, Name = "Headset", CatalogNumber = 5, Category = categories[1], Description = "Dit is tekst", InventoryLocation="Plank 1", ProductState = ProductState.ARCHIVED, RequiresApproval = true},
+
+               new Product { Id = 7, Name = "Microphone 1", CatalogNumber = 9, Category = categories[2], Description = "Dit is tekst", InventoryLocation="A3.5", ProductState = ProductState.AVAILABLE, RequiresApproval = false},
+               new Product { Id = 8, Name = "Microphone 2", CatalogNumber = 7, Category = categories[2], Description = "Dit is tekst", InventoryLocation="Plank A2", ProductState = ProductState.UNAVAILABLE, RequiresApproval = true},
+               new Product { Id = 9, Name = "Microphone 3", CatalogNumber = 8, Category = categories[2], Description = "Dit is tekst", InventoryLocation="Plank 1", ProductState = ProductState.ARCHIVED, RequiresApproval = false},
+            };
+            if (!context.Products.Any())
+            {
+                context.Products.AddRange(data);
+            }
+            context.SaveChanges();
+
         }
     }
 }
