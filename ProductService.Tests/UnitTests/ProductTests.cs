@@ -17,6 +17,14 @@ namespace ProductService.Tests.UnitTests
     public class ItemTests
     { 
 
+        /// <summary>
+        /// Initializes the test by creating the database and controller
+        /// </summary>
+        /// <param name="seed">Whether the database should be fileld with data</param>
+        /// <param name="callerName">The name of the method. 
+        /// Gets filled using the CallerMemberName attribute
+        /// </param>
+        /// <returns>The product controller set up for testing</returns>
         private ProductController Initialize(bool seed = true, [CallerMemberName]string callerName = "")
         {
             var options = new DbContextOptionsBuilder<ProductServiceDatabaseContext>().UseInMemoryDatabase(databaseName: "InMemoryProductDb_" + callerName).Options;
@@ -124,6 +132,7 @@ namespace ProductService.Tests.UnitTests
             Assert.Equal(0, resultValue);
         }
 
+        [Fact]
         private async Task GetLastCatalog_ShouldReturnLastCatalogNumber()
         {
             var controller = Initialize();
@@ -134,6 +143,7 @@ namespace ProductService.Tests.UnitTests
             Assert.Equal(9, resultValue);
         }
 
+        [Fact]
         private async Task GetFlatProductById_ShouldReturnNotFoundError()
         {
             var controller = Initialize();
@@ -168,10 +178,94 @@ namespace ProductService.Tests.UnitTests
         [Fact]
         private async Task GetInventoryProducts_ShouldReturnNotFound()
         {
-            var controller = Initialize(false);
+            var controller = Initialize(seed: false);
             var result = await controller.GetFlatProductById(100);
 
             Assert.IsType<NotFoundObjectResult>(result);
+        }
+
+        [Fact]
+        private async Task AddProduct_ShouldCreateObject()
+        {
+            var controller = Initialize();
+            using var httpTest = new HttpTest();
+            var productModel = new AddProductModel()
+            {
+                Name = "NewProduct",
+                CatalogNumber = 2,
+                Location = "Plek 3",
+                RequiresApproval = false,
+                CategoryId = 1,
+                Description = "Fusce consectetur luctus urna. Vestibulum feugiat id sem vitae placerat."
+            };
+            var result = await controller.AddProduct(productModel);
+
+            Assert.IsType<CreatedResult>(result);
+        }
+
+        [Fact]
+        private async Task AddProduct_ShouldReturnBadRequestIfParameterNull()
+        {
+            var controller = Initialize();
+            using var httpTest = new HttpTest();
+            var result = await controller.AddProduct(null);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        private async Task AddProduct_ShouldReturnBadRequestWithoutCategory()
+        {
+            var controller = Initialize();
+            using var httpTest = new HttpTest();
+            var productModel = new AddProductModel()
+            {
+                Name = "NewProduct",
+                CatalogNumber = 2,
+                Location = "Plek 3",
+                RequiresApproval = false,
+                Description = "Fusce consectetur luctus urna. Vestibulum feugiat id sem vitae placerat."
+            };
+            var result = await controller.AddProduct(productModel);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        private async Task AddProduct_ShouldReturnBadRequestWithoutName()
+        {
+            var controller = Initialize();
+            using var httpTest = new HttpTest();
+            var productModel = new AddProductModel()
+            {
+                CatalogNumber = 2,
+                Location = "Plek 3",
+                RequiresApproval = false,
+                CategoryId = 1,
+                Description = "Fusce consectetur luctus urna. Vestibulum feugiat id sem vitae placerat."
+            };
+            var result = await controller.AddProduct(productModel);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        private async Task AddProduct_ShouldReturnBadRequestIfCatalogNegative()
+        {
+            var controller = Initialize();
+            using var httpTest = new HttpTest();
+            var productModel = new AddProductModel()
+            {
+                Name = "NewProduct",
+                CatalogNumber = -2,
+                Location = "Plek 3",
+                RequiresApproval = false,
+                CategoryId = 1,
+                Description = "Fusce consectetur luctus urna. Vestibulum feugiat id sem vitae placerat."
+            };
+            var result = await controller.AddProduct(productModel);
+
+            Assert.IsType<BadRequestObjectResult>(result);
         }
 
         private void SeedProductInMemoryDatabaseWithData(ProductServiceDatabaseContext context)
