@@ -37,17 +37,6 @@ namespace ProductService.Controllers
         }
 
         /// <summary>
-        /// Get all the users from the database
-        /// </summary>
-        /// <returns>All Users in Db</returns>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
-        {
-            var result = await _dbContext.Products.ToListAsync();
-            return Ok(result);
-        }
-
-        /// <summary>
         /// Get the product with a certain id
         /// </summary>
         /// <param name="id"></param>
