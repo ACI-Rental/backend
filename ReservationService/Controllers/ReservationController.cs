@@ -48,6 +48,38 @@ namespace ReservationService.Controllers
         }
 
         /// <summary>
+        /// Get all reservations with similar start or enddate
+        /// </summary>
+        /// <param name="reservationId"></param>
+        /// <returns>List of all similar reservations, including the reservation itself</returns>
+        [HttpGet("similar/{reservationId}")]
+        public async Task<IActionResult> GetSimilarReservations(int reservationId)
+        {
+            if(reservationId < 0)
+            {
+                return BadRequest("RESERVATION.ACTION.INVALID.ID");
+            }
+
+            // TODO: Get userId from Cookie and check it against renterId
+            var renterId = 1;
+            var reservation = await _dbContext.Reservations.FirstOrDefaultAsync(x => x.Id == reservationId && x.RenterId == renterId);
+
+            if(reservation == default)
+            {
+                return NotFound("RESERVATION.ACTION.NOT_FOUND");
+            }
+
+            var similarReservations = new List<Reservation>()
+            {
+                reservation
+            };
+
+            similarReservations.AddRange(await _dbContext.Reservations.Where(x => x.Id != reservationId && (x.StartDate.Date == reservation.StartDate.Date || x.EndDate.Date == reservation.EndDate.Date)).ToListAsync());
+            
+            return Ok(similarReservations);
+        }   
+
+        /// <summary>
         /// Saves a reservation for a product.
         /// </summary>
         /// <param name="reserveProductModel">Model containing a list of product models.</param>
