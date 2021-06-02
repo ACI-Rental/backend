@@ -94,6 +94,20 @@ namespace ProductService.Tests.UnitTests
         }
 
         [Fact]
+        private async Task GetInventoryProducts_ShouldReturnBadObjectResultIfPageSizeIsNegative()
+        {
+            var result = await _controller.GetInventoryItems(0, -3);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        private async Task GetInventoryProducts_ShouldReturnBadObjectResultIfPageIndexIsNegative()
+        {
+            var result = await _controller.GetInventoryItems(-3, 1);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
         private async Task GetInventoryProducts_ShouldReturnNotFound()
         {
             var result = await _controller.GetFlatProductById(100);
