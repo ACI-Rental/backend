@@ -16,8 +16,8 @@ namespace ProductService.Models.DTO
         public IEnumerable<InventoryProduct> Products { get; set; }
 
         /// <summary>
-        /// De current page number
-        /// Sttarts with 1
+        /// The current page number
+        /// Starts with 0
         /// </summary>
         public int CurrentPage { get; set; }
 
