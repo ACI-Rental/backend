@@ -37,17 +37,6 @@ namespace ProductService.Controllers
         }
 
         /// <summary>
-        /// Get the product with a certain id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{productId}")]
-        public async Task<ActionResult<Product>> GetProduct(int productId)
-        {
-            return await _dbContext.Products.Where(x => x.Id == productId).FirstOrDefaultAsync();
-        }
-
-        /// <summary>
         /// Get a single inventory page containing products
         /// </summary>
         /// <param name="pageIndex">Which page is being requested. If 0 or lower returns first page. If higher than amount of pages returns the last page </param>
