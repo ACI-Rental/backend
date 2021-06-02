@@ -54,8 +54,18 @@ namespace ProductService.Controllers
         /// <param name="pageSize">The amount of products that are being requested</param>
         /// <returns>Object containing count of all products, current page and a collection of products</returns>
         [HttpGet("page/{pageIndex}/{pageSize}")]
-        public async Task<InventoryPage> GetInventoryItems(int pageIndex, int pageSize)
+        public async Task<IActionResult> GetInventoryItems(int pageIndex, int pageSize)
         {
+            if (pageIndex < 0)
+            {
+                return BadRequest("INVENTORY.INCORRECT_INDEX");
+            }
+
+            if (pageSize < 0)
+            {
+                return BadRequest("INVENTORY.INCORRECT_PAGESIZE");
+            }
+
             var page = new InventoryPage();
 
             var query = from product in _dbContext.Products
@@ -77,7 +87,7 @@ namespace ProductService.Controllers
             {
                 page.CurrentPage = 0;
                 page.Products = new List<InventoryProduct>(0);
-                return page;
+                return Ok(page);
             }
 
             // calculate how many pages there are given de current pageSize
@@ -91,7 +101,7 @@ namespace ProductService.Controllers
             page.CurrentPage = Math.Min(pageIndex, lastPage);
 
             page.Products = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
-            return page;
+            return Ok(page);
         }
 
         /// <summary>
