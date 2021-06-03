@@ -53,7 +53,7 @@ namespace ReservationService.Controllers
         /// <param name="reservationId"></param>
         /// <returns>List of all similar reservations, including the reservation itself</returns>
         [HttpGet("similar/{reservationId}")]
-        public async Task<IActionResult> GetSimilarReservations(int reservationId)
+        public async Task<IActionResult> GetSimilarReservationsToID(int reservationId)
         {
             if(reservationId < 0)
             {
@@ -61,7 +61,7 @@ namespace ReservationService.Controllers
             }
 
             // TODO: Get userId from Cookie and check it against renterId
-            var renterId = 1;
+            var renterId = 0;
             var reservation = await _dbContext.Reservations.FirstOrDefaultAsync(x => x.Id == reservationId && x.RenterId == renterId);
 
             if(reservation == default)
