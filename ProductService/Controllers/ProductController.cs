@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
 using Microsoft.Extensions.Options;
+using ProductService.Converters;
 
 namespace ProductService.Controllers
 {
@@ -93,7 +94,7 @@ namespace ProductService.Controllers
             // calculate how many pages there are given de current pageSize
             int lastPage = (int)Math.Ceiling((double)page.TotalProductCount / pageSize) - 1;
 
-            // pageIndex below 0 is non-sensical, bringing the value to closest sane value
+            // pageIndex below 0 is nonsensical, bringing the value to closest sane value
             if (pageIndex < 0)
                 pageIndex = 0;
 
@@ -299,5 +300,81 @@ namespace ProductService.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Gets all catalog entries based on pageindex and pagesize
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns>Empty list if no entries are found, Succes a CatalogPage object</returns>
+        [HttpGet("catalogentries/{pageindex}/{pagesize}")]
+        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize)
+        {
+            if (pageIndex < 0 || pageSize < 0)
+            {
+                return BadRequest("CATALOG.INCORRECT_PAGESIZE_OR_INDEX");
+            }
+            var converter = new CatalogItemConverter();
+            var catalogObjects = await _dbContext.Products.OrderBy(x => x.CatalogNumber).Include(x => x.Category).ToListAsync();
+            var allitems = new List<CatalogItemsWithCategory>();
+
+            foreach (var item in catalogObjects)
+            {
+                var images = await $"https://localhost:44372/api/image/images/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
+                var catalogImages = new List<string>();
+                foreach (var image in images)
+                {
+                    if (image != default && image.Blob != default)
+                    {
+                        catalogImages.Add(Convert.ToBase64String(image.Blob));
+                    }
+                }
+
+                if (!allitems.Any())
+                {
+                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages));
+                    continue;
+                }
+
+                // Check if the category name already exists within an item list
+                var firstlist = allitems.FirstOrDefault(x => x.CategoryName == item.Category.Name);
+                if (firstlist != default)
+                {
+                    firstlist.CatalogItems.Add(converter.ConvertProductToCatalogItemAsync(item, catalogImages));
+                }
+                else
+                {
+                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages));
+                }
+            }
+            var page = new CatalogPage 
+            { 
+                TotalProductCount = allitems.Count
+            };
+
+            // Last page calculation goes wrong if the totalcount is 0
+            // also no point in trying to get 0 products from DB
+            if (page.TotalProductCount == 0)
+            {
+                page.CurrentPage = 0;
+                page.CatalogItems = new List<CatalogItemsWithCategory>();
+                return Ok(page);
+            }
+
+            // calculate how many pages there are given de current pageSize
+            int lastPage = (int)Math.Ceiling((double)page.TotalProductCount / pageSize) - 1;
+
+            // pageIndex below 0 is nonsensical, bringing the value to closest sane value
+            if (pageIndex < 0)
+            {
+                pageIndex = 0;
+            }
+               
+            // use lastpage if requested page is higher
+            page.CurrentPage = Math.Min(pageIndex, lastPage);
+
+            page.CatalogItems = allitems.Skip((page.CurrentPage) * pageSize).Take(pageSize).ToList();
+
+            return Ok(page);
+        }
     }
 }
