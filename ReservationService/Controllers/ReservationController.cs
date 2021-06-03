@@ -46,6 +46,7 @@ namespace ReservationService.Controllers
             var result = await _dbContext.Reservations.ToListAsync();
             return Ok(result);
         }
+
         /// <summary>
         /// Saves a reservation for a product.
         /// </summary>
@@ -153,6 +154,31 @@ namespace ReservationService.Controllers
             await _dbContext.SaveChangesAsync();
             return Ok();
         }
+
+        /// <summary>
+        /// Get all reservations with similar startdate
+        /// </summary>
+        /// <returns>List of all similar reservations</returns>
+        [HttpGet("similar")]
+        public async Task<IActionResult> GetSimilarReservations()
+        {
+            var reservations = await _dbContext.Reservations.ToListAsync();
+            var similarReservations = new List<List<Reservation>>();
+
+            for (int i = 0; i < reservations.Count; i++)
+            {
+                var mergedReservations = new List<Reservation>();
+
+                mergedReservations.AddRange(reservations.Where(x => x.StartDate.Date == reservations[i].StartDate.Date && x.RenterId == reservations[i].RenterId).ToList());
+
+                reservations.RemoveAll(x => x.StartDate.Date == reservations[i].StartDate.Date && x.RenterId == reservations[i].RenterId && reservations[i].Id != x.Id);
+
+                similarReservations.Add(mergedReservations);
+            }
+
+            return Ok(similarReservations);
+        }
+
         /// <summary>
         /// Counts the amount of weekend days between two dates.
         /// </summary>
