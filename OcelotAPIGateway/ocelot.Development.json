@@ -131,6 +131,28 @@
         }
       ],
       "UpstreamPathTemplate": "/api/products/reserve"
+    },
+    {
+      "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64808
+        }
+      ],
+      "UpstreamPathTemplate": "/api/reservation/{reservationId}"
+    },
+    {
+      "DownstreamPathTemplate": "/reservation/reservationaction",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64808
+        }
+      ],
+      "UpstreamPathTemplate": "/api/reservation"
     }
 
   ],

@@ -74,7 +74,7 @@ namespace ReservationService.Controllers
                 reservation
             };
 
-            similarReservations.AddRange(await _dbContext.Reservations.Where(x => x.Id != reservationId && (x.StartDate.Date == reservation.StartDate.Date || x.EndDate.Date == reservation.EndDate.Date)).ToListAsync());
+            similarReservations.AddRange(await _dbContext.Reservations.Where(x => x.Id != reservationId && (x.StartDate.Date == reservation.StartDate.Date)).ToListAsync());
             
             return Ok(similarReservations);
         }   
@@ -252,7 +252,7 @@ namespace ReservationService.Controllers
         {
             if (reservationActionModel == null)
             {
-                return BadRequest("");
+                return BadRequest("RESERVATION.ACTION.INVALIDCALL");
             }
 
             if (reservationActionModel.ReservationId < 0)
