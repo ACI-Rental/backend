@@ -266,7 +266,7 @@ namespace ReservationService.Controllers
                 switch (reservationActionModel.ActionNumber)
                 {
                     case 0:
-                        //Verwijderen reservering? pickup return date zelfde data?
+                        //Delete reservation
                         break;
                     case 1:
                         result.PickedUpDate = DateTime.Now;

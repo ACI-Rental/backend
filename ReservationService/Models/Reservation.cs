@@ -41,7 +41,6 @@ namespace ReservationService.Models
         /// <summary>
         /// Used to display the return date of the reservation
         /// </summary>
-        /// 
         public DateTime? ReturnDate { get; set; }
 
         /// <summary>
