@@ -37,36 +37,24 @@ namespace ProductService.Controllers
         }
 
         /// <summary>
-        /// Get all the users from the database
-        /// </summary>
-        /// <returns>All Users in Db</returns>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
-        {
-            var result = await _dbContext.Products.ToListAsync();
-            return Ok(result);
-        }
-
-        /// <summary>
-        /// Get the product with a certain id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{productId}")]
-        public async Task<ActionResult<Product>> GetProduct(int productId)
-        {
-            return await _dbContext.Products.Where(x => x.Id == productId).FirstOrDefaultAsync();
-        }
-
-        /// <summary>
         /// Get a single inventory page containing products
         /// </summary>
         /// <param name="pageIndex">Which page is being requested. If 0 or lower returns first page. If higher than amount of pages returns the last page </param>
         /// <param name="pageSize">The amount of products that are being requested</param>
         /// <returns>Object containing count of all products, current page and a collection of products</returns>
         [HttpGet("page/{pageIndex}/{pageSize}")]
-        public async Task<InventoryPage> GetInventoryItems(int pageIndex, int pageSize)
+        public async Task<IActionResult> GetInventoryItems(int pageIndex, int pageSize)
         {
+            if (pageIndex < 0)
+            {
+                return BadRequest("INVENTORY.INCORRECT_INDEX");
+            }
+
+            if (pageSize < 0)
+            {
+                return BadRequest("INVENTORY.INCORRECT_PAGESIZE");
+            }
+
             var page = new InventoryPage();
 
             var query = from product in _dbContext.Products
@@ -88,7 +76,7 @@ namespace ProductService.Controllers
             {
                 page.CurrentPage = 0;
                 page.Products = new List<InventoryProduct>(0);
-                return page;
+                return Ok(page);
             }
 
             // calculate how many pages there are given de current pageSize
@@ -102,7 +90,7 @@ namespace ProductService.Controllers
             page.CurrentPage = Math.Min(pageIndex, lastPage);
 
             page.Products = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
-            return page;
+            return Ok(page);
         }
 
         /// <summary>
