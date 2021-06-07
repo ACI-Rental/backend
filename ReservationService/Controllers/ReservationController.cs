@@ -248,11 +248,11 @@ namespace ReservationService.Controllers
         /// <param name="reservationActionModel">Action Object with Reservation Id and Action number</param>
         /// <returns>Ok</returns>
         [HttpPost("reservationaction")]
-        public async Task<IActionResult> ReservationAction(ReservationActionModel reservationActionModel)
+        public async Task<IActionResult> ReservationActionCall(ReservationActionModel reservationActionModel)
         {
             if (reservationActionModel == null)
             {
-                return BadRequest("RESERVATION.ACTION.INVALIDCALL");
+                return BadRequest("RESERVATION.ACTION.INVALID.CALL");
             }
 
             if (reservationActionModel.ReservationId < 0)
@@ -263,15 +263,15 @@ namespace ReservationService.Controllers
             var result = _dbContext.Reservations.SingleOrDefault(b => b.Id == reservationActionModel.ReservationId);
             if (result != null)
             {
-                switch (reservationActionModel.ActionNumber)
+                switch (reservationActionModel.Action)
                 {
-                    case 0:
-                        //Delete reservation
+                    case ReservationAction.CANCEL:
+                        //TODO: Delete reservation
                         break;
-                    case 1:
+                    case ReservationAction.PICKUP:
                         result.PickedUpDate = DateTime.Now;
                         break;
-                    case 2:
+                    case ReservationAction.RETURN:
                         result.ReturnDate = DateTime.Now;
                         break;
                     default:

@@ -1,4 +1,6 @@
-﻿namespace ReservationService.Controllers
+﻿using ReservationService.Models.DTO;
+
+namespace ReservationService.Controllers
 {
     public class ReservationActionModel
     {
@@ -13,6 +15,6 @@
         /// 1: Pickup
         /// 2: Return
         /// </summary>
-        public int ActionNumber { get; set; }
+        public ReservationAction Action { get; set; }
     }
 }
