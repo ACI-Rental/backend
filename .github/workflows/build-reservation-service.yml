@@ -48,8 +48,8 @@ jobs:
     - name: SonarScanner for .NET 5
       uses: highbyte/sonarscan-dotnet@2.0
       with:
-        sonarProjectKey: siebrum_aci-backend-reservation-service
-        sonarProjectName:  aci-backend-reservation-service
-        sonarOrganization: siebrum
+        sonarProjectKey: aci-rental_backend-reservation-service
+        sonarProjectName:  backend-reservation-service
+        sonarOrganization: aci-rental
         dotnetBuildArguments: ./NoteService
         dotnetTestArguments: ./NoteService.Tests
