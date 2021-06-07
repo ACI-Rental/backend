@@ -53,9 +53,10 @@ namespace ReservationService.Tests.UnitTests
         [Fact]
         private async Task ReserveProducts_ShouldReturnEndDateBeforeCurrentDateError()
         {
-            var monday = GetNextMonday();
+            var today = DateTime.Today;
+            var endDate = (today.DayOfWeek == DayOfWeek.Monday) ? today.AddDays(-3) : today.AddDays(-1);
             var model = new ReserveProductModel() { ProductModels = new List<ProductModel>() };
-            var pm1 = new ProductModel { Id = 6, StartDate = monday, EndDate = monday.AddDays(-3) };
+            var pm1 = new ProductModel { Id = 6, StartDate = today, EndDate = endDate };
             model.ProductModels.Add(pm1);
             var product = new Product() { Id = 1, ProductState = ProductState.AVAILABLE, RequiresApproval = true };
             string serializedObject = JsonConvert.SerializeObject(product);
@@ -63,9 +64,10 @@ namespace ReservationService.Tests.UnitTests
             httpTest.RespondWith(serializedObject);
             var result = await _controller.ReserveProducts(model);
             var errorList = GetErrorList(result);
-            Assert.Single(errorList);
+            Assert.Equal(2, errorList.Count);
             Assert.Equal(pm1, errorList[0].Key);
-            Assert.Equal("PRODUCT.RESERVE.PRODUCT_ENDDATE_BEFORE_STARTDATE", errorList[0].Value);
+            Assert.Equal("PRODUCT.RESERVE.PRODUCT_INVALID_ENDDATE", errorList[0].Value);
+            Assert.Equal("PRODUCT.RESERVE.PRODUCT_ENDDATE_BEFORE_STARTDATE", errorList[1].Value);
         }
 
         [Fact]
