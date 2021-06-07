@@ -178,8 +178,8 @@ namespace ReservationService.Controllers
         /// <param name="productId">productId used to find the reservations</param>
         /// <param name="excludeHistory">Whether past reservation should be excluded from the results</param>
         /// <returns>All found reservations</returns>
-        [HttpGet("{productId}/{excludeHistory}")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationsByProductId(int productId, bool excludeHistory = true)
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationsByProductId(int productId, [FromQuery(Name = "excludeHistory")]bool excludeHistory = true)
         {
             var query = _dbContext.Reservations.Where(x => x.ProductId == productId);
             if (excludeHistory)

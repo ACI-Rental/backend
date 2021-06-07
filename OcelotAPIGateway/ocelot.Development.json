@@ -56,7 +56,7 @@
       "UpstreamPathTemplate": "/api/product/{archiveProductId}"
     },
     {
-      "DownstreamPathTemplate": "/reservation/{productId}/true",
+      "DownstreamPathTemplate": "/reservation/{productId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
