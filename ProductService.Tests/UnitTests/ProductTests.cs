@@ -43,11 +43,9 @@ namespace ProductService.Tests.UnitTests
             var controller = Initialize();
             var result = await controller.GetInventoryItems(0, 3);
 
-            Assert.IsType<OkObjectResult>(result);
-            var actionResult = (OkObjectResult)result;
+            var actionResult = Assert.IsType<OkObjectResult>(result);
 
-            Assert.IsType<InventoryPage>(actionResult.Value);
-            var resultValue = (InventoryPage)actionResult.Value;
+            var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
 
             Assert.Equal(3, resultValue.Products.Count());
             Assert.Equal(0, resultValue.CurrentPage);
@@ -60,11 +58,9 @@ namespace ProductService.Tests.UnitTests
         {
             var controller = Initialize();
             var result = await controller.GetInventoryItems(1, 2);
-            Assert.IsType<OkObjectResult>(result);
-            var actionResult = (OkObjectResult)result;
+            var actionResult = Assert.IsType<OkObjectResult>(result);
 
-            Assert.IsType<InventoryPage>(actionResult.Value);
-            var resultValue = (InventoryPage)actionResult.Value;
+            var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
 
             Assert.Equal(2, resultValue.Products.Count());
             Assert.Equal(1, resultValue.CurrentPage);
@@ -79,11 +75,9 @@ namespace ProductService.Tests.UnitTests
         {
             var controller = Initialize();
             var result = await controller.GetInventoryItems(0, 100);
-            Assert.IsType<OkObjectResult>(result);
-            var actionResult = (OkObjectResult)result;
+            var actionResult = Assert.IsType<OkObjectResult>(result);
 
-            Assert.IsType<InventoryPage>(actionResult.Value);
-            var resultValue = (InventoryPage)actionResult.Value;
+            var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
 
             Assert.Equal(9, resultValue.Products.Count());
             Assert.Equal(9, resultValue.TotalProductCount);
@@ -95,11 +89,9 @@ namespace ProductService.Tests.UnitTests
         {
             var controller = Initialize();
             var result = await controller.GetInventoryItems(50, 3);
-            Assert.IsType<OkObjectResult>(result);
-            var actionResult = (OkObjectResult)result;
+            var actionResult = Assert.IsType<OkObjectResult>(result);
 
-            Assert.IsType<InventoryPage>(actionResult.Value);
-            var resultValue = (InventoryPage)actionResult.Value;
+            var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
 
             Assert.Equal(3, resultValue.Products.Count());
             Assert.Equal(9, resultValue.TotalProductCount);
@@ -165,11 +157,9 @@ namespace ProductService.Tests.UnitTests
 
             var result = await controller.GetFlatProductById(7);
 
-            Assert.IsType<OkObjectResult>(result);
-            var actionResult = (OkObjectResult)result;
+            var actionResult = Assert.IsType<OkObjectResult>(result);
 
-            Assert.IsType<ProductFlatModel>(actionResult.Value);
-            var resultValue = (ProductFlatModel)actionResult.Value;
+            var resultValue = Assert.IsType<ProductFlatModel>(actionResult.Value);
 
             Assert.Equal(7, resultValue.Id);
             Assert.Equal("Microphone 1", resultValue.Name);
