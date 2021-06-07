@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 namespace ProductService.Models.DTO
 {
     /// <summary>
-    /// A page of products containing a subset of all products.
+    /// A catalog of products containing a subset of all products.
     /// </summary>
-    public class InventoryPage
+    public class CatalogPage
     {
         /// <summary>
-        /// The products contained with this page of the inventory
+        /// List of all the items that are within in the page
         /// </summary>
-        public IEnumerable<InventoryProduct> Products { get; set; }
-
+        public List<CatalogItemsWithCategory> CatalogItems { get; set; }
         /// <summary>
-        /// The current page number
-        /// Starts with 0
+        /// De current page number
+        /// Sttarts with 1
         /// </summary>
         public int CurrentPage { get; set; }
 
@@ -26,6 +25,5 @@ namespace ProductService.Models.DTO
         /// Not the number of products in the page.
         /// </summary>
         public int TotalProductCount { get; set; }
-
     }
 }

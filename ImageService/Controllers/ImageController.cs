@@ -46,6 +46,24 @@ namespace ImageService.Controllers
         }
 
         /// <summary>
+        /// Gets all images bound to the product id
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns>Returns a list of images</returns>
+        [HttpGet("images/{productId}")]
+        public async Task<IActionResult> GetImagesByProductId(int productId)
+        {
+            var images = await _dbContext.Images.Where(x => x.LinkedKey == productId && x.LinkedTableType == LinkedTableType.PRODUCT).ToListAsync();
+            List<ImageBlobModel> imageBlobModels = new List<ImageBlobModel>();
+            foreach (var item in images)
+            {
+                imageBlobModels.Add(new ImageBlobModel() { Blob = item?.Blob });
+            }
+
+            return Ok(imageBlobModels);
+        }
+
+        /// <summary>
         /// Adds image to the database
         /// </summary>
         /// <param name="addImageModel">The API call data object</param>
@@ -132,17 +150,6 @@ namespace ImageService.Controllers
             }
 
             return Ok();
-        }
-
-        /// <summary>
-        /// Get all the Images from the database
-        /// </summary>
-        /// <returns>All Images in Db</returns>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
-        {
-            var result = await _dbContext.Images.ToListAsync();
-            return Ok(result);
         }
     }
 }
