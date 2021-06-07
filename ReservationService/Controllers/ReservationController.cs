@@ -266,8 +266,7 @@ namespace ReservationService.Controllers
                 switch (reservationActionModel.Action)
                 {
                     case ReservationAction.CANCEL:
-                        //TODO: Delete reservation
-                        break;
+                        throw new NotImplementedException();
                     case ReservationAction.PICKUP:
                         result.PickedUpDate = DateTime.Now;
                         break;
