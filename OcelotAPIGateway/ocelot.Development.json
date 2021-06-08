@@ -68,33 +68,33 @@
     },
     {
       "DownstreamPathTemplate": "/reservation/{productId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44387
+          "Port": 64808
         }
       ],
       "UpstreamPathTemplate": "/api/reservation/{productId}"
     },
     {
       "DownstreamPathTemplate": "/reservation/similar",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44387
+          "Port": 64808
         }
       ],
       "UpstreamPathTemplate": "/api/reservation/similar"
     },
     {
       "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44387
+          "Port": 64808
         }
       ],
       "UpstreamPathTemplate": "/api/reservation/similar/{reservationId}"

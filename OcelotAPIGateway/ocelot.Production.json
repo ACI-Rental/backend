@@ -57,7 +57,7 @@
     },
     {
       "DownstreamPathTemplate": "/reservation/{productId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "aci-reservation-service",
@@ -68,7 +68,7 @@
     },
     {
       "DownstreamPathTemplate": "/reservation/similar",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "aci-reservation-service",
@@ -79,7 +79,7 @@
     },
     {
       "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "aci-reservation-service",
