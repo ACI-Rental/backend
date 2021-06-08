@@ -48,6 +48,38 @@ namespace ReservationService.Controllers
         }
 
         /// <summary>
+        /// Get all reservations with similar start or enddate
+        /// </summary>
+        /// <param name="reservationId"></param>
+        /// <returns>List of all similar reservations, including the reservation itself</returns>
+        [HttpGet("similar/{reservationId}")]
+        public async Task<IActionResult> GetSimilarReservationsToID(int reservationId)
+        {
+            if(reservationId < 0)
+            {
+                return BadRequest("RESERVATION.ACTION.INVALID.ID");
+            }
+
+            // TODO: Get userId from Cookie and check it against renterId
+            var renterId = 0;
+            var reservation = await _dbContext.Reservations.FirstOrDefaultAsync(x => x.Id == reservationId && x.RenterId == renterId);
+
+            if(reservation == default)
+            {
+                return NotFound("RESERVATION.ACTION.NOT_FOUND");
+            }
+
+            var similarReservations = new List<Reservation>()
+            {
+                reservation
+            };
+
+            similarReservations.AddRange(await _dbContext.Reservations.Where(x => x.Id != reservationId && (x.StartDate.Date == reservation.StartDate.Date)).ToListAsync());
+            
+            return Ok(similarReservations);
+        }   
+
+        /// <summary>
         /// Saves a reservation for a product.
         /// </summary>
         /// <param name="reserveProductModel">Model containing a list of product models.</param>
@@ -202,11 +234,58 @@ namespace ReservationService.Controllers
         /// Get all reservations that are linked to a product
         /// </summary>
         /// <param name="productId">productId used to find the reservations</param>
+        /// <param name="excludeHistory">Whether past reservation should be excluded from the results</param>
         /// <returns>All found reservations</returns>
         [HttpGet("{productId}")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationsByProductId(int productId)
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationsByProductId(int productId, [FromQuery(Name = "excludeHistory")]bool excludeHistory = true)
         {
-            return await _dbContext.Reservations.Where(x => x.ProductId == productId).ToListAsync();
+            var query = _dbContext.Reservations.Where(x => x.ProductId == productId);
+            if (excludeHistory)
+            {
+                query = query.Where(x => x.EndDate >= DateTime.Today);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        /// <summary>
+        /// A action that can be done on a reservation, updating the database
+        /// Actions that can be done are: Cancel, Pickup and Return
+        /// </summary>
+        /// <param name="reservationActionModel">Action Object with Reservation Id and Action number</param>
+        /// <returns>Ok</returns>
+        [HttpPost("reservationaction")]
+        public async Task<IActionResult> ReservationActionCall(ReservationActionModel reservationActionModel)
+        {
+            if (reservationActionModel == null)
+            {
+                return BadRequest("RESERVATION.ACTION.INVALID.CALL");
+            }
+
+            if (reservationActionModel.ReservationId < 0)
+            {
+                return BadRequest("RESERVATION.ACTION.INVALID.ID");
+            }
+
+            var result = _dbContext.Reservations.SingleOrDefault(b => b.Id == reservationActionModel.ReservationId);
+            if (result != null)
+            {
+                switch (reservationActionModel.Action)
+                {
+                    case ReservationAction.CANCEL:
+                        throw new NotImplementedException();
+                    case ReservationAction.PICKUP:
+                        result.PickedUpDate = DateTime.Now;
+                        break;
+                    case ReservationAction.RETURN:
+                        result.ReturnDate = DateTime.Now;
+                        break;
+                    default:
+                        return BadRequest("RESERVATION.ACTION.INVALID.ACTION");
+                }
+            }
+            await _dbContext.SaveChangesAsync();
+            return Ok();
         }
     }
 }

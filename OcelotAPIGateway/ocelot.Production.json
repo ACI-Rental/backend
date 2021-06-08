@@ -78,6 +78,17 @@
       "UpstreamPathTemplate": "/api/reservation/similar"
     },
     {
+      "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "aci-reservation-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/reservation/similar/{reservationId}"
+    },
+    {
       "DownstreamPathTemplate": "/category",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
