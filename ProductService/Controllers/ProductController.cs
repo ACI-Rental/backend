@@ -308,7 +308,7 @@ namespace ProductService.Controllers
 
             foreach (var item in catalogObjects)
             {
-                var images = await $"https://localhost:44372/api/image/images/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
+                var images = await $"{_config.Value.ApiGatewayBaseUrl}/api/image/images/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
                 var catalogImages = new List<string>();
                 foreach (var image in images)
                 {
