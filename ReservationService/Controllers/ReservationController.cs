@@ -142,7 +142,7 @@ namespace ReservationService.Controllers
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_ALREADY_RESERVED_IN_PERIOD"));
                 }
-                var result =  await $"{_config.Value.ApiGatewayBaseUrl}/api/product/{product.Id}".AllowAnyHttpStatus().GetStringAsync();
+                var result = await $"{_config.Value.ApiGatewayBaseUrl}/api/product/flat/{product.Id}".AllowAnyHttpStatus().GetStringAsync();
                 if (string.IsNullOrWhiteSpace(result))
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_FOUND"));
