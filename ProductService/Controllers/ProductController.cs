@@ -310,11 +310,15 @@ namespace ProductService.Controllers
             {
                 var images = await $"{_config.Value.ApiGatewayBaseUrl}/api/image/images/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
                 var catalogImages = new List<string>();
-                foreach (var image in images)
+
+                if (images != null)
                 {
-                    if (image != default && image.Blob != default)
+                    foreach (var image in images)
                     {
-                        catalogImages.Add(Convert.ToBase64String(image.Blob));
+                        if (image != default && image.Blob != default)
+                        {
+                            catalogImages.Add(Convert.ToBase64String(image.Blob));
+                        }
                     }
                 }
 
