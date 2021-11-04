@@ -164,6 +164,17 @@
         }
       ],
       "UpstreamPathTemplate": "/api/reservation"
+    },
+    {
+      "DownstreamPathTemplate": "/user/page/{pageindex}/{pagesize}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64810
+        }
+      ],
+      "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
     }
 
   ],
