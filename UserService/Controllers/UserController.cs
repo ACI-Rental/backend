@@ -66,26 +66,26 @@ namespace UserService.Controllers
 
             var query = from user in _dbContext.Users
                         orderby user.StudentNumber ascending
-                        select new User()
+                        select new OverviewUser()
                         {
                             StudentNumber = user.StudentNumber,
                             BannedUntil = user.BannedUntil,
                             Role = user.Role
                         };
 
-            page.TotalUserCount = await query.CountAsync();
+            page.TotalUsersCount = await query.CountAsync();
 
             // Last page calculation goes wrong if the totalcount is 0
             // also no point in trying to get 0 products from DB
-            if (page.TotalUserCount == 0)
+            if (page.TotalUsersCount == 0)
             {
                 page.CurrentPage = 0;
-                page.Users = new List<User>(0);
+                page.Users = new List<OverviewUser>(0);
                 return Ok(page);
             }
 
             // calculate how many pages there are given de current pageSize
-            int lastPage = (int)Math.Ceiling((double)page.TotalUserCount / pageSize) - 1;
+            int lastPage = (int)Math.Ceiling((double)page.TotalUsersCount / pageSize) - 1;
 
             // pageIndex below 0 is nonsensical, bringing the value to closest sane value
             if (pageIndex < 0)

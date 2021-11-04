@@ -13,7 +13,7 @@ namespace UserService.Models.DTO
         /// <summary>
         /// The users contained with this page
         /// </summary>
-        public IEnumerable<User> Users { get; set; }
+        public IEnumerable<OverviewUser> Users { get; set; }
 
         /// <summary>
         /// The current page number
@@ -25,7 +25,7 @@ namespace UserService.Models.DTO
         /// The total number of users
         /// Not the number of users on the page
         /// </summary>
-        public int TotalUserCount { get; set; }
+        public int TotalUsersCount { get; set; }
     
     }
 }
