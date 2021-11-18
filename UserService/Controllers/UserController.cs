@@ -43,6 +43,15 @@ namespace UserService.Controllers
             return Ok(result);
         }
 
+        [HttpGet("filter/{searchterm}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersBySearchterm(string searchterm)
+        {
+            searchterm.ToLower();
+
+            var result = await _dbContext.Users.Where(x => x.StudentNumber.ToString().ToLower().Contains(searchterm)).ToListAsync();
+            return Ok(result);
+        }
+
         /// <summary>
         /// Get all the Users for a single page
         /// </summary>
