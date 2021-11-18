@@ -24,7 +24,7 @@ namespace UserService.Controllers
         private readonly UserServiceDatabaseContext _dbContext;
 
         /// <summary>
-        /// Constructer is used for receiving the database context at the creation of the UserController.
+        /// Constructor is used for receiving the database context at the creation of the UserController.
         /// </summary>
         /// <param name="dbContext">Context of the database</param>
         public UserController(UserServiceDatabaseContext dbContext)
@@ -99,6 +99,58 @@ namespace UserService.Controllers
             page.Users = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
             return Ok(page);
         }
+
+        /// <summary>
+        /// An action that can be used on a user, updating the database
+        /// Actions that can be done are: Block and Unblock
+        /// </summary>
+        /// <param name="userBlockActionModel">Action Object with User Id, Action number and Enddate for the block</param>
+        /// <returns>Ok</returns>
+        [HttpPost("blockaction")]
+        public async Task<IActionResult> BlockActionCall(UserBlockActionModel userBlockActionModel)
+        {
+            if (userBlockActionModel == null)
+            {
+                return BadRequest("USERS.ACTION.INVALID.CALL");
+            }
+
+            if (userBlockActionModel.userId < 0)
+            {
+                return BadRequest("USERS.ACTION.INVALID.ID");
+            }
+
+            if ( userBlockActionModel.Action == UserBlockAction.BLOCK && userBlockActionModel.blockUntil < DateTime.Now)
+            {
+                return BadRequest("USERS.ACTION.INVALID.ACTION");
+            }
+
+            var user = _dbContext.Users.Include(u => u.Role).SingleOrDefault(x => x.StudentNumber == userBlockActionModel.userId);
+            if (user != null)
+            {
+                if (user.Role.Name != "Admin")
+                {
+                    switch (userBlockActionModel.Action)
+                    {
+                        case UserBlockAction.BLOCK:
+                            user.BannedUntil = userBlockActionModel.blockUntil;
+                            break;
+                        case UserBlockAction.UNBLOCK:
+                            user.BannedUntil = null;
+                            break;
+                        default:
+                            return BadRequest("USERS.ACTION.INVALID.ACTION");
+                    }
+                }
+                else
+                {
+                    return BadRequest("USERS.ACTION.INVALID.BLOCK_ADMIN");
+                }
+            }
+            await _dbContext.SaveChangesAsync();
+            return Ok();
+        }
+
+
 
     }
 }

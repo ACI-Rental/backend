@@ -49,7 +49,9 @@ namespace UserService.Tests.UnitTests
 
             Assert.Equal(9, users.Count());
             Assert.Equal(1, users.ElementAt(0).StudentNumber);
+            Assert.Null(users.ElementAt(0).BannedUntil);
             Assert.Equal(2, users.ElementAt(1).StudentNumber);
+            Assert.Equal(new DateTime(2020, 01, 01), users.ElementAt(1).BannedUntil);
             Assert.Equal(5, users.ElementAt(2).StudentNumber);
             Assert.Equal(6, users.ElementAt(3).StudentNumber);
             Assert.Equal(7, users.ElementAt(4).StudentNumber);
@@ -140,6 +142,110 @@ namespace UserService.Tests.UnitTests
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
+        [Fact]
+        public async Task BlockActionCall_UnbanUser()
+        {
+            var controller = Initialize();
+            UserBlockActionModel action = new UserBlockActionModel { Action = UserBlockAction.UNBLOCK, userId = 2 };
+
+            var result = await controller.BlockActionCall(action);
+
+            Assert.IsType<OkResult>(result);
+
+            var userList = await controller.GetUsers();
+            var objectresult = Assert.IsType<OkObjectResult>(userList.Result);
+            var resultValue = Assert.IsAssignableFrom<IEnumerable<User>>(objectresult.Value);
+            var user = resultValue.ElementAt(1);
+
+            Assert.Equal(2, user.StudentNumber);
+            Assert.Null(user.BannedUntil);
+        }
+
+        [Fact]
+        public async Task BlockActionCall_BanUser()
+        {
+            var controller = Initialize();
+            DateTime futureTime = DateTime.Now.AddDays(7);
+
+            UserBlockActionModel action = new UserBlockActionModel { Action = UserBlockAction.BLOCK, userId = 1, blockUntil = futureTime };
+
+            var result = await controller.BlockActionCall(action);
+
+            Assert.IsType<OkResult>(result);
+
+            var userList = await controller.GetUsers();
+            var objectresult = Assert.IsType<OkObjectResult>(userList.Result);
+            var resultValue = Assert.IsAssignableFrom<IEnumerable<User>>(objectresult.Value);
+            var user = resultValue.ElementAt(0);
+
+            Assert.Equal(1, user.StudentNumber);
+            Assert.Equal(futureTime, user.BannedUntil);
+        }
+
+        [Fact]
+        public async Task BlockActionCall_ShouldReturnBadObjectResultIfModelIsNull()
+        {
+            var controller = Initialize();
+            UserBlockActionModel action = null;
+
+            var result = await controller.BlockActionCall(action);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task BlockActionCall_ShouldReturnBadObjectResultIfUserIdInvalid()
+        {
+            var controller = Initialize();
+            DateTime futureTime = DateTime.Now.AddDays(7);
+
+            UserBlockActionModel action = new UserBlockActionModel { Action = UserBlockAction.BLOCK, userId = -1, blockUntil = futureTime };
+
+            var result = await controller.BlockActionCall(action);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task BlockActionCall_ShouldReturnBadObjectResultIfDateNotGiven()
+        {
+            var controller = Initialize();
+            UserBlockActionModel action = new UserBlockActionModel { Action = UserBlockAction.BLOCK, userId = 2};
+
+            var result = await controller.BlockActionCall(action);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task BlockActionCall_ShouldReturnBadObjectResultIfDateInPast()
+        {
+            var controller = Initialize();
+            DateTime pastTime = DateTime.Now.AddDays(-7);
+
+            UserBlockActionModel action = new UserBlockActionModel { Action = UserBlockAction.BLOCK, userId = 2, blockUntil = pastTime };
+
+            var result = await controller.BlockActionCall(action);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task BlockActionCall_ShouldReturnBadObjectResultIfBanningAdmin()
+        {
+            var controller = Initialize();
+            DateTime futureTime = DateTime.Now.AddDays(7);
+
+            UserBlockActionModel action = new UserBlockActionModel { Action = UserBlockAction.BLOCK, userId = 11, blockUntil = futureTime };
+
+            var result = await controller.BlockActionCall(action);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+
+
+
 
 
         private static void SeedUserInMemoryDatabaseWithData(UserServiceDatabaseContext context)
@@ -159,7 +265,7 @@ namespace UserService.Tests.UnitTests
             {
                 // First three users used for the first page
                 new User { StudentNumber = 1, Role = roles[0] },
-                new User { StudentNumber = 2, Role = roles[0] },
+                new User { StudentNumber = 2, Role = roles[0], BannedUntil = new DateTime(2020, 01, 01) },
                 new User { StudentNumber = 5, Role = roles[0] },
 
                 // Set of users for the second page

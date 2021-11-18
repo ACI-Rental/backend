@@ -175,6 +175,17 @@
         }
       ],
       "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
+    },
+    {
+      "DownstreamPathTemplate": "/user/blockaction",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64810
+        }
+      ],
+      "UpstreamPathTemplate": "/api/user/block"
     }
 
   ],
