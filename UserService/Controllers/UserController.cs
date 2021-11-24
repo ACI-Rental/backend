@@ -68,6 +68,7 @@ namespace UserService.Controllers
                         orderby user.Id ascending
                         select new OverviewUser()
                         {
+                            Id = user.Id,
                             StudentNumber = user.UserInfo.Studentnumber,
                             Name = user.UserInfo.Name,
                             BannedUntil = user.BannedUntil,

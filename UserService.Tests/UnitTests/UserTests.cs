@@ -93,6 +93,7 @@ namespace UserService.Tests.UnitTests
             Assert.Equal(1, resultValue.CurrentPage);
 
             var firstUser = resultValue.Users.First();
+            Assert.Equal(1, firstUser.Id);
             Assert.Equal("1010", firstUser.StudentNumber);
             Assert.Equal("Employee", firstUser.Role.Name);
             Assert.Equal("DDD", resultValue.Users.First().Name);

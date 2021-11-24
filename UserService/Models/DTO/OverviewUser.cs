@@ -11,6 +11,11 @@ namespace UserService.Models.DTO
     public class OverviewUser
     {
         /// <summary>
+        /// The Id of the person
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// The student number of the user
         /// This should be null if the user is not a student
         /// </summary>
