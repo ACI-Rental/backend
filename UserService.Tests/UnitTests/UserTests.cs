@@ -49,7 +49,7 @@ namespace UserService.Tests.UnitTests
 
             Assert.Equal(9, users.Count());
             Assert.Equal(1, users.ElementAt(0).Id);
-            Assert.Equal(1000, users.ElementAt(0).UserInfo.Studentnumber);
+            Assert.Equal("1000", users.ElementAt(0).UserInfo.Studentnumber);
             Assert.Equal("AAA", users.ElementAt(0).UserInfo.Name);
             Assert.Null(users.ElementAt(0).BannedUntil);
             Assert.Equal(2, users.ElementAt(1).Id);
@@ -75,7 +75,7 @@ namespace UserService.Tests.UnitTests
 
             Assert.Equal(3, resultValue.Users.Count());
             Assert.Equal(0, resultValue.CurrentPage);
-            Assert.Equal(1000, resultValue.Users.First().StudentNumber);
+            Assert.Equal("1000", resultValue.Users.First().StudentNumber);
             Assert.Equal("AAA", resultValue.Users.First().Name);
         }
 
@@ -93,7 +93,7 @@ namespace UserService.Tests.UnitTests
             Assert.Equal(1, resultValue.CurrentPage);
 
             var firstUser = resultValue.Users.First();
-            Assert.Equal(1010, firstUser.StudentNumber);
+            Assert.Equal("1010", firstUser.StudentNumber);
             Assert.Equal("Employee", firstUser.Role.Name);
             Assert.Equal("DDD", resultValue.Users.First().Name);
         }
@@ -268,19 +268,19 @@ namespace UserService.Tests.UnitTests
             var infos = new List<UserInfo>
             {
                 // First three users' userinfo used for the first page
-                new UserInfo { Id = 1, Name = "AAA", Studentnumber = 1000},
-                new UserInfo { Id = 2, Name = "BBB", Studentnumber = 1001},
-                new UserInfo { Id = 3, Name = "CCC", Studentnumber = 1002},
+                new UserInfo { Id = 1, Name = "AAA", Studentnumber = "1000"},
+                new UserInfo { Id = 2, Name = "BBB", Studentnumber = "1001"},
+                new UserInfo { Id = 3, Name = "CCC", Studentnumber = "1002"},
 
                 // Set of userinfo for the second page
-                new UserInfo { Id = 4, Name = "DDD", Studentnumber = 1010},
-                new UserInfo { Id = 5, Name = "EEE", Studentnumber = 1011},
-                new UserInfo { Id = 6, Name = "FFF", Studentnumber = 1012},
+                new UserInfo { Id = 4, Name = "DDD", Studentnumber = "1010"},
+                new UserInfo { Id = 5, Name = "EEE", Studentnumber = "1011"},
+                new UserInfo { Id = 6, Name = "FFF", Studentnumber = "1012"},
 
                 // Set of userinfo for the third page
-                new UserInfo { Id = 7, Name = "GGG", Studentnumber = 1020},
-                new UserInfo { Id = 8, Name = "HHH", Studentnumber = 1021},
-                new UserInfo { Id = 9, Name = "III", Studentnumber = 1022},
+                new UserInfo { Id = 7, Name = "GGG", Studentnumber = "1020"},
+                new UserInfo { Id = 8, Name = "HHH", Studentnumber = "1021"},
+                new UserInfo { Id = 9, Name = "III", Studentnumber = "1022"},
             };
 
             var data = new List<User>

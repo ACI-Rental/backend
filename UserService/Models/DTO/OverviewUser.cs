@@ -14,7 +14,7 @@ namespace UserService.Models.DTO
         /// The student number of the user
         /// This should be null if the user is not a student
         /// </summary>
-        public int StudentNumber { get; set; }
+        public string StudentNumber { get; set; }
 
         /// <summary>
         /// The name of the user

@@ -68,7 +68,7 @@ namespace UserService.Migrations
 
             modelBuilder.Entity("UserService.Models.User", b =>
                 {
-                    b.Property<int>("StudentNumber")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -82,11 +82,37 @@ namespace UserService.Migrations
                     b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
-                    b.HasKey("StudentNumber");
+                    b.Property<int?>("UserInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
+                    b.HasIndex("UserInfoId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("UserService.Models.UserInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Studentnumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserInfo");
                 });
 
             modelBuilder.Entity("PermissionRole", b =>
@@ -110,7 +136,13 @@ namespace UserService.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId");
 
+                    b.HasOne("UserService.Models.UserInfo", "UserInfo")
+                        .WithMany()
+                        .HasForeignKey("UserInfoId");
+
                     b.Navigation("Role");
+
+                    b.Navigation("UserInfo");
                 });
 #pragma warning restore 612, 618
         }

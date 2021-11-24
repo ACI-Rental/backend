@@ -29,7 +29,7 @@ namespace UserService.Models
         /// The studentnumber of the user
         /// If the user is not a student, this should be null
         /// </summary>
-        public int Studentnumber { get; set; }
+        public string Studentnumber { get; set; }
 
         /// <summary>
         /// Password for the user
