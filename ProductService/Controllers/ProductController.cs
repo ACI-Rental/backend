@@ -42,8 +42,8 @@ namespace ProductService.Controllers
         /// <param name="pageIndex">Which page is being requested. If 0 or lower returns first page. If higher than amount of pages returns the last page </param>
         /// <param name="pageSize">The amount of products that are being requested</param>
         /// <returns>Object containing count of all products, current page and a collection of products</returns>
-        [HttpGet("page/{pageIndex}/{pageSize}")]
-        public async Task<IActionResult> GetInventoryItems(int pageIndex, int pageSize)
+        [HttpGet("page/{pageIndex}/{pageSize}/{searchfilter}")]
+        public async Task<IActionResult> GetInventoryItems(int pageIndex, int pageSize, string searchfilter)
         {
             if (pageIndex < 0)
             {
@@ -67,6 +67,20 @@ namespace ProductService.Controllers
                             RequiresApproval = product.RequiresApproval,
                             Status = product.ProductState
                         };
+
+            if (searchfilter != "-")
+            {
+                query = from product in _dbContext.Products where product.Name.ToLower().Contains(searchfilter.ToLower())
+                        orderby product.CatalogNumber ascending
+                        select new InventoryProduct()
+                        {
+                            Id = product.Id,
+                            Name = product.Name,
+                            Location = product.InventoryLocation,
+                            RequiresApproval = product.RequiresApproval,
+                            Status = product.ProductState
+                        };
+            }
 
             page.TotalProductCount = await query.CountAsync();
 

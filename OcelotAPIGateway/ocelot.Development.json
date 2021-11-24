@@ -12,15 +12,15 @@
       "UpstreamPathTemplate": "/api/product"
     },
     {
-      "DownstreamPathTemplate": "/product/page/{pageIndex}/{pageSize}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 64807
-        }
-      ],
-      "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}"
+        "DownstreamPathTemplate": "/product/page/{pageIndex}/{pageSize}/{searchfilter}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+            {
+                "Host": "localhost",
+                "Port": 64807
+            }
+        ],
+        "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}"
     },
     {
       "DownstreamPathTemplate": "/product/catalogentries/{pageindex}/{pagesize}",
