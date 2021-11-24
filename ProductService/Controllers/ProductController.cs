@@ -70,7 +70,7 @@ namespace ProductService.Controllers
 
             if (searchfilter != "-")
             {
-                query = from product in _dbContext.Products where product.Name.Contains(searchfilter)
+                query = from product in _dbContext.Products where product.Name.ToLower().Contains(searchfilter.ToLower())
                         orderby product.CatalogNumber ascending
                         select new InventoryProduct()
                         {
