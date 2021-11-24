@@ -104,6 +104,7 @@ namespace ProductService.Controllers
             page.CurrentPage = Math.Min(pageIndex, lastPage);
 
             page.Products = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
+
             return Ok(page);
         }
 
@@ -310,7 +311,7 @@ namespace ProductService.Controllers
         /// <param name="pageSize"></param>
         /// <returns>Empty list if no entries are found, Succes a CatalogPage object</returns>
         [HttpGet("catalogentries/{pageindex}/{pagesize}")]
-        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize)
+        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize, string catalogFilter)
         {
             if (pageIndex < 0 || pageSize < 0)
             {
@@ -319,6 +320,16 @@ namespace ProductService.Controllers
             var converter = new CatalogItemConverter();
             var catalogObjects = await _dbContext.Products.OrderBy(x => x.CatalogNumber).Include(x => x.Category).ToListAsync();
             var allitems = new List<CatalogItemsWithCategory>();
+
+
+            if (catalogFilter != "-")
+            {
+                foreach (var item in catalogObjects.Where(n => n.Category.Name != catalogFilter))
+                {
+                    catalogObjects.Remove(item);
+                }
+            }
+
 
             foreach (var item in catalogObjects)
             {
