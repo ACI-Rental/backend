@@ -65,10 +65,11 @@ namespace UserService.Controllers
             var page = new UsersPage();
 
             var query = from user in _dbContext.Users
-                        orderby user.StudentNumber ascending
+                        orderby user.Id ascending
                         select new OverviewUser()
                         {
-                            StudentNumber = user.StudentNumber,
+                            StudentNumber = user.UserInfo.Studentnumber,
+                            Name = user.UserInfo.Name,
                             BannedUntil = user.BannedUntil,
                             Role = user.Role
                         };
@@ -124,7 +125,7 @@ namespace UserService.Controllers
                 return BadRequest("USERS.ACTION.INVALID.ACTION");
             }
 
-            var user = _dbContext.Users.Include(u => u.Role).SingleOrDefault(x => x.StudentNumber == userBlockActionModel.userId);
+            var user = _dbContext.Users.Include(u => u.Role).SingleOrDefault(x => x.Id == userBlockActionModel.userId);
             if (user != null)
             {
                 if (user.Role.Name != "Admin")
