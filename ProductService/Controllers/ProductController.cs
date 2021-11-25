@@ -322,13 +322,33 @@ namespace ProductService.Controllers
             var allitems = new List<CatalogItemsWithCategory>();
 
 
+            
             if (catalogFilter != "-")
             {
-                foreach (var item in catalogObjects.Where(n => n.Category.Name != catalogFilter))
+                var tempList = new List<Product>();
+                foreach (var item in catalogObjects.Where(n => n.Category.Name == catalogFilter))
                 {
-                    catalogObjects.Remove(item);
+                    tempList.Add(item);
                 }
+
+                catalogObjects = tempList;
             }
+
+            if (searchfilter != "-")
+            {
+                var tempList = new List<Product>();
+                foreach (var item in catalogObjects)
+                {
+                    if (item.Name.ToString().ToLower().Contains(searchfilter.ToLower()))
+                    {
+                        tempList.Add(item);
+                    }
+                }
+                catalogObjects = tempList;
+            }
+
+            
+
 
 
             foreach (var item in catalogObjects)
