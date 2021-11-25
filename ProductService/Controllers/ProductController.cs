@@ -310,8 +310,8 @@ namespace ProductService.Controllers
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns>Empty list if no entries are found, Succes a CatalogPage object</returns>
-        [HttpGet("catalogentries/{pageindex}/{pagesize}")]
-        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize, string catalogFilter)
+        [HttpGet("catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}")]
+        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize, string searchfilter, string catalogFilter)
         {
             if (pageIndex < 0 || pageSize < 0)
             {

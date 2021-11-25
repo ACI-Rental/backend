@@ -47,6 +47,32 @@ namespace ProductService.Tests.UnitTests
         }
 
         [Fact]
+        private async Task GetCatalogEntries_FilterOutAllButChat()
+        {
+            var imgblobs = new List<ImageBlobModel>();
+
+            string serializedObject = JsonConvert.SerializeObject(imgblobs);
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWith(serializedObject);
+                var result = await _controller.GetCatalogEntries(0, 5, "Chat");
+                var okObj = Assert.IsType<OkObjectResult>(result);
+                var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
+
+                CatalogItem testItem = new CatalogItem();
+
+                foreach(var item in model.CatalogItems)
+                {
+                    testItem.CatalogNumber = 1;
+                    testItem.Category.Name = item.CategoryName;
+                }
+
+                Assert.Equal("Chat", testItem.Category.Name);
+                
+            }
+        }
+
+        [Fact]
         private async Task GetCatalogEntries_ShouldReturnCatalogpage()
         {
             var imgblobs = new List<ImageBlobModel>();
