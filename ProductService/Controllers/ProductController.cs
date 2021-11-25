@@ -65,7 +65,7 @@ namespace ProductService.Controllers
                             Name = product.Name,
                             Location = product.InventoryLocation,
                             RequiresApproval = product.RequiresApproval,
-                            Status = product.ProductState
+                            Status = product.ProductState,
                         };
 
             if (searchfilter != "-")
@@ -309,15 +309,21 @@ namespace ProductService.Controllers
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns>Empty list if no entries are found, Succes a CatalogPage object</returns>
-        [HttpGet("catalogentries/{pageindex}/{pagesize}")]
-        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize)
+        [HttpGet("catalogentries/{pageindex}/{pagesize}/{searchfilter}")]
+        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize, string searchfilter)
         {
             if (pageIndex < 0 || pageSize < 0)
             {
                 return BadRequest("CATALOG.INCORRECT_PAGESIZE_OR_INDEX");
             }
             var converter = new CatalogItemConverter();
+
             var catalogObjects = await _dbContext.Products.OrderBy(x => x.CatalogNumber).Include(x => x.Category).ToListAsync();
+            if(searchfilter != "-")
+            {
+                catalogObjects = await _dbContext.Products.Where(p => p.Name.ToLower().Contains(searchfilter.ToLower())).OrderBy(x => x.CatalogNumber).Include(x => x.Category).ToListAsync();
+            }
+
             var allitems = new List<CatalogItemsWithCategory>();
 
             foreach (var item in catalogObjects)

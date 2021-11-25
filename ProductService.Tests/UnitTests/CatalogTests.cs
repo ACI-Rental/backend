@@ -38,7 +38,7 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(0, 0);
+                var result = await _controller.GetCatalogEntries(0, 0, "-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
@@ -55,7 +55,7 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(0, 5);
+                var result = await _controller.GetCatalogEntries(0, 5, "-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
@@ -73,11 +73,33 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(3, 2);
+                var result = await _controller.GetCatalogEntries(3, 2, "-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
 
+                Assert.Single(model.CatalogItems);
+            }
+        }
+
+        [Fact]
+        private async Task GetCatalogEntries_ShouldReturnCatalogProductsFiltertBySearch()
+        {
+            var imgblobs = new List<ImageBlobModel>();
+
+            string serializedObject = JsonConvert.SerializeObject(imgblobs);
+
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWith(serializedObject);
+                var result = await _controller.GetCatalogEntries(0, 50, "C");
+
+                var okObj = Assert.IsType<OkObjectResult>(result);
+                var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
+
+                Assert.Equal(1, model.CatalogItems.Count());
+                Assert.Equal(1, model.CatalogItems[0].CatalogItems.Count);
+                Assert.Equal("CCC", model.CatalogItems[0].CatalogItems[0].Name);
                 Assert.Single(model.CatalogItems);
             }
         }
