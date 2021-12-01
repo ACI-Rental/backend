@@ -19,7 +19,13 @@ namespace UserService.Models
         /// </summary>
         [Key]
         [Required]
-        public int StudentNumber { get; set; }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Info on the user, this is extern data
+        /// Currently it includes Name, Studentnumber and a Password
+        /// </summary>
+        public UserInfo UserInfo { get; set; }
 
         /// <summary>
         /// Token used to refresh the login session of the user.

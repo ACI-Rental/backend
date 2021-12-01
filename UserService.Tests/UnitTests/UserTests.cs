@@ -48,17 +48,19 @@ namespace UserService.Tests.UnitTests
             var users = Assert.IsAssignableFrom<IEnumerable<User>>(objectresult.Value);
 
             Assert.Equal(9, users.Count());
-            Assert.Equal(1, users.ElementAt(0).StudentNumber);
+            Assert.Equal(1, users.ElementAt(0).Id);
+            Assert.Equal("1000", users.ElementAt(0).UserInfo.Studentnumber);
+            Assert.Equal("AAA", users.ElementAt(0).UserInfo.Name);
             Assert.Null(users.ElementAt(0).BannedUntil);
-            Assert.Equal(2, users.ElementAt(1).StudentNumber);
+            Assert.Equal(2, users.ElementAt(1).Id);
             Assert.Equal(new DateTime(2020, 01, 01), users.ElementAt(1).BannedUntil);
-            Assert.Equal(5, users.ElementAt(2).StudentNumber);
-            Assert.Equal(6, users.ElementAt(3).StudentNumber);
-            Assert.Equal(7, users.ElementAt(4).StudentNumber);
-            Assert.Equal(10, users.ElementAt(5).StudentNumber);
-            Assert.Equal(11, users.ElementAt(6).StudentNumber);
-            Assert.Equal(12, users.ElementAt(7).StudentNumber);
-            Assert.Equal(15, users.ElementAt(8).StudentNumber);
+            Assert.Equal(5, users.ElementAt(2).Id);
+            Assert.Equal(6, users.ElementAt(3).Id);
+            Assert.Equal(7, users.ElementAt(4).Id);
+            Assert.Equal(10, users.ElementAt(5).Id);
+            Assert.Equal(11, users.ElementAt(6).Id);
+            Assert.Equal(12, users.ElementAt(7).Id);
+            Assert.Equal(15, users.ElementAt(8).Id);
         }
 
         [Fact]
@@ -73,7 +75,8 @@ namespace UserService.Tests.UnitTests
 
             Assert.Equal(3, resultValue.Users.Count());
             Assert.Equal(0, resultValue.CurrentPage);
-            Assert.Equal(1, resultValue.Users.First().StudentNumber);
+            Assert.Equal("1000", resultValue.Users.First().StudentNumber);
+            Assert.Equal("AAA", resultValue.Users.First().Name);
         }
 
         [Fact]
@@ -90,8 +93,10 @@ namespace UserService.Tests.UnitTests
             Assert.Equal(1, resultValue.CurrentPage);
 
             var firstUser = resultValue.Users.First();
-            Assert.Equal(6, firstUser.StudentNumber);
+            Assert.Equal(1, firstUser.Id);
+            Assert.Equal("1010", firstUser.StudentNumber);
             Assert.Equal("Employee", firstUser.Role.Name);
+            Assert.Equal("DDD", resultValue.Users.First().Name);
         }
 
         [Fact]
@@ -157,7 +162,7 @@ namespace UserService.Tests.UnitTests
             var resultValue = Assert.IsAssignableFrom<IEnumerable<User>>(objectresult.Value);
             var user = resultValue.ElementAt(1);
 
-            Assert.Equal(2, user.StudentNumber);
+            Assert.Equal(2, user.Id);
             Assert.Null(user.BannedUntil);
         }
 
@@ -178,7 +183,7 @@ namespace UserService.Tests.UnitTests
             var resultValue = Assert.IsAssignableFrom<IEnumerable<User>>(objectresult.Value);
             var user = resultValue.ElementAt(0);
 
-            Assert.Equal(1, user.StudentNumber);
+            Assert.Equal(1, user.Id);
             Assert.Equal(futureTime, user.BannedUntil);
         }
 
@@ -261,22 +266,40 @@ namespace UserService.Tests.UnitTests
                 context.Roles.AddRange(roles);
             }
 
+            var infos = new List<UserInfo>
+            {
+                // First three users' userinfo used for the first page
+                new UserInfo { Id = 1, Name = "AAA", Studentnumber = "1000"},
+                new UserInfo { Id = 2, Name = "BBB", Studentnumber = "1001"},
+                new UserInfo { Id = 3, Name = "CCC", Studentnumber = "1002"},
+
+                // Set of userinfo for the second page
+                new UserInfo { Id = 4, Name = "DDD", Studentnumber = "1010"},
+                new UserInfo { Id = 5, Name = "EEE", Studentnumber = "1011"},
+                new UserInfo { Id = 6, Name = "FFF", Studentnumber = "1012"},
+
+                // Set of userinfo for the third page
+                new UserInfo { Id = 7, Name = "GGG", Studentnumber = "1020"},
+                new UserInfo { Id = 8, Name = "HHH", Studentnumber = "1021"},
+                new UserInfo { Id = 9, Name = "III", Studentnumber = "1022"},
+            };
+
             var data = new List<User>
             {
                 // First three users used for the first page
-                new User { StudentNumber = 1, Role = roles[0] },
-                new User { StudentNumber = 2, Role = roles[0], BannedUntil = new DateTime(2020, 01, 01) },
-                new User { StudentNumber = 5, Role = roles[0] },
+                new User { Id = 1, Role = roles[0], UserInfo = infos[0] },
+                new User { Id = 2, Role = roles[0], UserInfo = infos[1], BannedUntil = new DateTime(2020, 01, 01) },
+                new User { Id = 5, Role = roles[0], UserInfo = infos[2] },
 
                 // Set of users for the second page
-                new User { StudentNumber = 6, Role = roles[1] },
-                new User { StudentNumber = 7, Role = roles[1] },
-                new User { StudentNumber = 10, Role = roles[1] },
+                new User { Id = 6, Role = roles[1], UserInfo = infos[3] },
+                new User { Id = 7, Role = roles[1], UserInfo = infos[4] },
+                new User { Id = 10, Role = roles[1], UserInfo = infos[5] },
 
                 // Set of users for the third page
-                new User { StudentNumber = 11, Role = roles[2] },
-                new User { StudentNumber = 12, Role = roles[2] },
-                new User { StudentNumber = 15, Role = roles[2] }
+                new User { Id = 11, Role = roles[2], UserInfo = infos[6] },
+                new User { Id = 12, Role = roles[2], UserInfo = infos[7] },
+                new User { Id = 15, Role = roles[2], UserInfo = infos[8] }
             };
             if (!context.Users.Any())
             {
