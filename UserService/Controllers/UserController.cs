@@ -48,7 +48,7 @@ namespace UserService.Controllers
         {
             searchterm.ToLower();
 
-            var result = await _dbContext.Users.Where(x => x.StudentNumber.ToString().ToLower().Contains(searchterm)).ToListAsync();
+            var result = await _dbContext.Users.Where(x => x.UserInfo.Name.ToString().ToLower().Contains(searchterm)).ToListAsync();
             return Ok(result);
         }
 
