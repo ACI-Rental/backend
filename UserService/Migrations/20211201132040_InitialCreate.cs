@@ -80,6 +80,7 @@ namespace UserService.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserInfoId = table.Column<int>(type: "int", nullable: true),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Banned = table.Column<bool>(type: "bit", nullable: false),
                     BannedUntil = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: true)
                 },

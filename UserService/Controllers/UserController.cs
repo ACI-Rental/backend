@@ -80,6 +80,7 @@ namespace UserService.Controllers
                             Id = user.Id,
                             StudentNumber = user.UserInfo.Studentnumber,
                             Name = user.UserInfo.Name,
+                            Banned = user.Banned,
                             BannedUntil = user.BannedUntil,
                             Role = user.Role
                         };
@@ -143,9 +144,15 @@ namespace UserService.Controllers
                     switch (userBlockActionModel.Action)
                     {
                         case UserBlockAction.BLOCK:
+                            user.Banned = true;
                             user.BannedUntil = userBlockActionModel.blockUntil;
                             break;
                         case UserBlockAction.UNBLOCK:
+                            user.Banned = false;
+                            user.BannedUntil = null;
+                            break;
+                        case UserBlockAction.PERMABLOCK:
+                            user.Banned = true;
                             user.BannedUntil = null;
                             break;
                         default:

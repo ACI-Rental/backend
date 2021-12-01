@@ -10,7 +10,7 @@ using UserService.DBContexts;
 namespace UserService.Migrations
 {
     [DbContext(typeof(UserServiceDatabaseContext))]
-    [Migration("20211124115937_InitialCreate")]
+    [Migration("20211201132040_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,9 @@ namespace UserService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Banned")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("BannedUntil")
                         .HasColumnType("datetime2");

@@ -73,6 +73,9 @@ namespace UserService.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Banned")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("BannedUntil")
                         .HasColumnType("datetime2");
 

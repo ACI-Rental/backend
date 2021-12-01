@@ -93,7 +93,7 @@ namespace UserService.Tests.UnitTests
             Assert.Equal(1, resultValue.CurrentPage);
 
             var firstUser = resultValue.Users.First();
-            Assert.Equal(1, firstUser.Id);
+            Assert.Equal(6, firstUser.Id);
             Assert.Equal("1010", firstUser.StudentNumber);
             Assert.Equal("Employee", firstUser.Role.Name);
             Assert.Equal("DDD", resultValue.Users.First().Name);
@@ -163,6 +163,7 @@ namespace UserService.Tests.UnitTests
             var user = resultValue.ElementAt(1);
 
             Assert.Equal(2, user.Id);
+            Assert.False(user.Banned);
             Assert.Null(user.BannedUntil);
         }
 
@@ -184,7 +185,29 @@ namespace UserService.Tests.UnitTests
             var user = resultValue.ElementAt(0);
 
             Assert.Equal(1, user.Id);
+            Assert.True(user.Banned);
             Assert.Equal(futureTime, user.BannedUntil);
+        }
+
+        [Fact]
+        public async Task BlockActionCall_PermaBanUser()
+        {
+            var controller = Initialize();
+
+            UserBlockActionModel action = new UserBlockActionModel { Action = UserBlockAction.PERMABLOCK, userId = 1 };
+
+            var result = await controller.BlockActionCall(action);
+
+            Assert.IsType<OkResult>(result);
+
+            var userList = await controller.GetUsers();
+            var objectresult = Assert.IsType<OkObjectResult>(userList.Result);
+            var resultValue = Assert.IsAssignableFrom<IEnumerable<User>>(objectresult.Value);
+            var user = resultValue.ElementAt(0);
+
+            Assert.Equal(1, user.Id);
+            Assert.True(user.Banned);
+            Assert.Null(user.BannedUntil);
         }
 
         [Fact]
