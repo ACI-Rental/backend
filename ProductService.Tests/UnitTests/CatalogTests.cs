@@ -147,7 +147,7 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(0, 50, "C");
+                var result = await _controller.GetCatalogEntries(0, 50, "C","-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
