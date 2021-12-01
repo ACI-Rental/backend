@@ -104,6 +104,7 @@ namespace ProductService.Controllers
             page.CurrentPage = Math.Min(pageIndex, lastPage);
 
             page.Products = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
+
             return Ok(page);
         }
 
@@ -309,8 +310,8 @@ namespace ProductService.Controllers
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns>Empty list if no entries are found, Succes a CatalogPage object</returns>
-        [HttpGet("catalogentries/{pageindex}/{pagesize}/{searchfilter}")]
-        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize, string searchfilter)
+        [HttpGet("catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}")]
+        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize, string searchfilter, string catalogFilter)
         {
             if (pageIndex < 0 || pageSize < 0)
             {
@@ -325,6 +326,36 @@ namespace ProductService.Controllers
             }
 
             var allitems = new List<CatalogItemsWithCategory>();
+
+
+            
+            if (catalogFilter != "-")
+            {
+                var tempList = new List<Product>();
+                foreach (var item in catalogObjects.Where(n => n.Category.Name == catalogFilter))
+                {
+                    tempList.Add(item);
+                }
+
+                catalogObjects = tempList;
+            }
+
+            if (searchfilter != "-")
+            {
+                var tempList = new List<Product>();
+                foreach (var item in catalogObjects)
+                {
+                    if (item.Name.ToString().ToLower().Contains(searchfilter.ToLower()))
+                    {
+                        tempList.Add(item);
+                    }
+                }
+                catalogObjects = tempList;
+            }
+
+            
+
+
 
             foreach (var item in catalogObjects)
             {

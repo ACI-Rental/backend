@@ -23,7 +23,7 @@
         "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}"
     },
     {
-        "DownstreamPathTemplate": "/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}",
+        "DownstreamPathTemplate": "/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
             {
@@ -31,7 +31,7 @@
                 "Port": 64807
             }
         ],
-        "UpstreamPathTemplate": "/api/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}"
+        "UpstreamPathTemplate": "/api/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}"
     },
     {
       "DownstreamPathTemplate": "/product/{productId}",
