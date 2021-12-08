@@ -191,7 +191,7 @@ namespace ReservationService.Controllers
         /// Get all reservations with similar startdate for a single page
         /// </summary>
         /// <returns>List of all similar reservations</returns>
-        [HttpGet("similar/{pageIndex}/{PageSize}")]
+        [HttpGet("similar/{pageIndex}/{pageSize}")]
         public async Task<IActionResult> GetSimilarReservations(int pageIndex, int pageSize)
         {
             if (pageIndex < 0)
