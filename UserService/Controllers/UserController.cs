@@ -95,7 +95,7 @@ namespace UserService.Controllers
                 return Ok(page);
             }
 
-            // calculate how many pages there are given de current pageSize
+            // calculate how many pages there are, given the current pageSize
             int lastPage = (int)Math.Ceiling((double)page.TotalUsersCount / pageSize) - 1;
 
             // pageIndex below 0 is nonsensical, bringing the value to closest sane value

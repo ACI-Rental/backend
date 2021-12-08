@@ -78,7 +78,7 @@
       "UpstreamPathTemplate": "/api/reservation/{productId}"
     },
     {
-      "DownstreamPathTemplate": "/reservation/similar",
+      "DownstreamPathTemplate": "/reservation/similar/{pageIndex}/{pageSize}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -86,7 +86,7 @@
           "Port": 64808
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/similar"
+      "UpstreamPathTemplate": "/api/reservation/similar/{pageIndex}/{pageSize}"
     },
     {
       "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
