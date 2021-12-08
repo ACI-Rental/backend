@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteService.Tests", "NoteSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Tests", "UserService.Tests\UserService.Tests.csproj", "{B36E7B2C-BB25-4F9D-8AAC-9AC9761D6593}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFService", "PDFService\PDFService.csproj", "{D06F5D34-3481-4735-917E-F9B154A7C860}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{B36E7B2C-BB25-4F9D-8AAC-9AC9761D6593}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B36E7B2C-BB25-4F9D-8AAC-9AC9761D6593}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B36E7B2C-BB25-4F9D-8AAC-9AC9761D6593}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D06F5D34-3481-4735-917E-F9B154A7C860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06F5D34-3481-4735-917E-F9B154A7C860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D06F5D34-3481-4735-917E-F9B154A7C860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06F5D34-3481-4735-917E-F9B154A7C860}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
