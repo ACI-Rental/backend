@@ -38,7 +38,7 @@ namespace PDFService.Controllers
         /// </summary>
         /// <param name="productId"></param>
         /// <returns>Returns a list of images</returns>
-        [HttpGet("product/{productId}")]
+        [HttpGet("{productId}")]
         public async Task<IActionResult> GetPdfByProductId(int productId)
         {
             var pdfs = await _dbContext.pdfs.Where(x => x.LinkedKey == productId && x.LinkedTableType == LinkedTableType.PRODUCT).ToListAsync();

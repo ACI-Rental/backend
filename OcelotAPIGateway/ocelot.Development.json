@@ -1,194 +1,216 @@
 {
-  "Routes": [
-    {
-      "DownstreamPathTemplate": "/product",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+    "Routes": [
         {
-          "Host": "localhost",
-          "Port": 64807
-        }
-      ],
-      "UpstreamPathTemplate": "/api/product"
-    },
-    {
-        "DownstreamPathTemplate": "/product/page/{pageIndex}/{pageSize}/{searchfilter}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-            {
-                "Host": "localhost",
-                "Port": 64807
-            }
-        ],
-        "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}"
-    },
-    {
-        "DownstreamPathTemplate": "/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-            {
-                "Host": "localhost",
-                "Port": 64807
-            }
-        ],
-        "UpstreamPathTemplate": "/api/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}"
-    },
-    {
-      "DownstreamPathTemplate": "/product/{productId}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/PDF/{productId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/PDF/{productId}"
+        },
         {
-          "Host": "localhost",
-          "Port": 64807
-        }
-      ],
-      "UpstreamPathTemplate": "/api/product/{productId}"
-    },
-    {
-      "DownstreamPathTemplate": "/product/lastcatalog",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/PDF",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/PDF"
+        },
         {
-          "Host": "localhost",
-          "Port": 64807
-        }
-      ],
-      "UpstreamPathTemplate": "/api/product/lastcatalog"
-    },
-    {
-      "DownstreamPathTemplate": "/product/{archiveProductId}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/product",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/product"
+        },
         {
-          "Host": "localhost",
-          "Port": 64807
-        }
-      ],
-      "UpstreamPathTemplate": "/api/product/{archiveProductId}"
-    },
-    {
-      "DownstreamPathTemplate": "/reservation/{productId}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/product/page/{pageIndex}/{pageSize}/{searchfilter}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}"
+        },
         {
-          "Host": "localhost",
-          "Port": 64808
-        }
-      ],
-      "UpstreamPathTemplate": "/api/reservation/{productId}"
-    },
-    {
-      "DownstreamPathTemplate": "/reservation/similar",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}"
+        },
         {
-          "Host": "localhost",
-          "Port": 64808
-        }
-      ],
-      "UpstreamPathTemplate": "/api/reservation/similar"
-    },
-    {
-      "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/product/{productId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/product/{productId}"
+        },
         {
-          "Host": "localhost",
-          "Port": 64808
-        }
-      ],
-      "UpstreamPathTemplate": "/api/reservation/similar/{reservationId}"
-    },
-    {
-      "DownstreamPathTemplate": "/category",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/product/lastcatalog",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/product/lastcatalog"
+        },
         {
-          "Host": "localhost",
-          "Port": 64807
-        }
-      ],
-      "UpstreamPathTemplate": "/api/category"
-    },
-    {
-      "DownstreamPathTemplate": "/image",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/product/{archiveProductId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/product/{archiveProductId}"
+        },
         {
-          "Host": "localhost",
-          "Port": 64799
-        }
-      ],
-      "UpstreamPathTemplate": "/api/image"
-    },
-    {
-      "DownstreamPathTemplate": "/image/{productId}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/reservation/{productId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64808
+                }
+            ],
+            "UpstreamPathTemplate": "/api/reservation/{productId}"
+        },
         {
-          "Host": "localhost",
-          "Port": 64799
-        }
-      ],
-      "UpstreamPathTemplate": "/api/image/{productId}"
-    },
-    {
-      "DownstreamPathTemplate": "/reservation/reserveproducts",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/reservation/similar",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64808
+                }
+            ],
+            "UpstreamPathTemplate": "/api/reservation/similar"
+        },
         {
-          "Host": "localhost",
-          "Port": 64808
-        }
-      ],
-      "UpstreamPathTemplate": "/api/products/reserve"
-    },
-    {
-      "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64808
+                }
+            ],
+            "UpstreamPathTemplate": "/api/reservation/similar/{reservationId}"
+        },
         {
-          "Host": "localhost",
-          "Port": 64808
-        }
-      ],
-      "UpstreamPathTemplate": "/api/reservation/{reservationId}"
-    },
-    {
-      "DownstreamPathTemplate": "/reservation/reservationaction",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/category",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64807
+                }
+            ],
+            "UpstreamPathTemplate": "/api/category"
+        },
         {
-          "Host": "localhost",
-          "Port": 64808
-        }
-      ],
-      "UpstreamPathTemplate": "/api/reservation"
-    },
-    {
-      "DownstreamPathTemplate": "/user/page/{pageindex}/{pagesize}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/image",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64799
+                }
+            ],
+            "UpstreamPathTemplate": "/api/image"
+        },
         {
-          "Host": "localhost",
-          "Port": 64810
-        }
-      ],
-      "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
-    },
-    {
-      "DownstreamPathTemplate": "/user/blockaction",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/image/{productId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64799
+                }
+            ],
+            "UpstreamPathTemplate": "/api/image/{productId}"
+        },
         {
-          "Host": "localhost",
-          "Port": 64810
+            "DownstreamPathTemplate": "/reservation/reserveproducts",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64808
+                }
+            ],
+            "UpstreamPathTemplate": "/api/products/reserve"
+        },
+        {
+            "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64808
+                }
+            ],
+            "UpstreamPathTemplate": "/api/reservation/{reservationId}"
+        },
+        {
+            "DownstreamPathTemplate": "/reservation/reservationaction",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64808
+                }
+            ],
+            "UpstreamPathTemplate": "/api/reservation"
+        },
+        {
+            "DownstreamPathTemplate": "/user/page/{pageindex}/{pagesize}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64810
+                }
+            ],
+            "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
+        },
+        {
+            "DownstreamPathTemplate": "/user/blockaction",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64810
+                }
+            ],
+            "UpstreamPathTemplate": "/api/user/block"
         }
-      ],
-      "UpstreamPathTemplate": "/api/user/block"
-    }
 
-  ],
+    ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:56005"
   }
