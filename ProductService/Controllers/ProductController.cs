@@ -353,10 +353,6 @@ namespace ProductService.Controllers
                 catalogObjects = tempList;
             }
 
-            
-
-
-
             foreach (var item in catalogObjects)
             {
                 var images = await $"{_config.Value.ApiGatewayBaseUrl}/api/image/images/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
@@ -374,7 +370,7 @@ namespace ProductService.Controllers
                     }
                 }
 
-                var pdfs = await $"{_config.Value.ApiGatewayBaseUrl}/api/pdf/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
+                var pdfs = await $"{_config.Value.ApiGatewayBaseUrl}/api/pdf/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<PdfBlobModel>>();
 
                 var catalogPdfs = new List<string>();
 
