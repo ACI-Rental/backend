@@ -18,7 +18,7 @@ namespace ProductService.Converters
         /// <param name="product"></param>
         /// <param name="catalogImages"></param>
         /// <returns>Returns a converted product model to CatalogItem model</returns>
-        public CatalogItem ConvertProductToCatalogItemAsync(Product product, List<string> catalogImages)
+        public CatalogItem ConvertProductToCatalogItemAsync(Product product, List<string> catalogImages, List<string> catalogPdfs)
         {
             CatalogItem item = new()
             {
@@ -30,6 +30,7 @@ namespace ProductService.Converters
                 RequiresApproval = product.RequiresApproval,
                 Status = product.ProductState,
                 Images = catalogImages,
+                Pdfs = catalogPdfs,
                 ImageIndex = 0,
             };
             return item;
@@ -41,13 +42,13 @@ namespace ProductService.Converters
         /// <param name="item"></param>
         /// <param name="catalogItem"></param>
         /// <returns>Returns a list of catalogitems with their category</returns>
-        public CatalogItemsWithCategory AddNewEntryToCatalogList(Product item, List<string> catalogItem)
+        public CatalogItemsWithCategory AddNewEntryToCatalogList(Product item, List<string> catalogImages, List<string> catalogPdfs)
         {
             CatalogItemsWithCategory catalogList = new()
             {
                 CatalogItems = new List<CatalogItem>()
                 {
-                    ConvertProductToCatalogItemAsync(item, catalogItem)
+                    ConvertProductToCatalogItemAsync(item, catalogImages, catalogPdfs)
                 },
                 CategoryName = item.Category.Name
             };

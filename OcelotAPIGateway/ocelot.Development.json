@@ -6,7 +6,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 64807
+                    "Port": 44338
                 }
             ],
             "UpstreamPathTemplate": "/api/PDF/{productId}"
@@ -17,7 +17,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 64807
+                    "Port": 26057
                 }
             ],
             "UpstreamPathTemplate": "/api/PDF"
@@ -28,7 +28,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 64807
+                    "Port": 26057
                 }
             ],
             "UpstreamPathTemplate": "/api/product"
