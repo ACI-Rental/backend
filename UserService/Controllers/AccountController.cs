@@ -26,17 +26,31 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDTO loginDto)
         {
+            if (loginDto.Username == null || loginDto.Password == null) return BadRequest("No user/password filled in");
+
             var user = await _context.Users.Include(u => u.UserInfo).SingleOrDefaultAsync(x => x.UserInfo.Name == loginDto.Username);
+            
+            if(user == null)
+            {
+                return BadRequest("No user found");
+            }
+           
+            if (user.UserInfo.Password != loginDto.Password)
+            {
+                return Unauthorized("password doesn't match");
+            }
+            
 
-            if (user == null) return Unauthorized("Invalid User/Password");
-
-            var logindata =  new UserDto
+            var logindata = new UserDto
             {
                 Username = user.UserInfo.Name,
                 Token = _tokenService.CreateToken(user)
             };
 
             return Ok(logindata);
+
+
+
 
         }
         // not yet implemented
