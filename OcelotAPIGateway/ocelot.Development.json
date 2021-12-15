@@ -12,26 +12,26 @@
       "UpstreamPathTemplate": "/api/product"
     },
     {
-        "DownstreamPathTemplate": "/product/page/{pageIndex}/{pageSize}/{searchfilter}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-            {
-                "Host": "localhost",
-                "Port": 64807
-            }
-        ],
-        "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}"
+      "DownstreamPathTemplate": "/product/page/{pageIndex}/{pageSize}/{searchfilter}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64807
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}"
     },
     {
-        "DownstreamPathTemplate": "/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-            {
-                "Host": "localhost",
-                "Port": 64807
-            }
-        ],
-        "UpstreamPathTemplate": "/api/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}"
+      "DownstreamPathTemplate": "/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64807
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}"
     },
     {
       "DownstreamPathTemplate": "/product/{productId}",
@@ -77,6 +77,7 @@
       ],
       "UpstreamPathTemplate": "/api/reservation/{productId}"
     },
+
     {
       "DownstreamPathTemplate": "/reservation/similar/{pageIndex}/{pageSize}",
       "DownstreamScheme": "http",
@@ -186,6 +187,18 @@
         }
       ],
       "UpstreamPathTemplate": "/api/user/block"
+    },
+
+    {
+      "DownstreamPathTemplate": "/account/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64810
+        }
+      ],
+      "UpstreamPathTemplate": "/api/account/login"
     }
 
   ],
