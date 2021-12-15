@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace API.Extensions
+namespace UserService
 {
     public static class IdentityServiceExtensions
     {

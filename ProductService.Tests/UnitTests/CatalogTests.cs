@@ -147,13 +147,13 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(0, 50, "C");
+                var result = await _controller.GetCatalogEntries(0, 50, "C", "-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
 
-                Assert.Equal(1, model.CatalogItems.Count());
-                Assert.Equal(1, model.CatalogItems[0].CatalogItems.Count);
+                Assert.Single(model.CatalogItems);
+                Assert.Single(model.CatalogItems[0].CatalogItems);
                 Assert.Equal("CCC", model.CatalogItems[0].CatalogItems[0].Name);
                 Assert.Single(model.CatalogItems);
             }

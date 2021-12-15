@@ -1,4 +1,4 @@
-﻿using API.Interfaces;
+﻿using UserService.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using UserService.Models;
 
-namespace API.Services
+namespace UserService
 {
     public class TokenService : ITokenService
     {

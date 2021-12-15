@@ -1,5 +1,5 @@
-﻿using API.DTOs;
-using API.Interfaces;
+﻿using UserService.Models.DTOs;
+using UserService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UserService.DBContexts;
 using UserService.Models;
 
-namespace API.Controllers
+namespace UserService.Controllers
 {
     [Route("[controller]")]
     [ApiController]

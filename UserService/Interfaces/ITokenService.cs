@@ -1,6 +1,6 @@
 ﻿using UserService.Models;
 
-namespace API.Interfaces
+namespace UserService.Interfaces
 {
     public interface ITokenService
     {
