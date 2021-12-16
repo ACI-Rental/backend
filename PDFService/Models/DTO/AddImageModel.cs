@@ -1,4 +1,8 @@
-﻿namespace ImageService.Models.DTO
+﻿using ImageService.Models;
+using ImageService;
+using PDFService.Models;
+
+namespace ImageService.Models.DTO
 {
     /// <summary>
     /// Data model for the AddImage calls
