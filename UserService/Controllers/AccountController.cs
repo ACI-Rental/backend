@@ -26,18 +26,21 @@ namespace UserService.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDTO loginDto)
         {
-            if (loginDto.Username == null || loginDto.Password == null) return BadRequest("No user/password filled in");
+            if (loginDto.Username == null || loginDto.Password == null)
+            {
+                return BadRequest("No user/password filled in");
+            }
 
             var user = await _context.Users.Include(u => u.UserInfo).SingleOrDefaultAsync(x => x.UserInfo.Name == loginDto.Username);
             
-            if(user == null)
+            if(user == null || user == default(User))
             {
                 return BadRequest("No user found");
             }
            
             if (user.UserInfo.Password != loginDto.Password)
             {
-                return Unauthorized("password doesn't match");
+                return Unauthorized("Password does not match");
             }
             
 
@@ -48,15 +51,12 @@ namespace UserService.Controllers
             };
 
             return Ok(logindata);
-
-
-
-
         }
+
         // not yet implemented
         private async Task<bool> UserExists(int studentnr)
         {
-            return await _context.Users.AnyAsync(x => x.UserInfo.Studentnumber == studentnr.ToString());
+            return await _context.Users.Include(u => u.UserInfo).AnyAsync(x => x.UserInfo.Studentnumber == studentnr.ToString());
         }
 
 
