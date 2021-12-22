@@ -125,6 +125,7 @@ namespace ProductService.Controllers
 
             if (Products.Count > (page.CurrentPage * pageSize))
             {
+                var temp2 = new List<InventoryProduct>();
                 var temp = new List<InventoryProduct>();
 
                 foreach (var item in Products)
@@ -138,7 +139,11 @@ namespace ProductService.Controllers
                     }
                     else
                     {
-                        if (temp.Count >= (page.CurrentPage * pageSize))
+                        if (temp2.Count <= (page.CurrentPage + pageSize))
+                        {
+                            temp2.Add(item);
+                        }
+                        else//if (temp.Count >= (page.CurrentPage * pageSize))
                         {
                             temp.Add(item);
                         }
