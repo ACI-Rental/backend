@@ -132,21 +132,23 @@ namespace ProductService.Controllers
                 {
                     if (page.CurrentPage == 0)
                     {
-                        if (temp.Count < (pageSize))
+                         temp.Add(item);
+                    }
+                    else
+                    {
+                        if (temp2.Count < (page.CurrentPage * pageSize))
+                        {
+                            temp2.Add(item);
+                        }
+                        else
                         {
                             temp.Add(item);
                         }
                     }
-                    else
+
+                    if (temp.Count == pageSize)
                     {
-                        if (temp2.Count <= (page.CurrentPage + pageSize))
-                        {
-                            temp2.Add(item);
-                        }
-                        else//if (temp.Count >= (page.CurrentPage * pageSize))
-                        {
-                            temp.Add(item);
-                        }
+                        break;
                     }
                     
                 }
