@@ -45,27 +45,16 @@
             "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}"
         },
         {
-          "Host": "localhost",
-          "Port": 64808
-        }
-      ],
-      "UpstreamPathTemplate": "/api/reservation/{productId}"
-    },
-    {
-      "DownstreamPathTemplate": "/reservation/similar/{pageIndex}/{pageSize}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 64808
-        }
-      ],
-      "UpstreamPathTemplate": "/api/reservation/similar/{pageIndex}/{pageSize}"
-    },
-    {
-      "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+            "DownstreamPathTemplate": "/reservation/similar/{pageIndex}/{pageSize}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 64808
+                }
+            ],
+            "UpstreamPathTemplate": "/api/reservation/similar/{pageIndex}/{pageSize}"
+        },
         {
             "DownstreamPathTemplate": "/product/lastcatalog",
             "DownstreamScheme": "http",
