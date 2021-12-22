@@ -405,13 +405,10 @@ namespace ProductService.Controllers
                 catalogObjects = tempList;
             }
 
-            
-
-
-
             foreach (var item in catalogObjects)
             {
                 var images = await $"{_config.Value.ApiGatewayBaseUrl}/api/image/images/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
+
                 var catalogImages = new List<string>();
 
                 if (images != null)
@@ -425,9 +422,24 @@ namespace ProductService.Controllers
                     }
                 }
 
+                var pdfs = await $"{_config.Value.ApiGatewayBaseUrl}/api/pdf/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<PdfBlobModel>>();
+
+                var catalogPdfs = new List<string>();
+
+                if (pdfs != null)
+                {
+                    foreach (var pdf in pdfs)
+                    {
+                        if (pdf != default && pdf.Blob != default)
+                        {
+                            catalogPdfs.Add(Convert.ToBase64String(pdf.Blob));
+                        }
+                    }
+                }
+
                 if (!allitems.Any())
                 {
-                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages));
+                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages, catalogPdfs));
                     continue;
                 }
 
@@ -435,11 +447,11 @@ namespace ProductService.Controllers
                 var firstlist = allitems.FirstOrDefault(x => x.CategoryName == item.Category.Name);
                 if (firstlist != default)
                 {
-                    firstlist.CatalogItems.Add(converter.ConvertProductToCatalogItemAsync(item, catalogImages));
+                    firstlist.CatalogItems.Add(converter.ConvertProductToCatalogItemAsync(item, catalogImages, catalogPdfs));
                 }
                 else
                 {
-                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages));
+                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages, catalogPdfs));
                 }
             }
             var page = new CatalogPage 
