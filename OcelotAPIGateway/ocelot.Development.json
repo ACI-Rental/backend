@@ -1,7 +1,7 @@
 {
     "Routes": [
         {
-            "DownstreamPathTemplate": "/PDF/{productId}",
+            "DownstreamPathTemplate": "/pdf/{productId}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
@@ -9,10 +9,10 @@
                     "Port": 26057
                 }
             ],
-            "UpstreamPathTemplate": "/api/PDF/{productId}"
+            "UpstreamPathTemplate": "/api/pdf/{productId}"
         },
         {
-            "DownstreamPathTemplate": "/PDF",
+            "DownstreamPathTemplate": "/pdf",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
@@ -20,7 +20,7 @@
                     "Port": 26057
                 }
             ],
-            "UpstreamPathTemplate": "/api/PDF"
+            "UpstreamPathTemplate": "/api/pdf"
         },
         {
             "DownstreamPathTemplate": "/product",

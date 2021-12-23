@@ -235,6 +235,18 @@ namespace ProductService.Controllers
                 }
             }
 
+            if (addProductModel.Pdfs != default && addProductModel.Pdfs.Any())
+            {
+
+                var addPdfObject = new AddPdfModel(newProduct.Id, LinkedTableType.PRODUCT, addProductModel.Pdfs);
+                if ((await $"{_config.Value.ApiGatewayBaseUrl}/api/pdf".AllowAnyHttpStatus().PostJsonAsync(addPdfObject)).StatusCode != 201)
+                {
+                    _dbContext.Products.Remove(newProduct);
+                    await _dbContext.SaveChangesAsync();
+                    return BadRequest("PRODUCT.ADD.SAVING_PDFS_FAILED");
+                }
+            }
+
             return Created($"/product/{newProduct.Id}", newProduct);
         }
 

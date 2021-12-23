@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PDFService.Models.DTO
+namespace ProductService.Models.DTO
 {
+    /// <summary>
+    /// Data model for the AddImage calls
+    /// </summary>
     public class AddPdfModel
     {
         /// <summary>
