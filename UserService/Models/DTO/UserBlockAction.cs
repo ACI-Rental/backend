@@ -11,6 +11,7 @@ namespace UserService.Models.DTO
     public enum UserBlockAction
     {
         BLOCK = 0,
-        UNBLOCK = 1
+        UNBLOCK = 1,
+        PERMABLOCK = 2
     }
 }

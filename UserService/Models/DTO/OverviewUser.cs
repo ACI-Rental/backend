@@ -27,8 +27,16 @@ namespace UserService.Models.DTO
         public string Name { get; set; }
 
         /// <summary>
-        /// A date will be set when the user is banned
-        /// It will be null when the user is not banned
+        /// Boolean to show if user is blocked
+        /// True if blocked
+        /// False if not blocked
+        /// </summary>
+        public bool Banned { get; set; }
+
+        /// <summary>
+        /// The date until which the user is blocked, if the user is blocked
+        /// If the user is banned indefinitely, this will be null
+        /// If the user is not banned, this should be null as well
         /// </summary>
         public DateTime? BannedUntil { get; set; }
 

@@ -147,7 +147,7 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(0, 50, "C");
+                var result = await _controller.GetCatalogEntries(0, 50, "C", "-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
@@ -169,16 +169,19 @@ namespace ProductService.Tests.UnitTests
             _context.Categories.Add(category);
 
             var data = new List<Product>
-                {
-                    new Product { Name = "BBB", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category },
-                    new Product { Name = "ZZZ", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category2 },
-                    new Product { Name = "AAA", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category3 },
-                    new Product { Name = "CCC", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category4 },
-                    new Product { Name = "DDD", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category5 },
-                    new Product { Name = "FFF", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category2 },
-                    new Product { Name = "GGG", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category },
-                };
-            _context.Products.AddRange(data);
+            {
+                new Product { Name = "BBB", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category },
+                new Product { Name = "ZZZ", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category2 },
+                new Product { Name = "AAA", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category3 },
+                new Product { Name = "CCC", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category4 },
+                new Product { Name = "DDD", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category5 },
+                new Product { Name = "FFF", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category2 },
+                new Product { Name = "GGG", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category },
+            };
+            if (!_context.Products.Any())
+            {
+                _context.Products.AddRange(data);
+            }
             _context.SaveChanges();
         }
     }

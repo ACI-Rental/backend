@@ -57,6 +57,26 @@ namespace ProductService.Controllers
 
             var page = new InventoryPage();
 
+            var Inventory = await _dbContext.Products.OrderBy(x => x.CatalogNumber).Include(x => x.Category).ToListAsync();
+            var Products = new List<InventoryProduct>();
+
+            foreach(var item in Inventory)
+            {
+                InventoryProduct IP = new InventoryProduct()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Category = item.Category.Name,
+                    Status = item.ProductState,
+                    RequiresApproval = item.RequiresApproval,
+                    Location = item.InventoryLocation
+                };
+
+                Products.Add(IP);
+            }
+
+
+            /*
             var query = from product in _dbContext.Products
                         orderby product.CatalogNumber ascending
                         select new InventoryProduct()
@@ -67,22 +87,22 @@ namespace ProductService.Controllers
                             RequiresApproval = product.RequiresApproval,
                             Status = product.ProductState,
                         };
+            */
 
             if (searchfilter != "-")
             {
-                query = from product in _dbContext.Products where product.Name.ToLower().Contains(searchfilter.ToLower())
-                        orderby product.CatalogNumber ascending
-                        select new InventoryProduct()
-                        {
-                            Id = product.Id,
-                            Name = product.Name,
-                            Location = product.InventoryLocation,
-                            RequiresApproval = product.RequiresApproval,
-                            Status = product.ProductState
-                        };
+                var tempList = new List<InventoryProduct>();
+                foreach (var item in Products)
+                {
+                    if (item.Name.ToString().ToLower().Contains(searchfilter.ToLower()))
+                    {
+                        tempList.Add(item);
+                    }
+                }
+                Products = tempList;
             }
 
-            page.TotalProductCount = await query.CountAsync();
+            page.TotalProductCount = Products.Count;//await query.CountAsync();
 
             // Last page calculation goes wrong if the totalcount is 0
             // also no point in trying to get 0 products from DB
@@ -103,7 +123,41 @@ namespace ProductService.Controllers
             // use lastpage if requested page is higher
             page.CurrentPage = Math.Min(pageIndex, lastPage);
 
-            page.Products = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
+            if (Products.Count > (page.CurrentPage * pageSize))
+            {
+                var temp2 = new List<InventoryProduct>();
+                var temp = new List<InventoryProduct>();
+
+                foreach (var item in Products)
+                {
+                    if (page.CurrentPage == 0)
+                    {
+                         temp.Add(item);
+                    }
+                    else
+                    {
+                        if (temp2.Count < (page.CurrentPage * pageSize))
+                        {
+                            temp2.Add(item);
+                        }
+                        else
+                        {
+                            temp.Add(item);
+                        }
+                    }
+
+                    if (temp.Count == pageSize)
+                    {
+                        break;
+                    }
+                    
+                }
+
+                Products = temp;
+            }
+            
+
+            page.Products = Products; //await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
 
             return Ok(page);
         }
@@ -353,13 +407,10 @@ namespace ProductService.Controllers
                 catalogObjects = tempList;
             }
 
-            
-
-
-
             foreach (var item in catalogObjects)
             {
                 var images = await $"{_config.Value.ApiGatewayBaseUrl}/api/image/images/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
+
                 var catalogImages = new List<string>();
 
                 if (images != null)
@@ -373,9 +424,24 @@ namespace ProductService.Controllers
                     }
                 }
 
+                var pdfs = await $"{_config.Value.ApiGatewayBaseUrl}/api/pdf/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<PdfBlobModel>>();
+
+                var catalogPdfs = new List<string>();
+
+                if (pdfs != null)
+                {
+                    foreach (var pdf in pdfs)
+                    {
+                        if (pdf != default && pdf.Blob != default)
+                        {
+                            catalogPdfs.Add(Convert.ToBase64String(pdf.Blob));
+                        }
+                    }
+                }
+
                 if (!allitems.Any())
                 {
-                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages));
+                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages, catalogPdfs));
                     continue;
                 }
 
@@ -383,11 +449,11 @@ namespace ProductService.Controllers
                 var firstlist = allitems.FirstOrDefault(x => x.CategoryName == item.Category.Name);
                 if (firstlist != default)
                 {
-                    firstlist.CatalogItems.Add(converter.ConvertProductToCatalogItemAsync(item, catalogImages));
+                    firstlist.CatalogItems.Add(converter.ConvertProductToCatalogItemAsync(item, catalogImages, catalogPdfs));
                 }
                 else
                 {
-                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages));
+                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages, catalogPdfs));
                 }
             }
             var page = new CatalogPage 
