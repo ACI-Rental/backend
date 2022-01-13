@@ -64,7 +64,7 @@ namespace PDFService.Controllers
                 return BadRequest("NO_DATA");
             }
 
-            if (addPdfModel.Pdf == default || !addPdfModel.Pdf.Any())
+            if (addPdfModel.Pdfs == default || !addPdfModel.Pdfs.Any())
             {
                 return BadRequest("NO_PDF");
             }
@@ -76,7 +76,7 @@ namespace PDFService.Controllers
 
             List<Pdf> pdfs = new List<Pdf>();
 
-            foreach (var pdf in addPdfModel.Pdf)
+            foreach (var pdf in addPdfModel.Pdfs)
             {
                 //if (CheckPdf(new CheckPdfModel() { Pdf = pdf }).GetType() != typeof(OkResult))
                 //{
