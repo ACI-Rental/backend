@@ -107,7 +107,7 @@ namespace ProductService.Tests.UnitTests
 
             var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
 
-            Assert.Equal(1, resultValue.Products.Count());
+            Assert.Single(resultValue.Products);
             Assert.Equal(1, resultValue.TotalProductCount);
             Assert.Equal("Speakers", resultValue.Products.First().Name);
         }

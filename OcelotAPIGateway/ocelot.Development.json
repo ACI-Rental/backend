@@ -197,7 +197,19 @@
                 }
             ],
             "UpstreamPathTemplate": "/api/user/block"
+        },
+
+    {
+      "DownstreamPathTemplate": "/account/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 64810
         }
+      ],
+      "UpstreamPathTemplate": "/api/account/login"
+    }
 
     ],
   "GlobalConfiguration": {

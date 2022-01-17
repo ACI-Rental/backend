@@ -152,8 +152,8 @@ namespace ProductService.Tests.UnitTests
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
 
-                Assert.Equal(1, model.CatalogItems.Count());
-                Assert.Equal(1, model.CatalogItems[0].CatalogItems.Count);
+                Assert.Single(model.CatalogItems);
+                Assert.Single(model.CatalogItems[0].CatalogItems);
                 Assert.Equal("CCC", model.CatalogItems[0].CatalogItems[0].Name);
                 Assert.Single(model.CatalogItems);
             }
