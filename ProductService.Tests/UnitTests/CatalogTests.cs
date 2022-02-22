@@ -38,11 +38,66 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(0, 0);
+                var result = await _controller.GetCatalogEntries(0, 0,"-","-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
                 Assert.Empty(model.CatalogItems);
+            }
+        }
+
+        [Fact]
+        private async Task GetCatalogEntries_FilterOutAllButChat()
+        {
+            var imgblobs = new List<ImageBlobModel>();
+
+            string serializedObject = JsonConvert.SerializeObject(imgblobs);
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWith(serializedObject);
+                var result = await _controller.GetCatalogEntries(0, 5, "-","Chat");
+                var okObj = Assert.IsType<OkObjectResult>(result);
+                var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
+
+                CatalogItem testItem = new CatalogItem();
+
+                foreach(var item in model.CatalogItems)
+                {
+                    var category = new Category { Name = item.CategoryName };
+                    testItem.CatalogNumber = 1;
+                    testItem.Category = category;
+                }
+
+                Assert.Equal("Chat", testItem.Category.Name);
+                
+            }
+        }
+
+        [Fact]
+        private async Task GetCatalogEntries_FilterOutAllButBBB()
+        {
+            var imgblobs = new List<ImageBlobModel>();
+
+            string serializedObject = JsonConvert.SerializeObject(imgblobs);
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWith(serializedObject);
+                var result = await _controller.GetCatalogEntries(0, 5, "BBB", "-");
+                var okObj = Assert.IsType<OkObjectResult>(result);
+                var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
+
+                string name = "ERROR";
+
+                foreach (var item in model.CatalogItems)
+                {
+                    foreach(var product in item.CatalogItems)
+                    {
+                        name = product.Name;
+                    }
+                }
+
+                Assert.Equal("BBB", name);
+
             }
         }
 
@@ -55,7 +110,7 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(0, 5);
+                var result = await _controller.GetCatalogEntries(0, 5, "-", "-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
@@ -73,11 +128,33 @@ namespace ProductService.Tests.UnitTests
             using (var httpTest = new HttpTest())
             {
                 httpTest.RespondWith(serializedObject);
-                var result = await _controller.GetCatalogEntries(3, 2);
+                var result = await _controller.GetCatalogEntries(3, 2, "-", "-");
 
                 var okObj = Assert.IsType<OkObjectResult>(result);
                 var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
 
+                Assert.Single(model.CatalogItems);
+            }
+        }
+
+        [Fact]
+        private async Task GetCatalogEntries_ShouldReturnCatalogProductsFiltertBySearch()
+        {
+            var imgblobs = new List<ImageBlobModel>();
+
+            string serializedObject = JsonConvert.SerializeObject(imgblobs);
+
+            using (var httpTest = new HttpTest())
+            {
+                httpTest.RespondWith(serializedObject);
+                var result = await _controller.GetCatalogEntries(0, 50, "C", "-");
+
+                var okObj = Assert.IsType<OkObjectResult>(result);
+                var model = Assert.IsAssignableFrom<CatalogPage>(okObj.Value);
+
+                Assert.Single(model.CatalogItems);
+                Assert.Single(model.CatalogItems[0].CatalogItems);
+                Assert.Equal("CCC", model.CatalogItems[0].CatalogItems[0].Name);
                 Assert.Single(model.CatalogItems);
             }
         }
@@ -92,16 +169,19 @@ namespace ProductService.Tests.UnitTests
             _context.Categories.Add(category);
 
             var data = new List<Product>
-                {
-                    new Product { Name = "BBB", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category },
-                    new Product { Name = "ZZZ", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category2 },
-                    new Product { Name = "AAA", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category3 },
-                    new Product { Name = "CCC", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category4 },
-                    new Product { Name = "DDD", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category5 },
-                    new Product { Name = "FFF", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category2 },
-                    new Product { Name = "GGG", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category },
-                };
-            _context.Products.AddRange(data);
+            {
+                new Product { Name = "BBB", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category },
+                new Product { Name = "ZZZ", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category2 },
+                new Product { Name = "AAA", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category3 },
+                new Product { Name = "CCC", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category4 },
+                new Product { Name = "DDD", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category5 },
+                new Product { Name = "FFF", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category2 },
+                new Product { Name = "GGG", Description = "", ProductState = ProductState.AVAILABLE, RequiresApproval = true, Category = category },
+            };
+            if (!_context.Products.Any())
+            {
+                _context.Products.AddRange(data);
+            }
             _context.SaveChanges();
         }
     }

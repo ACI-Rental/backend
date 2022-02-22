@@ -67,7 +67,7 @@
       "UpstreamPathTemplate": "/api/reservation/{productId}"
     },
     {
-      "DownstreamPathTemplate": "/reservation/similar",
+      "DownstreamPathTemplate": "/reservation/similar/{pageIndex}/{pageSize}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -75,7 +75,7 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/similar"
+      "UpstreamPathTemplate": "/api/reservation/similar/{pageIndex}/{pageSize}"
     },
     {
       "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
@@ -131,8 +131,41 @@
         }
       ],
       "UpstreamPathTemplate": "/api/products/reserve"
-    }
+    },
+    {
+      "DownstreamPathTemplate": "/user/page/{pageindex}/{pagesize}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "aci-user-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
+    },
+    {
+      "DownstreamPathTemplate": "/user/blockaction",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "aci-user-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/user/block"
+    },
 
+    {
+      "DownstreamPathTemplate": "/account/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "aci-user-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/account/login"
+    }
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:56005"

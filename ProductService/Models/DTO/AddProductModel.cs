@@ -33,5 +33,7 @@
         /// Images that have to be linked to the product
         /// </summary>
         public string[] Images { get; set; }
+
+        public string[] Pdfs { get; set; }
     }
 }
