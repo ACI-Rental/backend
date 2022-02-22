@@ -18,9 +18,13 @@ namespace ProductService.Models.DTO
         /// The name of the product
         /// </summary>
         public string Name { get; set; }
+        //<summary>
+        // The category of the product
+        //<summary>
+        public string Category { get; set; }
         /// <summary>
         /// The location where the product is physically stored
-        /// </summary>
+        /// </summary>     
         public string Location { get; set; }
         /// <summary>
         /// Whether the product has to be approved before it can be rented

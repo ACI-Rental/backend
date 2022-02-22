@@ -41,7 +41,7 @@ namespace ProductService.Tests.UnitTests
         private async Task GetInventoryProducts_ShouldReturnFirstPageIfIndexZero()
         {
             var controller = Initialize();
-            var result = await controller.GetInventoryItems(0, 3);
+            var result = await controller.GetInventoryItems(0, 3, "-");
 
             var actionResult = Assert.IsType<OkObjectResult>(result);
 
@@ -57,7 +57,7 @@ namespace ProductService.Tests.UnitTests
         private async Task GetInventoryProducts_ShouldReturnSecondPageIfIndexOne()
         {
             var controller = Initialize();
-            var result = await controller.GetInventoryItems(1, 2);
+            var result = await controller.GetInventoryItems(1, 2, "-");
             var actionResult = Assert.IsType<OkObjectResult>(result);
 
             var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
@@ -74,7 +74,7 @@ namespace ProductService.Tests.UnitTests
         private async Task GetInventoryProducts_ShouldReturnAllProducts()
         {
             var controller = Initialize();
-            var result = await controller.GetInventoryItems(0, 100);
+            var result = await controller.GetInventoryItems(0, 100, "-");
             var actionResult = Assert.IsType<OkObjectResult>(result);
 
             var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
@@ -88,7 +88,7 @@ namespace ProductService.Tests.UnitTests
         private async Task GetInventoryProducts_ShouldReturnLastPage()
         {
             var controller = Initialize();
-            var result = await controller.GetInventoryItems(50, 3);
+            var result = await controller.GetInventoryItems(50, 3, "-");
             var actionResult = Assert.IsType<OkObjectResult>(result);
 
             var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
@@ -99,10 +99,41 @@ namespace ProductService.Tests.UnitTests
         }
 
         [Fact]
+        private async Task GetInventoryProducts_ShouldReturnValueThatContainsSearchfilter()
+        {
+            var controller = Initialize();
+            var result = await controller.GetInventoryItems(0, 100, "Speakers");
+            var actionResult = Assert.IsType<OkObjectResult>(result);
+
+            var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
+
+            Assert.Single(resultValue.Products);
+            Assert.Equal(1, resultValue.TotalProductCount);
+            Assert.Equal("Speakers", resultValue.Products.First().Name);
+        }
+
+        [Fact]
+        private async Task GetInventoryProducts_ShouldReturn3ValuesThatContainsSearchfilter()
+        {
+            var controller = Initialize();
+            var result = await controller.GetInventoryItems(0, 3, "s");
+            var actionResult = Assert.IsType<OkObjectResult>(result);
+
+            var resultValue = Assert.IsType<InventoryPage>(actionResult.Value);
+
+            Assert.Equal(3, resultValue.Products.Count());
+            Assert.Equal(4, resultValue.TotalProductCount);
+
+            Assert.Equal("Canon EOS R5", resultValue.Products.ElementAt(0).Name);
+            Assert.Equal("Speakers", resultValue.Products.ElementAt(1).Name);
+            Assert.Equal("Headset", resultValue.Products.ElementAt(2).Name);
+        }
+
+        [Fact]
         private async Task GetInventoryProducts_ShouldReturnBadObjectResultIfPageSizeIsNegative()
         {
             var controller = Initialize(seed: false);
-            var result = await controller.GetInventoryItems(0, -3);
+            var result = await controller.GetInventoryItems(0, -3, "-");
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
@@ -110,7 +141,7 @@ namespace ProductService.Tests.UnitTests
         private async Task GetInventoryProducts_ShouldReturnBadObjectResultIfPageIndexIsNegative()
         {
             var controller = Initialize(seed: false);
-            var result = await controller.GetInventoryItems(-3, 1);
+            var result = await controller.GetInventoryItems(-3, 1, "-");
             Assert.IsType<BadRequestObjectResult>(result);
         }
 

@@ -142,7 +142,7 @@ namespace ReservationService.Controllers
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_ALREADY_RESERVED_IN_PERIOD"));
                 }
-                var result =  await $"{_config.Value.ApiGatewayBaseUrl}/api/product/{product.Id}".AllowAnyHttpStatus().GetStringAsync();
+                var result = await $"{_config.Value.ApiGatewayBaseUrl}/api/product/flat/{product.Id}".AllowAnyHttpStatus().GetStringAsync();
                 if (string.IsNullOrWhiteSpace(result))
                 {
                     productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_FOUND"));
@@ -188,12 +188,24 @@ namespace ReservationService.Controllers
         }
 
         /// <summary>
-        /// Get all reservations with similar startdate
+        /// Get all reservations with similar startdate for a single page
         /// </summary>
         /// <returns>List of all similar reservations</returns>
-        [HttpGet("similar")]
-        public async Task<IActionResult> GetSimilarReservations()
+        [HttpGet("similar/{pageIndex}/{pageSize}")]
+        public async Task<IActionResult> GetSimilarReservations(int pageIndex, int pageSize)
         {
+            if (pageIndex < 0)
+            {
+                return BadRequest("RESERVATION.INCORRECT_INDEX");
+            }
+
+            if (pageSize <= 0)
+            {
+                return BadRequest("RESERVATION.INCORRECT_INDEX");
+            }
+
+            var page = new ReservationOverviewPage();
+
             var reservations = await _dbContext.Reservations.ToListAsync();
             var similarReservations = new List<List<Reservation>>();
 
@@ -208,7 +220,31 @@ namespace ReservationService.Controllers
                 similarReservations.Add(mergedReservations);
             }
 
-            return Ok(similarReservations);
+            page.TotalReservationCount = similarReservations.Count();
+
+            // Last page calculation goes wrong if the totalcount is 0
+            // also no point in trying to get 0 products from DB
+            if (page.TotalReservationCount == 0)
+            {
+                page.CurrentPage = 0;
+                page.Reservations = new List<List<Reservation>>(0);
+                return Ok(page);
+            }
+
+            // Calculate how many pages there are, given the current pageSize
+            int lastPage = (int)Math.Ceiling((double)page.TotalReservationCount / pageSize) - 1;
+
+            //pageIndex below 0 is nonsensical, bringing the value to closest sane value
+            if (pageIndex < 0)
+            {
+                pageIndex = 0;
+            }
+
+            // Use last page if requested page is higher
+            page.CurrentPage = Math.Min(pageIndex, lastPage);
+
+            page.Reservations = similarReservations.Skip(page.CurrentPage * pageSize).Take(pageSize).ToList();
+            return Ok(page);
         }
 
         /// <summary>

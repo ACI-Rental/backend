@@ -36,6 +36,10 @@ namespace ProductService.Models.DTO
         /// </summary>
         public List<string> Images { get; set; }
         /// <summary>
+        /// list of pdfs of the catalogitem
+        /// </summary>
+        public List<string> Pdfs { get; set; }
+        /// <summary>
         /// Image index to indicate position
         /// </summary>
         public int ImageIndex { get; set; }

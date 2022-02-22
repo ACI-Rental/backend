@@ -19,7 +19,13 @@ namespace UserService.Models
         /// </summary>
         [Key]
         [Required]
-        public int StudentNumber { get; set; }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Info on the user, this is extern data
+        /// Currently it includes Name, Studentnumber and a Password
+        /// </summary>
+        public UserInfo UserInfo { get; set; }
 
         /// <summary>
         /// Token used to refresh the login session of the user.
@@ -27,8 +33,16 @@ namespace UserService.Models
         public string RefreshToken { get; set; }
 
         /// <summary>
-        /// A date will be set when the user is banned
-        /// Will be null when the user is not banned
+        /// Boolean to show if user is blocked
+        /// True if blocked
+        /// False if not blocked
+        /// </summary>
+        public bool Banned { get; set; }
+        
+        /// <summary>
+        /// The date until which the user is blocked, if the user is blocked
+        /// If the user is banned indefinitely, this will be null
+        /// If the user is not banned, this is null as well
         /// </summary>
         public DateTime? BannedUntil { get; set; }
 

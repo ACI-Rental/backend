@@ -266,6 +266,91 @@ namespace ReservationService.Tests.UnitTests
             Assert.Single(reservation.Value);
         }
 
+        [Fact]
+        private async Task GetSimilarReservations_ShouldReturnBadRequestInvalidIndex()
+        {
+            var reservationPage = (await _controller.GetSimilarReservations(-1, 2));
+
+            Assert.IsType<BadRequestObjectResult>(reservationPage);
+        }
+
+        [Fact]
+        private async Task GetSimilarReservations_ShouldReturnBadRequestInvalidPagesize()
+        {
+            var reservationPage = (await _controller.GetSimilarReservations(2, 0));
+
+            Assert.IsType<BadRequestObjectResult>(reservationPage);
+        }
+
+        [Fact]
+        private async Task GetSimilarReservations_ShouldReturnFirstPageIfIndexZero()
+        {
+            _context.Reservations.Add(new Reservation() { Id = 1, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 3, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 2, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 4, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 3, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 5, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 4, ProductId = 1 });
+            await _context.SaveChangesAsync();
+
+            var reservationPage = (await _controller.GetSimilarReservations(0, 2));
+
+            var actionResult = Assert.IsType<OkObjectResult>(reservationPage);
+
+            var resultValue = Assert.IsType<ReservationOverviewPage>(actionResult.Value);
+
+            Assert.Equal(4, resultValue.TotalReservationCount);
+            Assert.Equal(0, resultValue.CurrentPage);
+            Assert.Equal(2, resultValue.Reservations.Count());
+            Assert.Equal(1, resultValue.Reservations[0].First().Id);
+            Assert.Equal(3, resultValue.Reservations[1].First().Id);
+        }
+
+        [Fact]
+        private async Task GetSimilarReservations_ShouldReturnSecondPageIfIndexOne()
+        {
+            _context.Reservations.Add(new Reservation() { Id = 1, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 3, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 2, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 4, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 3, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 5, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 4, ProductId = 1 });
+            await _context.SaveChangesAsync();
+
+            var reservationPage = (await _controller.GetSimilarReservations(1, 2));
+
+            var actionResult = Assert.IsType<OkObjectResult>(reservationPage);
+
+            var resultValue = Assert.IsType<ReservationOverviewPage>(actionResult.Value);
+
+            Assert.Equal(4, resultValue.TotalReservationCount);
+            Assert.Equal(1, resultValue.CurrentPage);
+            Assert.Equal(2, resultValue.Reservations.Count());
+            Assert.Equal(4, resultValue.Reservations[0].First().Id);
+            Assert.Equal(5, resultValue.Reservations[1].First().Id);
+        }
+
+        [Fact]
+        private async Task GetSimilarReservations_ShouldReturnAsSimilar()
+        {
+            _context.Reservations.Add(new Reservation() { Id = 1, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 3, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 1, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 4, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 3, ProductId = 1 });
+            _context.Reservations.Add(new Reservation() { Id = 5, StartDate = DateTime.Now.AddDays(-1), EndDate = DateTime.Now.AddDays(1), IsApproved = true, RenterId = 4, ProductId = 1 });
+            await _context.SaveChangesAsync();
+
+            var reservationPage = (await _controller.GetSimilarReservations(0, 2));
+
+            var actionResult = Assert.IsType<OkObjectResult>(reservationPage);
+
+            var resultValue = Assert.IsType<ReservationOverviewPage>(actionResult.Value);
+
+            Assert.Equal(3, resultValue.TotalReservationCount);
+            Assert.Equal(0, resultValue.CurrentPage);
+            Assert.Equal(2, resultValue.Reservations.Count());
+            Assert.Equal(2, resultValue.Reservations[0].Count());
+            Assert.Equal(4, resultValue.Reservations[1].First().Id);
+        }
+
+
+
+
         /// <summary>
         /// Gets error from a badrequest error for the Reserve Products tests
         /// </summary>

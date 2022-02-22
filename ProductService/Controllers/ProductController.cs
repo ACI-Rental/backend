@@ -42,8 +42,8 @@ namespace ProductService.Controllers
         /// <param name="pageIndex">Which page is being requested. If 0 or lower returns first page. If higher than amount of pages returns the last page </param>
         /// <param name="pageSize">The amount of products that are being requested</param>
         /// <returns>Object containing count of all products, current page and a collection of products</returns>
-        [HttpGet("page/{pageIndex}/{pageSize}")]
-        public async Task<IActionResult> GetInventoryItems(int pageIndex, int pageSize)
+        [HttpGet("page/{pageIndex}/{pageSize}/{searchfilter}")]
+        public async Task<IActionResult> GetInventoryItems(int pageIndex, int pageSize, string searchfilter)
         {
             if (pageIndex < 0)
             {
@@ -57,6 +57,26 @@ namespace ProductService.Controllers
 
             var page = new InventoryPage();
 
+            var Inventory = await _dbContext.Products.OrderBy(x => x.CatalogNumber).Include(x => x.Category).ToListAsync();
+            var Products = new List<InventoryProduct>();
+
+            foreach(var item in Inventory)
+            {
+                InventoryProduct IP = new InventoryProduct()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Category = item.Category.Name,
+                    Status = item.ProductState,
+                    RequiresApproval = item.RequiresApproval,
+                    Location = item.InventoryLocation
+                };
+
+                Products.Add(IP);
+            }
+
+
+            /*
             var query = from product in _dbContext.Products
                         orderby product.CatalogNumber ascending
                         select new InventoryProduct()
@@ -65,10 +85,24 @@ namespace ProductService.Controllers
                             Name = product.Name,
                             Location = product.InventoryLocation,
                             RequiresApproval = product.RequiresApproval,
-                            Status = product.ProductState
+                            Status = product.ProductState,
                         };
+            */
 
-            page.TotalProductCount = await query.CountAsync();
+            if (searchfilter != "-")
+            {
+                var tempList = new List<InventoryProduct>();
+                foreach (var item in Products)
+                {
+                    if (item.Name.ToString().ToLower().Contains(searchfilter.ToLower()))
+                    {
+                        tempList.Add(item);
+                    }
+                }
+                Products = tempList;
+            }
+
+            page.TotalProductCount = Products.Count;//await query.CountAsync();
 
             // Last page calculation goes wrong if the totalcount is 0
             // also no point in trying to get 0 products from DB
@@ -89,7 +123,42 @@ namespace ProductService.Controllers
             // use lastpage if requested page is higher
             page.CurrentPage = Math.Min(pageIndex, lastPage);
 
-            page.Products = await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
+            if (Products.Count > (page.CurrentPage * pageSize))
+            {
+                var temp2 = new List<InventoryProduct>();
+                var temp = new List<InventoryProduct>();
+
+                foreach (var item in Products)
+                {
+                    if (page.CurrentPage == 0)
+                    {
+                         temp.Add(item);
+                    }
+                    else
+                    {
+                        if (temp2.Count < (page.CurrentPage * pageSize))
+                        {
+                            temp2.Add(item);
+                        }
+                        else
+                        {
+                            temp.Add(item);
+                        }
+                    }
+
+                    if (temp.Count == pageSize)
+                    {
+                        break;
+                    }
+                    
+                }
+
+                Products = temp;
+            }
+            
+
+            page.Products = Products; //await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
+
             return Ok(page);
         }
 
@@ -220,6 +289,18 @@ namespace ProductService.Controllers
                 }
             }
 
+            if (addProductModel.Pdfs != default && addProductModel.Pdfs.Any())
+            {
+
+                var addPdfObject = new AddPdfModel(newProduct.Id, LinkedTableType.PRODUCT, addProductModel.Pdfs);
+                if ((await $"{_config.Value.ApiGatewayBaseUrl}/api/pdf".AllowAnyHttpStatus().PostJsonAsync(addPdfObject)).StatusCode != 201)
+                {
+                    _dbContext.Products.Remove(newProduct);
+                    await _dbContext.SaveChangesAsync();
+                    return BadRequest("PRODUCT.ADD.SAVING_PDFS_FAILED");
+                }
+            }
+
             return Created($"/product/{newProduct.Id}", newProduct);
         }
 
@@ -295,32 +376,84 @@ namespace ProductService.Controllers
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns>Empty list if no entries are found, Succes a CatalogPage object</returns>
-        [HttpGet("catalogentries/{pageindex}/{pagesize}")]
-        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize)
+        [HttpGet("catalogentries/{pageindex}/{pagesize}/{searchfilter}/{catalogfilter}")]
+        public async Task<IActionResult> GetCatalogEntries(int pageIndex, int pageSize, string searchfilter, string catalogFilter)
         {
             if (pageIndex < 0 || pageSize < 0)
             {
                 return BadRequest("CATALOG.INCORRECT_PAGESIZE_OR_INDEX");
             }
             var converter = new CatalogItemConverter();
+
             var catalogObjects = await _dbContext.Products.OrderBy(x => x.CatalogNumber).Include(x => x.Category).ToListAsync();
+            if(searchfilter != "-")
+            {
+                catalogObjects = await _dbContext.Products.Where(p => p.Name.ToLower().Contains(searchfilter.ToLower())).OrderBy(x => x.CatalogNumber).Include(x => x.Category).ToListAsync();
+            }
+
             var allitems = new List<CatalogItemsWithCategory>();
+
+
+            
+            if (catalogFilter != "-")
+            {
+                var tempList = new List<Product>();
+                foreach (var item in catalogObjects.Where(n => n.Category.Name == catalogFilter))
+                {
+                    tempList.Add(item);
+                }
+
+                catalogObjects = tempList;
+            }
+
+            if (searchfilter != "-")
+            {
+                var tempList = new List<Product>();
+                foreach (var item in catalogObjects)
+                {
+                    if (item.Name.ToString().ToLower().Contains(searchfilter.ToLower()))
+                    {
+                        tempList.Add(item);
+                    }
+                }
+                catalogObjects = tempList;
+            }
 
             foreach (var item in catalogObjects)
             {
                 var images = await $"{_config.Value.ApiGatewayBaseUrl}/api/image/images/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<ImageBlobModel>>();
+
                 var catalogImages = new List<string>();
-                foreach (var image in images)
+
+                if (images != null)
                 {
-                    if (image != default && image.Blob != default)
+                    foreach (var image in images)
                     {
-                        catalogImages.Add(Convert.ToBase64String(image.Blob));
+                        if (image != default && image.Blob != default)
+                        {
+                            catalogImages.Add(Convert.ToBase64String(image.Blob));
+                        }
+                    }
+                }
+
+                var pdfs = await $"{_config.Value.ApiGatewayBaseUrl}/api/pdf/{item.Id}".AllowAnyHttpStatus().GetJsonAsync<List<PdfBlobModel>>();
+
+                var catalogPdfs = new List<string>();
+
+                if (pdfs != null)
+                {
+                    foreach (var pdf in pdfs)
+                    {
+                        if (pdf != default && pdf.Blob != default)
+                        {
+                            catalogPdfs.Add(Convert.ToBase64String(pdf.Blob));
+                        }
                     }
                 }
 
                 if (!allitems.Any())
                 {
-                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages));
+                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages, catalogPdfs));
                     continue;
                 }
 
@@ -328,11 +461,11 @@ namespace ProductService.Controllers
                 var firstlist = allitems.FirstOrDefault(x => x.CategoryName == item.Category.Name);
                 if (firstlist != default)
                 {
-                    firstlist.CatalogItems.Add(converter.ConvertProductToCatalogItemAsync(item, catalogImages));
+                    firstlist.CatalogItems.Add(converter.ConvertProductToCatalogItemAsync(item, catalogImages, catalogPdfs));
                 }
                 else
                 {
-                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages));
+                    allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages, catalogPdfs));
                 }
             }
             var page = new CatalogPage 
