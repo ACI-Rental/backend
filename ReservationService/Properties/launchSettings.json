@@ -22,10 +22,11 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "aci_db_string" : "Server=localhost,5433;Database=aci-image-service;User Id=sa;Password=AdminACI321;"
       },
       "dotnetRunMessages": "true",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+      "applicationUrl": "https://localhost:5021;http://localhost:5022"
     },
     "Docker": {
       "commandName": "Docker",
