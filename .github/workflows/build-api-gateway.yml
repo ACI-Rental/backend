@@ -11,6 +11,7 @@ on:
     branches: 
       - main
       - dev
+      - S6_S2022_dev
     paths:
       - "OcelotAPIGateway/**"
       - ".github/workflows/build-api-gateway.yml"
