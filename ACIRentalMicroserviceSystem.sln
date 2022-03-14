@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31019.35
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageService", "ImageService\ImageService.csproj", "{F995E3A8-6147-4788-B8C7-7F9766059A4A}"
 EndProject
@@ -27,11 +27,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Tests", "UserSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFService", "PDFService\PDFService.csproj", "{D06F5D34-3481-4735-917E-F9B154A7C860}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFService.Tests", "PDFService.Tests\PDFService.Tests.csproj", "{F234913C-A9E4-459B-A770-DC5B0CECFA45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFService.Tests", "PDFService.Tests\PDFService.Tests.csproj", "{F234913C-A9E4-459B-A770-DC5B0CECFA45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.Products", "ACI.Products\ACI.Products.csproj", "{4220F943-46E9-461D-A3E3-0C2816077EEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Products", "ACI.Products\ACI.Products.csproj", "{4220F943-46E9-461D-A3E3-0C2816077EEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.Shared", "ACI.Shared\ACI.Shared.csproj", "{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Shared", "ACI.Shared\ACI.Shared.csproj", "{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Reservations", "ACI.Reservations\ACI.Reservations.csproj", "{06E12AFE-BE3D-49F0-9BAB-C477B39C2C0C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2} = {D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +104,10 @@ Global
 		{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06E12AFE-BE3D-49F0-9BAB-C477B39C2C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06E12AFE-BE3D-49F0-9BAB-C477B39C2C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06E12AFE-BE3D-49F0-9BAB-C477B39C2C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06E12AFE-BE3D-49F0-9BAB-C477B39C2C0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
