@@ -5,7 +5,7 @@ namespace ACI.Products.Models.DTO;
 public class CreateProductDTO
 {
     [Required(AllowEmptyStrings = false)]
-    [MaxLength(128)]
+    [Range(2, 128, ErrorMessage = "Productnaam moet tussen de 2 en 128 karakters lang zijn")]
     public string Name { get; set; } = null!;
 
     [Required(AllowEmptyStrings = false)]

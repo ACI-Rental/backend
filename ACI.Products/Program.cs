@@ -7,7 +7,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-Log.Information("Starting ACI.Products microservice");
+Log.Information("Starting ACI.Products Microservice");
 
 try
 {

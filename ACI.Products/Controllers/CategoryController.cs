@@ -11,7 +11,6 @@ public class CategoryController : ControllerBase
     private readonly ILogger<ProductController> _logger;
     private readonly ProductContext _context;
 
-
     public CategoryController(ILogger<ProductController> logger, ProductContext context)
     {
         _logger = logger;
@@ -21,6 +20,11 @@ public class CategoryController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddCategory([FromBody] CreateCategoryDTO dto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
         var category = dto.ToCategory();
 
         _context.Categories.Add(category);

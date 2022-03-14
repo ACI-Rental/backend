@@ -1,8 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ACI.Products.Models.DTO;
 
 public class CreateCategoryDTO
 {
-    public string Name { get; set; }
+    [Required]
+    [Range(2, 32, ErrorMessage = "Categorie-naam moet tussen de 2 en 32 karakters lang zijn!")]
+    public string Name { get; set; } = null!;
 
     public ProductCategory ToCategory()
     {

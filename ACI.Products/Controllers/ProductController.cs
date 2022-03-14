@@ -20,6 +20,11 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddProduct([FromBody] CreateProductDTO dto)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
         var product = dto.ToProduct();
 
         _context.Products.Add(product);
