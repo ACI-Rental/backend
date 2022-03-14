@@ -1,14 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ACI.Products.Models;
+namespace ACI.Products.Models.DTO;
 
-public class Product
+public class CreateProductDTO
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
-
     [Required(AllowEmptyStrings = false)]
     [MaxLength(128)]
     public string Name { get; set; } = null!;
@@ -26,6 +21,15 @@ public class Product
     [Required]
     public int CategoryId { get; set; }
 
-    [Required]
-    public virtual ProductCategory Category { get; set; } = null!;
+    public Product ToProduct()
+    {
+        return new Product
+        {
+            Name = Name,
+            Description = Description,
+            IsDeleted = IsDeleted,
+            RequiresApproval = RequiresApproval,
+            CategoryId = CategoryId,
+        };
+    }
 }
