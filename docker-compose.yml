@@ -1,6 +1,15 @@
 version: '3.9'
 
 services:
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - '5341:80'
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - gateway-network
+
   mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
@@ -10,3 +19,7 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=AdminACI321
+
+networks:
+  gateway-network:
+    name: gateway-network
