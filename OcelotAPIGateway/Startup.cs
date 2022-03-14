@@ -30,10 +30,10 @@ namespace OcelotAPIGateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
 
             string domain = Configuration["Auth0:Domain"];
+            string authenticationProviderKey = "Auth0";
 
             services.AddAuthorization(options =>
             {
@@ -44,19 +44,21 @@ namespace OcelotAPIGateway
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+                
+            }).AddJwtBearer(authenticationProviderKey, options =>
             {
                 options.Authority = domain;
                 options.Audience = Configuration["Auth0:Audience"];
             });
-
-            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
-
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OcelotAPIGateway", Version = "v1" });
             });
-            services.AddOcelot(Configuration);
+            
+            services.AddOcelot();
+            
+            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
