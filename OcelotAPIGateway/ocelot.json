@@ -42,7 +42,11 @@
           "Port": 5020
         }
       ],
-      "UpstreamPathTemplate": "/api/product/lastcatalog"
+      "UpstreamPathTemplate": "/api/product/lastcatalog",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Auth0",
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamPathTemplate": "/product/{archiveProductId}",
