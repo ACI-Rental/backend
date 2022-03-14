@@ -1,4 +1,6 @@
+using ACI.Products.Data;
 using ACI.Shared;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -30,6 +32,9 @@ void Run()
     // Add services to the container.
     builder.Services.AddControllers();
 
+    builder.Services.AddDbContext<ProductContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -43,6 +48,14 @@ void Run()
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+    }
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+
+        var context = services.GetRequiredService<ProductContext>();
+        context.Database.EnsureCreated();
     }
 
     app.UseHttpsRedirection();
