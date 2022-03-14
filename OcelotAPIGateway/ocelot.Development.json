@@ -155,29 +155,6 @@
       "UpstreamPathTemplate": "/api/reservation"
     },
     {
-      "DownstreamPathTemplate": "/user/page/{pageindex}/{pagesize}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5018
-        }
-      ],
-      "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
-    },
-    {
-      "DownstreamPathTemplate": "/user/blockaction",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5018
-        }
-      ],
-      "UpstreamPathTemplate": "/api/user/block"
-    },
-
-    {
       "DownstreamPathTemplate": "/account/login",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
