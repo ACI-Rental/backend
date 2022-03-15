@@ -33,12 +33,8 @@ namespace OcelotAPIGateway
             services.AddControllers();
 
             string domain = Configuration["Auth0:Domain"];
-            string authenticationProviderKey = "Auth0";
+            const string authenticationProviderKey = "Auth0";
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("read:users", policy => policy.Requirements.Add(new HasScopeRequirement("read:users", domain)));
-            });
 
             services.AddAuthentication(options =>
             {
@@ -49,6 +45,11 @@ namespace OcelotAPIGateway
             {
                 options.Authority = domain;
                 options.Audience = Configuration["Auth0:Audience"];
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("read:users", policy => policy.Requirements.Add(new HasScopeRequirement("read:users", domain)));
             });
             
             services.AddSwaggerGen(c =>
