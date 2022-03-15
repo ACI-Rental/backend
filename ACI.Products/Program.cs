@@ -1,4 +1,8 @@
 using ACI.Products.Data;
+using ACI.Products.Data.Repositories;
+using ACI.Products.Data.Repositories.Interfaces;
+using ACI.Products.Domain.Category;
+using ACI.Products.Domain.Product;
 using ACI.Shared;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -34,6 +38,13 @@ void Run()
 
     builder.Services.AddDbContext<ProductContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
+    // Core services
+    builder.Services.AddScoped<IProductRepository, ProductRepository>();
+    builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+    builder.Services.AddScoped<IProductService, ProductService>();
+    builder.Services.AddScoped<ICategoryService, CategoryService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();

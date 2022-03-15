@@ -1,4 +1,5 @@
 using ACI.Products.Data;
+using ACI.Products.Domain.Product;
 using ACI.Products.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,28 +10,23 @@ namespace ACI.Products.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
-    private readonly ProductContext _context;
+    private readonly IProductService _service;
 
-    public ProductController(ILogger<ProductController> logger, ProductContext context)
+    public ProductController(ILogger<ProductController> logger, IProductService service)
     {
         _logger = logger;
-        _context = context;
+        _service = service;
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddProduct([FromBody] CreateProductDTO dto)
+    public async Task<IActionResult> AddProduct([FromBody] CreateProductDto dto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        var product = dto.ToProduct();
-
-        _context.Products.Add(product);
-
-        var result = await _context.SaveChangesAsync();
-
-        return Ok($"{result} rows changed.");
+        var result = await _service.AddProduct(dto);
+        return Ok(result);
     }
 }

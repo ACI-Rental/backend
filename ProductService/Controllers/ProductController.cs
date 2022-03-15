@@ -150,12 +150,12 @@ namespace ProductService.Controllers
                     {
                         break;
                     }
-                    
+
                 }
 
                 Products = temp;
             }
-            
+
 
             page.Products = Products; //await (query).Skip(page.CurrentPage * pageSize).Take(pageSize).ToListAsync();
 
@@ -394,7 +394,7 @@ namespace ProductService.Controllers
             var allitems = new List<CatalogItemsWithCategory>();
 
 
-            
+
             if (catalogFilter != "-")
             {
                 var tempList = new List<Product>();
@@ -468,8 +468,8 @@ namespace ProductService.Controllers
                     allitems.Add(converter.AddNewEntryToCatalogList(item, catalogImages, catalogPdfs));
                 }
             }
-            var page = new CatalogPage 
-            { 
+            var page = new CatalogPage
+            {
                 TotalProductCount = allitems.Count
             };
 
@@ -490,7 +490,7 @@ namespace ProductService.Controllers
             {
                 pageIndex = 0;
             }
-               
+
             // use lastpage if requested page is higher
             page.CurrentPage = Math.Min(pageIndex, lastPage);
 

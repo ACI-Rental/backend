@@ -1,4 +1,5 @@
 using ACI.Products.Data;
+using ACI.Products.Domain.Category;
 using ACI.Products.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,27 +10,23 @@ namespace ACI.Products.Controllers;
 public class CategoryController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
-    private readonly ProductContext _context;
+    private readonly ICategoryService _service;
 
-    public CategoryController(ILogger<ProductController> logger, ProductContext context)
+    public CategoryController(ILogger<ProductController> logger, ICategoryService service)
     {
         _logger = logger;
-        _context = context;
+        _service = service;
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddCategory([FromBody] CreateCategoryDTO dto)
+    public async Task<IActionResult> AddCategory([FromBody] CreateCategoryDto dto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        var category = dto.ToCategory();
-
-        _context.Categories.Add(category);
-        var result = await _context.SaveChangesAsync();
-
-        return Ok($"{result} rows changed.");
+        var result = await _service.CreateCategory(dto);
+        return Ok(result);
     }
 }
