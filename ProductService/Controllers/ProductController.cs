@@ -189,7 +189,7 @@ namespace ProductService.Controllers
         [HttpGet("lastcatalog")]
         public async Task<ActionResult<int>> GetLastCatalog()
         {
-            return Ok("nice");
+            return Ok(Request.Headers);
         }
 
         /// <summary>
