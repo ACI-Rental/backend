@@ -22,9 +22,9 @@ namespace ACI.Reservations.Controllers
         }
 
         /// <summary>
-        /// Get all the Reservations from the database
+        /// Get all the Reservations from the database.
         /// </summary>
-        /// <returns>All Reservations in Db</returns>
+        /// <returns>All Reservations in the database.</returns>
         [HttpGet]
         public async Task<IActionResult> GetReservations()
         {
@@ -38,35 +38,47 @@ namespace ACI.Reservations.Controllers
         }
 
         /// <summary>
-        /// Get all reservations with similar start or enddate.
+        /// Get all reservations with the same StartDate as specified in the parameter.
         /// </summary>
-        /// <param name="reservationId">The id of which the similar reservations should be requested.</param>
-        /// <returns>List of all similar reservations, including the reservation itself.</returns>
-        [HttpGet("similar/{reservationId}")]
-        public async Task<IActionResult> GetSimilarReservationsToID(Guid reservationId)
+        /// <param name="datetime">The parameter to get reservations with the same StartDate.</param>
+        /// <returns>A List with reservations that have the specified StartDate.</returns>
+        [HttpGet("bystartdate/{datetime}")]
+        public async Task<IActionResult> GetReservationsWithSimilarStartDate(DateTime startDate)
         {
-            if (reservationId == Guid.Empty)
+            if (datetime == DateTime.MinValue)
             {
-                return BadRequest("RESERVATION.ACTION.INVALID.ID");
+                return BadRequest("RESERVATION.NO_VALID_DATETIME");
             }
 
-            // TODO: Get userId from Cookie and check it against renterId
-            var renterId = 0;
-            var reservation = await _dbContext.Reservations.FirstOrDefaultAsync(x => x.Id == reservationId && x.RenterId == renterId);
-
-            if (reservation == default)
+            var result = await _reservationService.GetReservationsByStartDate(startDate);
+            if (result != null)
             {
-                return NotFound("RESERVATION.ACTION.NOT_FOUND");
+                return Ok(result);
             }
 
-            var similarReservations = new List<Reservation>()
+            return NotFound();
+        }
+
+        /// <summary>
+        /// Get all reservations with the same EndDate as specified in the parameter.
+        /// </summary>
+        /// <param name="datetime">The parameter to get reservations with the same EndDate.</param>
+        /// <returns>A List with reservations that have the specified EndDate.</returns>
+        [HttpGet("byenddate/{datetime}")]
+        public async Task<IActionResult> GetReservationsWithSimilarEndDate(DateTime endDate)
+        {
+            if (datetime == DateTime.MinValue)
             {
-                reservation
-            };
+                return BadRequest("RESERVATION.NO_VALID_DATETIME");
+            }
 
-            similarReservations.AddRange(await _dbContext.Reservations.Where(x => x.Id != reservationId && (x.StartDate.Date == reservation.StartDate.Date)).ToListAsync());
+            var result = await _reservationService.GetReservationsByEndDate(endDate);
+            if (result != null)
+            {
+                return Ok(result);
+            }
 
-            return Ok(similarReservations);
+            return NotFound();
         }
 
         /// <summary>
