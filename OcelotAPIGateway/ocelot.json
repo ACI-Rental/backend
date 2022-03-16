@@ -47,17 +47,22 @@
     },
     {
       "DownstreamPathTemplate": "/product/lastcatalog",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 5019
         }
       ],
       "UpstreamPathTemplate": "/api/product/lastcatalog",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Auth0",
         "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "uid": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value",
+        "email": "Claims[http://acirental/email] > value",
+        "name": "Claims[http://acirental/name] > value"
       }
     },
     {
