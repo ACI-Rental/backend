@@ -77,3 +77,8 @@ void Run()
 
     app.Run();
 }
+
+public partial class Program
+{
+    // Expose the Program class for use with WebApplicationFactory<T>
+}
