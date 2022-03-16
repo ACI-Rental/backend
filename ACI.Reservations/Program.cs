@@ -1,5 +1,9 @@
 using ACI.Reservations.DBContext;
 using ACI.Reservations.Models;
+using ACI.Reservations.Repositories;
+using ACI.Reservations.Repositories.Interfaces;
+using ACI.Reservations.Services;
+using ACI.Reservations.Services.Interfaces;
 using ACI.Shared;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -35,6 +39,10 @@ void Run()
 
     builder.Services.AddDbContext<ReservationDBContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+
+    // Add Dependency injection.
+    builder.Services.AddSingleton<IReservationRepository, ReservationRepository>();
+    builder.Services.AddSingleton<IReservationService, ReservationService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
