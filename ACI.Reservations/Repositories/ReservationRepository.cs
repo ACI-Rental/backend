@@ -18,5 +18,15 @@ namespace ACI.Reservations.Repositories
         {
             return await _dbContext.Reservations.ToListAsync();
         }
+
+        public async Task<List<Reservation>> GetReservationsByStartDate(DateTime startDate)
+        {
+            return await _dbContext.Reservations.Where(x => x.StartDate.Date == startDate.Date).ToListAsync();
+        }
+
+        public async Task<List<Reservation>> GetReservationsByEndDate(DateTime endDate)
+        {
+            return await _dbContext.Reservations.Where(x => x.EndDate.Date == endDate.Date).ToListAsync();
+        }
     }
 }
