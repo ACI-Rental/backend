@@ -1,12 +1,14 @@
 using ACI.Products.Models.DTO;
+using LanguageExt;
+using LanguageExt.Common;
 
 namespace ACI.Products.Domain.Category;
 
 public interface ICategoryService
 {
-    public Task<CategoryDto> CreateCategory(CreateCategoryDto createCategoryDto);
+    public Task<Either<Error, CategoryResponse>> CreateCategory(CreateCategoryRequest createCategoryRequest);
 
-    public Task<CategoryDto> GetCategory(int categoryId);
+    public Task<Option<CategoryResponse>> GetCategory(int categoryId);
 
-    public Task<List<CategoryDto>> GetCategories();
+    public Task<List<CategoryResponse>> GetCategories();
 }

@@ -1,5 +1,7 @@
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Models.DTO;
+using LanguageExt;
+using LanguageExt.Common;
 
 namespace ACI.Products.Domain.Category;
 
@@ -12,25 +14,21 @@ public class CategoryService : ICategoryService
         _repository = repository;
     }
 
-    public async Task<CategoryDto> CreateCategory(CreateCategoryDto createCategoryDto)
+    public async Task<Either<Error, CategoryResponse>> CreateCategory(CreateCategoryRequest createCategoryRequest)
     {
-        // TODO: Check if a category with the same name already exists and return an error if that is the case
-        var result = await _repository.AddCategory(createCategoryDto.Name);
-        return CategoryDto.From(result);
+        var result = await _repository.AddCategory(createCategoryRequest.Name);
+        return result.Map(CategoryResponse.From);
     }
 
-    public async Task<CategoryDto> GetCategory(int categoryId)
+    public async Task<Option<CategoryResponse>> GetCategory(int categoryId)
     {
         var model = await _repository.GetCategory(categoryId);
-
-        // TODO: null check
-        return CategoryDto.From(model);
+        return model.Map(CategoryResponse.From);
     }
 
-    public async Task<List<CategoryDto>> GetCategories()
+    public async Task<List<CategoryResponse>> GetCategories()
     {
         var models = await _repository.GetAllCategories();
-
-        return models.Select(CategoryDto.From).ToList();
+        return models.Select(CategoryResponse.From).ToList();
     }
 }

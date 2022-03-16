@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ACI.Products.Models.DTO;
 
-public class CreateProductDto
+public class CreateProductRequest
 {
     [Required(AllowEmptyStrings = false)]
     [StringLength(128, ErrorMessage = "Productnaam moet tussen de 2 en 128 karakters lang zijn", MinimumLength = 2)]

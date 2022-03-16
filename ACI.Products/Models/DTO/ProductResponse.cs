@@ -1,6 +1,6 @@
 namespace ACI.Products.Models.DTO;
 
-public class ProductDto
+public class ProductResponse
 {
     public Guid Id { get; }
     public string Name { get; }
@@ -9,7 +9,7 @@ public class ProductDto
     public bool IsDeleted { get; }
     public int CategoryId { get; }
 
-    public ProductDto(Guid id, string name, string description, bool requiresApproval, bool isDeleted, int categoryId)
+    public ProductResponse(Guid id, string name, string description, bool requiresApproval, bool isDeleted, int categoryId)
     {
         Id = id;
         Name = name;
@@ -19,7 +19,7 @@ public class ProductDto
         CategoryId = categoryId;
     }
 
-    public static ProductDto From(Product model)
+    public static ProductResponse From(Product model)
         => new(
             model.Id,
             model.Name,
