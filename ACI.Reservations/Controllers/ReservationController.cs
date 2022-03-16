@@ -40,45 +40,45 @@ namespace ACI.Reservations.Controllers
         /// <summary>
         /// Get all reservations with the same StartDate as specified in the parameter.
         /// </summary>
-        /// <param name="datetime">The parameter to get reservations with the same StartDate.</param>
+        /// <param name="startDate">The parameter to get reservations with the same StartDate.</param>
         /// <returns>A List with reservations that have the specified StartDate.</returns>
         [HttpGet("bystartdate/{datetime}")]
         public async Task<IActionResult> GetReservationsWithSimilarStartDate(DateTime startDate)
         {
-            if (datetime == DateTime.MinValue)
+            if (startDate == DateTime.MinValue)
             {
                 return BadRequest("RESERVATION.NO_VALID_DATETIME");
             }
 
             var result = await _reservationService.GetReservationsByStartDate(startDate);
-            if (result != null)
+            if (result.Count > 0)
             {
                 return Ok(result);
             }
 
-            return NotFound();
+            return NotFound("RESERVATION.NONE.FOUND");
         }
 
         /// <summary>
         /// Get all reservations with the same EndDate as specified in the parameter.
         /// </summary>
-        /// <param name="datetime">The parameter to get reservations with the same EndDate.</param>
+        /// <param name="endDate">The parameter to get reservations with the same EndDate.</param>
         /// <returns>A List with reservations that have the specified EndDate.</returns>
         [HttpGet("byenddate/{datetime}")]
         public async Task<IActionResult> GetReservationsWithSimilarEndDate(DateTime endDate)
         {
-            if (datetime == DateTime.MinValue)
+            if (endDate == DateTime.MinValue)
             {
                 return BadRequest("RESERVATION.NO_VALID_DATETIME");
             }
 
             var result = await _reservationService.GetReservationsByEndDate(endDate);
-            if (result != null)
+            if (result.Count > 0)
             {
                 return Ok(result);
             }
 
-            return NotFound();
+            return NotFound("RESERVATION.NONE.FOUND");
         }
 
         /// <summary>
