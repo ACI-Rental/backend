@@ -15,7 +15,7 @@ public static class ServiceCollectionExt
             d => d.ServiceType ==
                  typeof(DbContextOptions<ProductContext>));
 
-        services.Remove(descriptor);
+        services.Remove(descriptor ?? throw new InvalidOperationException("Failed to remove default Sql provider"));
 
         services.AddDbContext<ProductContext>(options =>
         {
@@ -24,25 +24,22 @@ public static class ServiceCollectionExt
 
         var sp = services.BuildServiceProvider();
 
-        using (var scope = sp.CreateScope())
+        using var scope = sp.CreateScope();
+
+        var scopedServices = scope.ServiceProvider;
+        var db = scopedServices.GetRequiredService<ProductContext>();
+        var logger = scopedServices
+            .GetRequiredService<ILogger<ProductTest>>();
+
+        db.Database.EnsureCreated();
+
+        try
         {
-            var scopedServices = scope.ServiceProvider;
-            var db = scopedServices.GetRequiredService<ProductContext>();
-            var logger = scopedServices
-                .GetRequiredService<ILogger<ProductTest>>();
-
-            db.Database.EnsureCreated();
-
-            try
-            {
-                DbSetup.InitializeForTests(db);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex,
-                    "An error occurred seeding the database with test messages. Error: {Message}",
-                    ex.Message);
-            }
+            DbSetup.InitializeForTests(db);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred seeding the database with test messages. Error: {Message}", ex.Message);
         }
     }
 }

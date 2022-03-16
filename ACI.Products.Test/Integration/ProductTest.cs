@@ -3,24 +3,17 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using ACI.Products.Models.DTO;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace ACI.Products.Test.Integration;
 
-public class ProductTest
+public class ProductTest : IClassFixture<ProductAppFactory>
 {
     private readonly HttpClient _client;
 
-    public ProductTest()
+    public ProductTest(ProductAppFactory factory)
     {
-        var application = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureServices(services => services.UseTestDatabase());
-            });
-
-        _client = application.CreateClient();
+        _client = factory.CreateClient();
     }
 
     [Fact]
