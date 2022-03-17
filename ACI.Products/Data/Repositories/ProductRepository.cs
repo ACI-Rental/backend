@@ -1,7 +1,7 @@
 using ACI.Products.Data.Repositories.Interfaces;
+using ACI.Products.Domain;
 using ACI.Products.Models;
 using LanguageExt;
-using LanguageExt.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace ACI.Products.Data.Repositories;
@@ -30,14 +30,14 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
     }
 
-    public async Task<Either<Error, Product>> AddProduct(Product product)
+    public async Task<Either<IError, Product>> AddProduct(Product product)
     {
         var categoryExists = await _ctx.Categories.AnyAsync(x => x.Id == product.CategoryId);
 
         if (!categoryExists)
         {
-            _logger.LogInformation("Unable to add product because the given category {CategoryId} does not exist", product.CategoryId);
-            return Error.New($"Category with id {product.CategoryId} does not exist!");
+            _logger.LogInformation("Adding product {Product} failed with error {Error}", product.CategoryId, AppErrors.ProductInvalidCategoryError);
+            return AppErrors.ProductInvalidCategoryError;
         }
 
         var result = await _ctx.Products.AddAsync(product);
@@ -45,16 +45,8 @@ public class ProductRepository : IProductRepository
         return result.Entity;
     }
 
-    public async Task<Either<Error, Unit>> DeleteProduct(Guid id)
+    public async Task<Either<IError, Unit>> DeleteProduct(Product product)
     {
-        var product = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id);
-
-        if (product == null || product.IsDeleted)
-        {
-            _logger.LogInformation("Unable to delete product because product with id {ProductId} does not exist", id);
-            return Error.New($"Product with id {id} does not exist");
-        }
-
         product.IsDeleted = true;
         _ctx.Products.Update(product);
         await _ctx.SaveChangesAsync();

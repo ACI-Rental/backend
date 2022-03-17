@@ -1,6 +1,5 @@
 using ACI.Products.Models;
 using LanguageExt;
-using LanguageExt.Common;
 
 namespace ACI.Products.Data.Repositories.Interfaces;
 
@@ -10,5 +9,7 @@ public interface ICategoryRepository
 
     public Task<Option<ProductCategory>> GetCategory(int id);
 
-    public Task<Either<Error, ProductCategory>> AddCategory(string name);
+    public Task<Option<ProductCategory>> GetCategoryByName(string name);
+
+    public Task<ProductCategory> AddCategory(string name);
 }

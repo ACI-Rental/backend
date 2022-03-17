@@ -1,7 +1,7 @@
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Models.DTO;
 using LanguageExt;
-using LanguageExt.Common;
+using LanguageExt.UnsafeValueAccess;
 
 namespace ACI.Products.Domain.Product;
 
@@ -16,23 +16,31 @@ public class ProductService : IProductService
         _logger = logger;
     }
 
-    public async Task<Either<Error, ProductResponse>> AddProduct(CreateProductRequest request)
+    public async Task<Either<IError, ProductResponse>> AddProduct(CreateProductRequest request)
     {
         var result = await _repository.AddProduct(request.ToProduct());
         return result.Map(ProductResponse.From);
     }
 
-    public async Task<Either<Error, Unit>> DeleteProduct(Guid productId)
+    public async Task<Either<IError, Unit>> DeleteProduct(Guid productId)
     {
-        var product = await _repository.GetProductById(productId);
+        var optProduct = await _repository.GetProductById(productId);
 
-        if (product.IsNone)
+        if (optProduct.IsNone)
         {
-            _logger.LogInformation("Unable to delete product {ProductId} because it does not exist", productId);
-            return Error.New($"Product with id {productId} does not exist!");
+            _logger.LogInformation("Deleting product {ProductId} failed with error {Error}", productId, AppErrors.ProductNotFoundError);
+            return AppErrors.ProductNotFoundError;
         }
 
-        await _repository.DeleteProduct(productId);
+        var product = optProduct.ValueUnsafe();
+
+        if (product.IsDeleted)
+        {
+            _logger.LogInformation("Product {ProductId} is already deleted", productId);
+            return AppErrors.ProductAlreadyDeletedError;
+        }
+
+        await _repository.DeleteProduct(product);
         return Unit.Default;
     }
 

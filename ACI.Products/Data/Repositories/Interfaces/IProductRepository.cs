@@ -1,6 +1,6 @@
+using ACI.Products.Domain;
 using ACI.Products.Models;
 using LanguageExt;
-using LanguageExt.Common;
 
 namespace ACI.Products.Data.Repositories.Interfaces;
 
@@ -10,9 +10,9 @@ public interface IProductRepository
 
     public Task<List<Product>> GetProductsByCategory(int categoryId);
 
-    public Task<Either<Error, Product>> AddProduct(Product product);
+    public Task<Either<IError, Product>> AddProduct(Product product);
 
-    public Task<Either<Error, Unit>> DeleteProduct(Guid id);
+    public Task<Either<IError, Unit>> DeleteProduct(Product product);
 
     public Task<List<Product>> GetAllProducts();
 }

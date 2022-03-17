@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include ="ACI.Products.Test"/>
+        <InternalsVisibleTo Include="ACI.Products.Test" />
     </ItemGroup>
 
     <ItemGroup>

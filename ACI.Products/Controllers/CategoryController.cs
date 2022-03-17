@@ -31,6 +31,6 @@ public class CategoryController : ControllerBase
 
         return result
             .Right<IActionResult>(Ok)
-            .Left(err => BadRequest(err));
+            .Left(BadRequest);
     }
 }

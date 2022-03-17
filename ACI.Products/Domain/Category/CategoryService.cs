@@ -1,23 +1,32 @@
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Models.DTO;
 using LanguageExt;
-using LanguageExt.Common;
 
 namespace ACI.Products.Domain.Category;
 
 public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _repository;
+    private readonly ILogger<CategoryService> _logger;
 
-    public CategoryService(ICategoryRepository repository)
+    public CategoryService(ICategoryRepository repository, ILogger<CategoryService> logger)
     {
         _repository = repository;
+        _logger = logger;
     }
 
-    public async Task<Either<Error, CategoryResponse>> CreateCategory(CreateCategoryRequest createCategoryRequest)
+    public async Task<Either<IError, CategoryResponse>> CreateCategory(CreateCategoryRequest req)
     {
-        var result = await _repository.AddCategory(createCategoryRequest.Name);
-        return result.Map(CategoryResponse.From);
+        var nameExists = await _repository.GetCategoryByName(req.Name);
+
+        if (nameExists)
+        {
+            _logger.LogInformation("Adding category {CategoryName} failed with error {Error}", req.Name, AppErrors.CategoryNameAlreadyExistsError);
+            return AppErrors.CategoryNameAlreadyExistsError;
+        }
+
+        var result = await _repository.AddCategory(req.Name);
+        return CategoryResponse.From(result);
     }
 
     public async Task<Option<CategoryResponse>> GetCategory(int categoryId)

@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using ACI.Products.Domain;
 using ACI.Products.Models.DTO;
 using FluentAssertions;
 using Xunit;
@@ -33,6 +34,27 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         category.Should().NotBeNull();
         category!.Id.Should().BePositive();
         category.Name.Should().Be(request.Name);
+    }
+
+    [Fact]
+    public async void AddDuplicateCategory_Returns_ErrorResponse()
+    {
+        // Arrange
+        var request = new CreateCategoryRequest { Name = "TestDuplicateCategory" };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("category", request);
+        var secondResponse = await _client.PostAsJsonAsync("category", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        secondResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var expectedError = AppErrors.CategoryNameAlreadyExistsError;
+        var error = await secondResponse.Content.ReadFromJsonAsync<IError>();
+
+        error.Should().NotBeNull();
+        error.Should().Be(expectedError);
     }
 
     [Fact]
