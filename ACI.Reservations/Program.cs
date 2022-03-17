@@ -41,8 +41,8 @@ void Run()
         options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 
     // Add Dependency injection.
-    builder.Services.AddSingleton<IReservationRepository, ReservationRepository>();
-    builder.Services.AddSingleton<IReservationService, ReservationService>();
+    builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+    builder.Services.AddScoped<IReservationService, ReservationService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
