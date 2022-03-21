@@ -5,21 +5,21 @@ on:
     branches:
       - main
     paths:
-      - "ProductService/**"
-      - "ProductService.Tests/**"
+      - "ACI.Products/**"
+      - "ACI.Products.Test/**"
       - ".github/workflows/build-product-service.yml"
   pull_request:
-    branches: 
+    branches:
       - main
       - dev
     paths:
-      - "ProductService/**"
-      - "ProductService.Tests/**"
+      - "ACI.Products/**"
+      - "ACI.Products.Test/**"
       - ".github/workflows/build-product-service.yml"
 
 env:
-  PROJECT_PATH: 'ProductService/ProductService.csproj'
-  TEST_PATH: 'ProductService.Tests/ProductService.Tests.csproj'
+  PROJECT_PATH: 'ACI.Products/ACI.Products.csproj'
+  TEST_PATH: 'ACI.Products.Test/ACI.Products.Test.csproj'
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PRODUCT_SERVICE }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -33,7 +33,7 @@ jobs:
     - name: 'Install dotnet'
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
 
     - name: 'Restore packages'
       run: dotnet restore ${{ env.PROJECT_PATH }}
@@ -51,5 +51,5 @@ jobs:
         sonarProjectKey: aci-rental_backend-product-service
         sonarProjectName:  backend-product-service
         sonarOrganization: aci-rental
-        dotnetBuildArguments: ./ProductService
-        dotnetTestArguments: ./ProductService.Tests
+        dotnetBuildArguments: ./ACI.Products
+        dotnetTestArguments: ./ACI.Products.Tests

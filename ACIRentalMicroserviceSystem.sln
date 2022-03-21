@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.Shared", "ACI.Shared\AC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.Products.Test", "ACI.Products.Test\ACI.Products.Test.csproj", "{636CD5E2-C10B-4ED2-921E-49C7A5BC5E3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.Images", "ACI.Images\ACI.Images.csproj", "{13FF6B8F-F05E-4D32-91F3-22833E4A4143}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{636CD5E2-C10B-4ED2-921E-49C7A5BC5E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{636CD5E2-C10B-4ED2-921E-49C7A5BC5E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{636CD5E2-C10B-4ED2-921E-49C7A5BC5E3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13FF6B8F-F05E-4D32-91F3-22833E4A4143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13FF6B8F-F05E-4D32-91F3-22833E4A4143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13FF6B8F-F05E-4D32-91F3-22833E4A4143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13FF6B8F-F05E-4D32-91F3-22833E4A4143}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
