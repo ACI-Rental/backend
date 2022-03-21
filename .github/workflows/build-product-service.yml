@@ -46,8 +46,8 @@ jobs:
       run: dotnet test ${{ env.TEST_PATH }}
 
     # https://github.com/highbyte/sonarscan-dotnet
-    - name: SonarScanner for .NET 5
-      uses: highbyte/sonarscan-dotnet@2.0
+    - name: SonarScanner for .NET 6
+      uses: highbyte/sonarscan-dotnet
       with:
         sonarProjectKey: aci-rental_backend-product-service
         sonarProjectName:  backend-product-service
