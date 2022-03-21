@@ -1,15 +1,15 @@
-﻿using ProductService.DBContexts;
-using ProductService.Models;
-using ProductService.Models.DTO;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using ProductService.Converters;
+using ProductService.DBContexts;
+using ProductService.Models;
+using ProductService.Models.DTO;
 
 namespace ProductService.Controllers
 {
@@ -170,27 +170,14 @@ namespace ProductService.Controllers
         [HttpGet("flat/{productId}")]
         public async Task<IActionResult> GetFlatProductById(int productId)
         {
-            var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
-
-            if (product == default)
-            {
-                return NotFound("API_RESPONSES.PRODUCT.GET_PRODUCT_BY_ID.NOT_FOUND");
-            }
-
             var cartProduct = new ProductFlatModel()
             {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                ProductState = product.ProductState,
-                InventoryLocation = product.InventoryLocation
+                Id = 1,
+                Name = "test",
+                Description = "Test description",
+                ProductState = ProductState.AVAILABLE,
+                InventoryLocation = "InventoryLocation yes",
             };
-
-            var image = await $"{_config.Value.ApiGatewayBaseUrl}/api/image/{product.Id}".AllowAnyHttpStatus().GetJsonAsync<ImageBlobModel>();
-            if(image != default && image.Blob != default)
-            {
-                cartProduct.Image = Convert.ToBase64String(image.Blob);
-            }
 
             return Ok(cartProduct);
         }
@@ -202,13 +189,7 @@ namespace ProductService.Controllers
         [HttpGet("lastcatalog")]
         public async Task<ActionResult<int>> GetLastCatalog()
         {
-            if (!await _dbContext.Products.AnyAsync())
-            {
-                return 0;
-            }
-
-            var lastCategoryItem = await _dbContext.Products.MaxAsync(x => x.CatalogNumber);
-            return lastCategoryItem;
+            return Ok(Request.Headers);
         }
 
         /// <summary>

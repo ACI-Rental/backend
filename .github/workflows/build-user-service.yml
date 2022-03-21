@@ -12,6 +12,7 @@ on:
     branches: 
       - main
       - dev
+      - S6_S2022_dev
     paths:
       - "UserService/**"
       - "UserService.Tests/**"
