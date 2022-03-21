@@ -49,8 +49,8 @@ jobs:
     - name: SonarScanner for .NET 6 with pull request decoration support
       uses: highbyte/sonarscan-dotnet@v2.1.2
       with:
-        sonarProjectKey: aci-rental_backend-product-service
-        sonarProjectName:  backend-product-service
+        sonarProjectKey: aci-product-service
+        sonarProjectName:  aci-rental
         sonarOrganization: aci-rental
         dotnetBuildArguments: ./ACI.Products
         dotnetTestArguments: ./ACI.Products.Tests
