@@ -5,7 +5,7 @@ namespace ACI.Products.Domain.Category;
 
 public interface ICategoryService
 {
-    public Task<Either<IError, CategoryResponse>> CreateCategory(CreateCategoryRequest createCategoryRequest);
+    public Task<Either<IError, CategoryResponse>> CreateCategory(CreateCategoryRequest req);
 
     public Task<Option<CategoryResponse>> GetCategory(int categoryId);
 

@@ -9,7 +9,7 @@ namespace ACI.Products.Data.Repositories;
 public class ProductRepository : IProductRepository
 {
     private readonly ProductContext _ctx;
-    private ILogger<ProductRepository> _logger;
+    private readonly ILogger<ProductRepository> _logger;
 
     public ProductRepository(ProductContext context, ILogger<ProductRepository> logger)
     {
@@ -26,7 +26,7 @@ public class ProductRepository : IProductRepository
     {
         return await _ctx.Products
             .Where(x => x.CategoryId == categoryId)
-            .Where(x => x.IsDeleted == false)
+            .Where(x => !x.IsDeleted)
             .ToListAsync();
     }
 
@@ -56,6 +56,6 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetAllProducts()
     {
-        return await _ctx.Products.Where(x => x.IsDeleted == false).ToListAsync();
+        return await _ctx.Products.Where(x => !x.IsDeleted).ToListAsync();
     }
 }
