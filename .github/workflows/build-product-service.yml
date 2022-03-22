@@ -20,8 +20,8 @@ on:
 
 env:
   PROJECT_PATH: 'ACI.Products/ACI.Products.csproj'
-  UNIT_TEST_PATH: 'ACI.Products.Test/ACI.Products.Test.Unit.csproj'
-  INTEGRATION_TEST_PATH: 'ACI.Products.Test/ACI.Products.Test.Integration.csproj'
+  UNIT_TEST_PATH: 'ACI.Products.Test.Unit/ACI.Products.Test.Unit.csproj'
+  INTEGRATION_TEST_PATH: 'ACI.Products.Test.Integration/ACI.Products.Test.Integration.csproj'
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PRODUCT_SERVICE }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
