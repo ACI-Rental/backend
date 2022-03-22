@@ -4,10 +4,12 @@ using ACI.Products.Data;
 using ACI.Products.Models;
 using Bogus;
 
-namespace ACI.Products.Test.Integration;
+namespace ACI.Products.Test.Integration.Fixtures;
 
 public class DbSetup
 {
+    public const int ProductsPerCategory = 20;
+
     public static void InitializeForTests(ProductContext db)
     {
         db.Categories.AddRange(GetCategories());
@@ -17,7 +19,7 @@ public class DbSetup
 
         foreach (var category in categories)
         {
-            db.Products.AddRange(GetProducts(20, category.Id));
+            db.Products.AddRange(GetProducts(ProductsPerCategory, category.Id));
         }
 
         db.SaveChanges();
@@ -47,7 +49,7 @@ public class DbSetup
         };
     }
 
-    public static List<Product> GetProducts(int amount = 200, int categoryId = 1)
+    public static List<Product> GetProducts(int amount = ProductsPerCategory, int categoryId = 1)
     {
         return new Faker<Product>()
             .RuleFor(p => p.Name, f => $"{f.Commerce.ProductAdjective()} {f.Commerce.ProductName()}")

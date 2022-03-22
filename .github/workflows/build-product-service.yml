@@ -19,7 +19,7 @@ on:
       - ".github/workflows/build-product-service.yml"
 
 env:
-  PROJECT_PATH: 'ACI.Products/ACI.Products.csproj'
+  PROJECT_PATH: 'ACI.Products/ACI.Products.csproj
   TEST_PATH: 'ACI.Products.Test/ACI.Products.Test.csproj'
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PRODUCT_SERVICE }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -19,7 +19,9 @@ public class ProductRepository : IProductRepository
 
     public async Task<Option<Product>> GetProductById(Guid id)
     {
-        return await _ctx.Products.FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
+        return await _ctx.Products
+            .Where(x => !x.IsDeleted)
+            .FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
     }
 
     public async Task<List<Product>> GetProductsByCategory(int categoryId)

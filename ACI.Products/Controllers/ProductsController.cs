@@ -31,7 +31,7 @@ public class ProductsController : ControllerBase
 
         return result
             .Right<IActionResult>(Ok)
-            .Left(err => BadRequest(err));
+            .Left(BadRequest);
     }
 
     [HttpGet("{id:guid}")]
@@ -61,6 +61,6 @@ public class ProductsController : ControllerBase
 
         return result
             .Right<IActionResult>(_ => NoContent())
-            .Left(err => BadRequest(err));
+            .Left(BadRequest);
     }
 }

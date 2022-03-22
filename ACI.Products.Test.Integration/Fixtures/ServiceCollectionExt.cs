@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace ACI.Products.Test.Integration;
+namespace ACI.Products.Test.Integration.Fixtures;
 
 public static class ServiceCollectionExt
 {

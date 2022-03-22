@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using ACI.Products.Domain;
 using ACI.Products.Models.DTO;
+using ACI.Products.Test.Integration.Fixtures;
 using FluentAssertions;
 using Xunit;
 
@@ -10,11 +15,11 @@ namespace ACI.Products.Test.Integration;
 
 public class ProductTest : IClassFixture<ProductAppFactory>
 {
-    private readonly HttpClient _client;
+    private readonly HttpClient _apiClient;
 
     public ProductTest(ProductAppFactory factory)
     {
-        _client = factory.CreateClient();
+        _apiClient = factory.CreateClient();
     }
 
     [Fact]
@@ -24,7 +29,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         var request = new CreateCategoryRequest { Name = "Keyboards" };
 
         // Act
-        var response = await _client.PostAsJsonAsync("category", request);
+        var response = await _apiClient.PostCreateCategory(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -43,8 +48,8 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         var request = new CreateCategoryRequest { Name = "TestDuplicateCategory" };
 
         // Act
-        var response = await _client.PostAsJsonAsync("category", request);
-        var secondResponse = await _client.PostAsJsonAsync("category", request);
+        var response = await _apiClient.PostCreateCategory(request);
+        var secondResponse = await _apiClient.PostCreateCategory(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -71,7 +76,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync("products", request);
+        var response = await _apiClient.PostCreateProduct(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -85,5 +90,60 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         product.Name.Should().Be(request.Name);
         product.Description.Should().Be(request.Description);
         product.CategoryId.Should().Be(request.CategoryId);
+    }
+
+    [Fact]
+    public async void GetAllProducts_ReturnsExpectedAmount()
+    {
+        // Arrange
+        var expectedProductCount = DbSetup.ProductsPerCategory * DbSetup.GetCategories().Count;
+
+        // Act
+        var result = await GetAllProducts();
+
+        // Assert
+        result.Count.Should().Be(expectedProductCount);
+    }
+
+    [Fact]
+    public async void GetProductById_Returns_SuccessResult()
+    {
+        // Arrange
+        var allProducts = await GetAllProducts();
+        var searchProduct = allProducts.First();
+
+        // Act
+        var result = await _apiClient.GetProductById(searchProduct.Id);
+
+        // Assert
+        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        var foundProduct = await result.Content.ReadFromJsonAsync<ProductResponse>();
+
+        foundProduct.Should().BeEquivalentTo(searchProduct);
+    }
+
+    [Fact]
+    public async void DeleteProductById_Returns_Success()
+    {
+        // Arrange
+        var allProducts = await GetAllProducts();
+        var searchProduct = allProducts.First();
+
+        // Act
+        var delResult = await _apiClient.DeleteProductById(searchProduct.Id);
+        var getResult = await _apiClient.GetProductById(searchProduct.Id);
+
+        // Assert
+        delResult.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        getResult.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    private async Task<List<ProductResponse>> GetAllProducts()
+    {
+        var result = await _apiClient.GetAllProducts();
+        result.EnsureSuccessStatusCode();
+
+        return await result.Content.ReadFromJsonAsync<List<ProductResponse>>()
+               ?? throw new ArgumentException("Unable to deserialize list of products");
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace ACI.Products.Test.Integration;
+namespace ACI.Products.Test.Integration.Fixtures;
 
 public class ProductAppFactory : WebApplicationFactory<Program>
 {
