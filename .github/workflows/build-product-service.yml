@@ -41,7 +41,15 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: 'Begin Sonar scan'
-      run: dotnet sonarscanner begin /d:sonar.host.url="https://sonarcloud.io" /o:"aci-rental" /k:"aci.microservice.product" /d:sonar.login=${{ env.SONAR_TOKEN }} /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.sources="ACI.Products/**"
+      run: >
+        dotnet sonarscanner begin
+        /d:sonar.host.url="https://sonarcloud.io"
+        /o:"aci-rental"
+        /k:"aci.microservice.product"
+        /d:sonar.login=${{ env.SONAR_TOKEN }}
+        /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+        /d:sonar.sources="ACI.Products/**"
+        /d:sonar.coverage.exclusions="ACI.Products.Test.*/**"
 
     - name: 'Restore packages'
       run: dotnet restore ${{ env.PROJECT_PATH }}
