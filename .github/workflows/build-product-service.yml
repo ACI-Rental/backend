@@ -49,7 +49,7 @@ jobs:
         /d:sonar.login=${{ env.SONAR_TOKEN }}
         /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
         /d:sonar.sources="ACI.Products/**"
-        /d:sonar.coverage.exclusions="ACI.Products.Test.*/**"
+        /d:sonar.exclusions="ACI.Products.Test.*/**"
 
     - name: 'Restore packages'
       run: dotnet restore ${{ env.PROJECT_PATH }}
