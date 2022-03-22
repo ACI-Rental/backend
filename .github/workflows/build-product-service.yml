@@ -37,6 +37,12 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
+    - name: 'Install Sonar global tool'
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: 'Begin Sonar scan'
+      run: dotnet sonarscanner begin /k:"aci.microservices.product" /d:sonar.login=${{ env.SONAR_TOKEN }}
+
     - name: 'Restore packages'
       run: dotnet restore ${{ env.PROJECT_PATH }}
 
@@ -44,16 +50,10 @@ jobs:
       run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release
 
     - name: 'Run unit tests'
-      run: dotnet test ${{ env.UNIT_TEST_PATH }} --no-build --verbosity normal
+      run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
 
     - name: 'Run integration tests'
-      run: dotnet test ${{ env.INTEGRATION_TEST_PATH }} --no-build --verbosity normal
+      run: dotnet test ${{ env.INTEGRATION_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
 
-    # https://github.com/highbyte/sonarscan-dotnet
-    - name: SonarScanner for .NET 6 with pull request decoration support
-      uses: highbyte/sonarscan-dotnet@v2.1.2
-      with:
-        sonarProjectKey: aci.microservice.product
-        sonarProjectName: aci.microservice.product
-        sonarOrganization: aci-rental
-        sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
+    - name: End Sonar scan
+      run: dotnet sonarscanner end /d:sonar.login=${{ env.SONAR_TOKEN }}
