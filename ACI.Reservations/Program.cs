@@ -12,10 +12,9 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-Log.Information("Starting ACI.Products microservice");
-
 try
 {
+    Log.Information("Starting ACI.Products microservice");
     Run();
 }
 catch (Exception ex)
