@@ -1,6 +1,7 @@
-﻿using ACI.Reservations.DBContext;
+﻿using ACI.Reservations.Domain;
+using ACI.Reservations.Models;
+using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.Reservations.Controllers
@@ -10,15 +11,17 @@ namespace ACI.Reservations.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationService;
+        private readonly ILogger<ReservationController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReservationController"/> class.
         /// Constructor is used to define Interfaces.
         /// </summary>
         /// <param name="reservationService">Interface for the ReservationService.</param>
-        public ReservationController(IReservationService reservationService)
+        public ReservationController(IReservationService reservationService, ILogger<ReservationController> logger)
         {
             _reservationService = reservationService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace ACI.Reservations.Controllers
         {
             if (startDate == DateTime.MinValue)
             {
-                return BadRequest("RESERVATION.NO_VALID_DATETIME");
+                return BadRequest(AppErrors.InvalidStartDate);
             }
 
             var result = await _reservationService.GetReservationsByStartDate(startDate);
@@ -56,7 +59,7 @@ namespace ACI.Reservations.Controllers
                 return Ok(result);
             }
 
-            return NotFound("RESERVATION.NONE.FOUND");
+            return NotFound(AppErrors.FailedToFindReservation);
         }
 
         /// <summary>
@@ -69,7 +72,7 @@ namespace ACI.Reservations.Controllers
         {
             if (endDate == DateTime.MinValue)
             {
-                return BadRequest("RESERVATION.NO_VALID_DATETIME");
+                return BadRequest(AppErrors.InvalidEndDate);
             }
 
             var result = await _reservationService.GetReservationsByEndDate(endDate);
@@ -78,252 +81,67 @@ namespace ACI.Reservations.Controllers
                 return Ok(result);
             }
 
-            return NotFound("RESERVATION.NONE.FOUND");
+            return NotFound(AppErrors.FailedToFindReservation);
         }
 
         /// <summary>
-        /// Saves a reservation for a product.
+        /// Creates a new reservation to be added to the database.
         /// </summary>
-        /// <param name="reserveProductModel">Model containing a list of product models.</param>
-        /// <returns>Returns BadRequest with a list of errors, returns Ok if successful</returns>
-        [HttpPost("reserveproducts")]
-        public async Task<IActionResult> ReserveProducts(ReserveProductModel reserveProductModel)
+        /// <param name="productReservation">This parameter contains the ProductId, RenterId, StartDate, and EndDate of the new reservation.</param>
+        /// <returns>A status 200 if the reservation is created succesfully of a Status 400 if an error occured while creating the new reservation.</returns>
+        [HttpPost("reserveproduct")]
+        public async Task<IActionResult> ReserveProduct([FromBody] ProductReservationDTO productReservation)
         {
-            var revervations = new List<Reservation>();
-            var productModelsErrorList = new List<KeyValuePair<ProductModel, string>>();
-            if (reserveProductModel.ProductModels == null || reserveProductModel.ProductModels.Count <= 0)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("PRODUCT.RESERVE.NO_PRODUCTS");
+                return BadRequest();
             }
 
+            _logger.LogInformation("Creating new Reservation {productReservation}", productReservation);
 
-            foreach (var product in reserveProductModel.ProductModels)
-            {
-                // Later we will add time slots
-                var tempStartDate = product.StartDate.AddHours(23 - product.StartDate.Hour);
-                tempStartDate = tempStartDate.AddMinutes(59 - product.StartDate.Minute);
-                tempStartDate = tempStartDate.AddSeconds(58 - product.StartDate.Second);
+            var result = await _reservationService.ReserveProduct(productReservation);
 
-                var tempEndDate = product.EndDate.AddHours(23 - product.EndDate.Hour);
-                tempEndDate = tempEndDate.AddMinutes(59 - product.EndDate.Minute);
-                tempEndDate = tempEndDate.AddSeconds(59 - product.EndDate.Second);
-
-                if (product.Id <= 0)
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NO_ID"));
-                }
-                if (tempStartDate < DateTime.Now)
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_INVALID_STARTDATE"));
-                }
-                if (tempEndDate < DateTime.Now)
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_INVALID_ENDDATE"));
-                }
-                if (tempEndDate < tempStartDate)
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_ENDDATE_BEFORE_STARTDATE"));
-                }
-                if (product.StartDate.DayOfWeek == DayOfWeek.Saturday || product.StartDate.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.STARTDATE_IN_WEEKEND"));
-                }
-                if (product.EndDate.DayOfWeek == DayOfWeek.Saturday || product.EndDate.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.ENDDATE_IN_WEEKEND"));
-                }
-                int weekenddays = AmountOfWeekendDays(product.StartDate, product.EndDate);
-                double totalamountofdays = (product.EndDate - product.StartDate).TotalDays - weekenddays;
-                if (totalamountofdays > 5)
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.RESERVATION_TIME_TO_LONG"));
-                }
-                // https://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods
-                var foundReservation = await _dbContext.Reservations.Where(x => x.StartDate <= product.EndDate && product.StartDate < x.EndDate).FirstOrDefaultAsync();
-                if (foundReservation != null)
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_ALREADY_RESERVED_IN_PERIOD"));
-                }
-                var result = await $"{_config.Value.ApiGatewayBaseUrl}/api/product/flat/{product.Id}".AllowAnyHttpStatus().GetStringAsync();
-                if (string.IsNullOrWhiteSpace(result))
-                {
-                    productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_FOUND"));
-                }
-                else
-                {
-                    var foundProduct = JsonConvert.DeserializeObject<Product>(result);
-                    if (foundProduct == null)
-                    {
-                        productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_FOUND"));
-                    }
-                    else
-                    {
-                        if (foundProduct.ProductState != ProductState.AVAILABLE)
-                        {
-                            productModelsErrorList.Add(new KeyValuePair<ProductModel, string>(product, "PRODUCT.RESERVE.PRODUCT_NOT_AVAILABLE"));
-                        }
-                        if (productModelsErrorList.Count <= 0)
-                        {
-                            //TODO: Add RenterID with JWT claims
-                            var reservation = new Reservation()
-                            {
-                                ProductId = product.Id,
-                                StartDate = product.StartDate,
-                                EndDate = product.EndDate,
-                                IsApproved = foundProduct.RequiresApproval ? false : null,
-                            };
-                            revervations.Add(reservation);
-                        }
-                    }
-                }
-            }
-            if (productModelsErrorList.Count > 0)
-            {
-                return BadRequest(productModelsErrorList);
-            }
-            foreach (var item in revervations)
-            {
-                _dbContext.Reservations.Add(item);
-            }
-            await _dbContext.SaveChangesAsync();
-            return Ok();
+            return result
+                .Right<IActionResult>(Ok)
+                .Left(err => BadRequest(err));
         }
 
         /// <summary>
-        /// Get all reservations with similar startdate for a single page
+        /// Get all reservations that contain the same product.
         /// </summary>
-        /// <returns>List of all similar reservations</returns>
-        [HttpGet("similar/{pageIndex}/{pageSize}")]
-        public async Task<IActionResult> GetSimilarReservations(int pageIndex, int pageSize)
+        /// <param name="productId">This parameter is used to get the reservations from the database.</param>
+        /// <returns>A List of reservations with the productId.</returns>
+        [HttpGet("Reservation/{productId}")]
+        public async Task<IActionResult> GetReservationsByProductId(Guid productId)
         {
-            if (pageIndex < 0)
+            if (productId == Guid.Empty)
             {
-                return BadRequest("RESERVATION.INCORRECT_INDEX");
+                return BadRequest();
             }
 
-            if (pageSize <= 0)
+            var result = await _reservationService.GetReservationsByProductId(productId);
+            if (result.Count > 0)
             {
-                return BadRequest("RESERVATION.INCORRECT_INDEX");
+                return Ok(result);
             }
 
-            var page = new ReservationOverviewPage();
-
-            var reservations = await _dbContext.Reservations.ToListAsync();
-            var similarReservations = new List<List<Reservation>>();
-
-            for (int i = 0; i < reservations.Count; i++)
-            {
-                var mergedReservations = new List<Reservation>();
-
-                mergedReservations.AddRange(reservations.Where(x => x.StartDate.Date == reservations[i].StartDate.Date && x.RenterId == reservations[i].RenterId).ToList());
-
-                reservations.RemoveAll(x => x.StartDate.Date == reservations[i].StartDate.Date && x.RenterId == reservations[i].RenterId && reservations[i].Id != x.Id);
-
-                similarReservations.Add(mergedReservations);
-            }
-
-            page.TotalReservationCount = similarReservations.Count();
-
-            // Last page calculation goes wrong if the totalcount is 0
-            // also no point in trying to get 0 products from DB
-            if (page.TotalReservationCount == 0)
-            {
-                page.CurrentPage = 0;
-                page.Reservations = new List<List<Reservation>>(0);
-                return Ok(page);
-            }
-
-            // Calculate how many pages there are, given the current pageSize
-            int lastPage = (int)Math.Ceiling((double)page.TotalReservationCount / pageSize) - 1;
-
-            //pageIndex below 0 is nonsensical, bringing the value to closest sane value
-            if (pageIndex < 0)
-            {
-                pageIndex = 0;
-            }
-
-            // Use last page if requested page is higher
-            page.CurrentPage = Math.Min(pageIndex, lastPage);
-
-            page.Reservations = similarReservations.Skip(page.CurrentPage * pageSize).Take(pageSize).ToList();
-            return Ok(page);
+            return NotFound(AppErrors.FailedToFindReservation);
         }
 
-        /// <summary>
-        /// Counts the amount of weekend days between two dates.
-        /// </summary>
-        /// <param name="startDate">The starting date</param>
-        /// <param name="endDate">The end date</param>
-        /// <returns>The amount days that are weekend days found</returns>
-        private int AmountOfWeekendDays(DateTime startDate, DateTime endDate)
+        [HttpPost("reservationaction/{reservationId}/{reservationAction}")]
+        public async Task<IActionResult> ExecuteReservationAction(Guid reservationId, int reservationAction)
         {
-            int amountOfWeekendDays = 0;
-            for (DateTime i = startDate; i < endDate; i = i.AddDays(1))
+            if (reservationId == Guid.Empty || reservationAction > 2 || reservationAction < 0)
             {
-                if (i.DayOfWeek == DayOfWeek.Saturday || i.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    amountOfWeekendDays++;
-                }
+                return BadRequest();
             }
-            return amountOfWeekendDays;
-        }
+            var action = (ReservationAction)Enum.ToObject(typeof(ReservationAction), reservationAction);
 
-        /// <summary>
-        /// Get all reservations that are linked to a product
-        /// </summary>
-        /// <param name="productId">productId used to find the reservations</param>
-        /// <param name="excludeHistory">Whether past reservation should be excluded from the results</param>
-        /// <returns>All found reservations</returns>
-        [HttpGet("{productId}")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationsByProductId(int productId, [FromQuery(Name = "excludeHistory")] bool excludeHistory = true)
-        {
-            var query = _dbContext.Reservations.Where(x => x.ProductId == productId);
-            if (excludeHistory)
-            {
-                query = query.Where(x => x.EndDate >= DateTime.Today);
-            }
+            var result = await _reservationService.ExecuteReservationAction(reservationId, action);
 
-            return await query.ToListAsync();
-        }
-
-        /// <summary>
-        /// A action that can be done on a reservation, updating the database
-        /// Actions that can be done are: Cancel, Pickup and Return
-        /// </summary>
-        /// <param name="reservationActionModel">Action Object with Reservation Id and Action number</param>
-        /// <returns>Ok</returns>
-        [HttpPost("reservationaction")]
-        public async Task<IActionResult> ReservationActionCall(ReservationActionModel reservationActionModel)
-        {
-            if (reservationActionModel == null)
-            {
-                return BadRequest("RESERVATION.ACTION.INVALID.CALL");
-            }
-
-            if (reservationActionModel.ReservationId < 0)
-            {
-                return BadRequest("RESERVATION.ACTION.INVALID.ID");
-            }
-
-            var result = _dbContext.Reservations.SingleOrDefault(b => b.Id == reservationActionModel.ReservationId);
-            if (result != null)
-            {
-                switch (reservationActionModel.Action)
-                {
-                    case ReservationAction.CANCEL:
-                        throw new NotImplementedException();
-                    case ReservationAction.PICKUP:
-                        result.PickedUpDate = DateTime.Now;
-                        break;
-                    case ReservationAction.RETURN:
-                        result.ReturnDate = DateTime.Now;
-                        break;
-                    default:
-                        return BadRequest("RESERVATION.ACTION.INVALID.ACTION");
-                }
-            }
-            await _dbContext.SaveChangesAsync();
-            return Ok();
+            return result
+                .Right<IActionResult>(Ok)
+                .Left(err => BadRequest(err));
         }
     }
 }
