@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "ACI.Products/**"
-      - "ACI.Products.Test/**"
+      - "ACI.Products.Test.*/**"
       - ".github/workflows/build-product-service.yml"
   pull_request:
     branches:
@@ -15,12 +15,13 @@ on:
       - S6_S2022_dev
     paths:
       - "ACI.Products/**"
-      - "ACI.Products.Test/**"
+      - "ACI.Products.Test.*/**"
       - ".github/workflows/build-product-service.yml"
 
 env:
-  PROJECT_PATH: 'ACI.Products/ACI.Products.csproj
-  TEST_PATH: 'ACI.Products.Test/ACI.Products.Test.csproj'
+  PROJECT_PATH: 'ACI.Products/ACI.Products.csproj'
+  UNIT_TEST_PATH: 'ACI.Products.Test/ACI.Products.Test.Unit.csproj'
+  INTEGRATION_TEST_PATH: 'ACI.Products.Test/ACI.Products.Test.Integration.csproj'
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PRODUCT_SERVICE }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -40,10 +41,13 @@ jobs:
       run: dotnet restore ${{ env.PROJECT_PATH }}
 
     - name: 'Build project'
-      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
+      run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release
 
-    - name: Run tests
-      run: dotnet test ${{ env.TEST_PATH }}
+    - name: 'Run unit tests'
+      run: dotnet test ${{ env.UNIT_TEST_PATH }} --no-build --verbosity normal
+
+    - name: 'Run integration tests'
+      run: dotnet test ${{ env.INTEGRATION_TEST_PATH }} --no-build --verbosity normal
 
     # https://github.com/highbyte/sonarscan-dotnet
     - name: SonarScanner for .NET 6 with pull request decoration support
