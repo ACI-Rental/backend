@@ -43,12 +43,12 @@ namespace ACI.Reservations.Models
         /// Id of the person that mode the reservation.
         /// </summary>
         [Required]
-        public int RenterId { get; set; }
+        public Guid RenterId { get; set; }
 
         /// <summary>
         /// Id of the person that made the review of the reservation.
         /// </summary>
-        public int? ReviewerId { get; set; }
+        public Guid? ReviewerId { get; set; }
 
         /// <summary>
         /// Used to know if the reservation is approved or not.
@@ -60,6 +60,11 @@ namespace ACI.Reservations.Models
         /// Used to represent the product that is being reserved.
         /// </summary>
         [Required]
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
+
+        /// <summary>
+        /// Used to know if a reservation is cancelled.
+        /// </summary>
+        public bool Cancelled { get; set; } = false;
     }
 }
