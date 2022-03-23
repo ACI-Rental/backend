@@ -12,3 +12,9 @@ dotnet_diagnostic.SA1600.severity = none
 dotnet_diagnostic.SA1601.severity = none
 dotnet_diagnostic.SA1633.severity = none
 dotnet_diagnostic.CS8618.severity = none
+
+# Sonar rules
+dotnet_diagnostic.S101.severity = none
+dotnet_diagnostic.S1118.severity = none
+dotnet_diagnostic.S3903.severity = none
+dotnet_diagnostic.S4792.severity = none
