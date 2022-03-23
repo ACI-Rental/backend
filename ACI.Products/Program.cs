@@ -69,6 +69,7 @@ void Run()
         context.Database.EnsureCreated();
     }
 
+
     app.UseHttpsRedirection();
 
     app.UseAuthorization();
