@@ -15,63 +15,59 @@ namespace ACI.Reservations.Services
         private readonly IReservationRepository _reservationRepository;
         private readonly HttpClient _httpClient;
 
-
         public ReservationService(IReservationRepository reservationRepository, HttpClient httpClient)
         {
             _reservationRepository = reservationRepository;
             _httpClient = httpClient;
         }
 
-        public async Task<List<Reservation>> GetReservations()
+        public async Task<Either<IError, List<Reservation>>> GetReservations()
         {
             return await _reservationRepository.GetReservations();
         }
 
-        public async Task<List<Reservation>> GetReservationsByStartDate(DateTime startDate)
+        public async Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate)
         {
-            return await _reservationRepository.GetReservationsByStartDate(startDate) ?? new List<Reservation>();
+            return await _reservationRepository.GetReservationsByStartDate(startDate);
         }
 
-        public async Task<List<Reservation>> GetReservationsByEndDate(DateTime endDate)
+        public async Task<Either<IError, List<Reservation>>> GetReservationsByEndDate(DateTime endDate)
         {
-            return await _reservationRepository.GetReservationsByEndDate(endDate) ?? new List<Reservation>();
+            return await _reservationRepository.GetReservationsByEndDate(endDate);
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservationsByProductId(Guid productId)
         {
-            var result = await _reservationRepository.GetReservationsByProductId(productId);
-
-            if (result == Option<List<Reservation>>.None)
-            {
-                return AppErrors.FailedToFindReservation;
-            }
+            return await _reservationRepository.GetReservationsByProductId(productId);
         }
 
         public async Task<Either<IError, Reservation>> ExecuteReservationAction(Guid reservationId, ReservationAction action)
         {
             var reservation = await _reservationRepository.GetReservationByReservationId(reservationId);
 
-            if (reservation == Option<Reservation>.None)
+            if (reservation.GetType() == typeof(IError))
             {
-                return AppErrors.FailedToFindReservation;
+                return reservation;
             }
+
+            var reservationToChange = reservation.ValueUnsafe();
 
             switch (action)
             {
                 case ReservationAction.CANCEL:
-                    reservation.Cancelled = true;
+                    reservationToChange.Cancelled = true;
                     break;
                 case ReservationAction.PICKUP:
-                    reservation.PickedUpDate = DateTime.Now;
+                    reservationToChange.PickedUpDate = DateTime.Now;
                     break;
                 case ReservationAction.RETURN:
-                    reservation.ReturnDate = DateTime.Now;
+                    reservationToChange.ReturnDate = DateTime.Now;
                     break;
                 default:
                     return AppErrors.InvalidReservationAction;
             }
 
-            return await _reservationRepository.UpdateReservation(reservation);
+            return await _reservationRepository.UpdateReservation(reservationToChange);
         }
 
         public async Task<Either<IError, Reservation>> ReserveProduct(ProductReservationDTO productReservationDTO)
@@ -88,7 +84,7 @@ namespace ACI.Reservations.Services
                 return AppErrors.ProductNotFoundError;
             }
 
-            var product = JsonConvert.DeserializeObject<ProductDTO>(productResult.ToString());
+            var product = JsonConvert.DeserializeObject<ProductDTO>(productResult.ToString()) ?? new ProductDTO();
             var reservation = new Reservation()
             {
                 ProductId = productReservationDTO.ProductId,
@@ -97,7 +93,7 @@ namespace ACI.Reservations.Services
                 EndDate = productReservationDTO.EndDate,
             };
 
-            if (product.RequiresApproval)
+            if (product.RequiresApproval && product.Id != Guid.Empty)
             {
                 reservation.IsApproved = false;
             }
@@ -145,7 +141,7 @@ namespace ACI.Reservations.Services
             }
 
             var reservationResult = await _reservationRepository.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate);
-            if (reservationResult.Id != Guid.Empty)
+            if (reservationResult.ValueUnsafe().Id != Guid.Empty)
             {
                 return AppErrors.ReservationIsOverlapping;
             }
@@ -170,6 +166,7 @@ namespace ACI.Reservations.Services
                     amountOfWeekendDays++;
                 }
             }
+
             return amountOfWeekendDays;
         }
     }
