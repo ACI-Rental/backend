@@ -41,7 +41,7 @@ jobs:
       run: dotnet restore ${{ env.PROJECT_PATH }}
 
     - name: 'Compile and run code style checks'
-      run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release
+      run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release -clp:NoSummary
 
   test:
     needs: build-and-lint
@@ -74,7 +74,7 @@ jobs:
       run: dotnet restore ${{ env.PROJECT_PATH }}
 
     - name: 'Build project'
-      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
+      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -clp:NoSummary
 
     - name: 'Run unit tests'
       run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
