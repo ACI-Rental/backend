@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReservationService.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteService.Tests", "NoteService.Tests\NoteService.Tests.csproj", "{E062F40E-740B-49EF-9AFC-685E8C19C3BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.ImageService", "ACI.ImageService\ACI.ImageService.csproj", "{19B83DC5-5E41-4E8F-976C-B20C24943FDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.Images", "ACI.Images\ACI.Images.csproj", "{19B83DC5-5E41-4E8F-976C-B20C24943FDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
