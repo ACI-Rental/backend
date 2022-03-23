@@ -2,6 +2,7 @@
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Services.Interfaces;
+using LanguageExt.UnsafeValueAccess;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.Reservations.Controllers
@@ -18,6 +19,7 @@ namespace ACI.Reservations.Controllers
         /// Constructor is used to define Interfaces.
         /// </summary>
         /// <param name="reservationService">Interface for the ReservationService.</param>
+        /// <param name="logger">This is the logger that logs application actions.</param>
         public ReservationController(IReservationService reservationService, ILogger<ReservationController> logger)
         {
             _reservationService = reservationService;
@@ -32,12 +34,10 @@ namespace ACI.Reservations.Controllers
         public async Task<IActionResult> GetReservations()
         {
             var result = await _reservationService.GetReservations();
-            if (result != null)
-            {
-                return Ok(result);
-            }
 
-            return NotFound();
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => BadRequest(err));
         }
 
         /// <summary>
@@ -54,12 +54,10 @@ namespace ACI.Reservations.Controllers
             }
 
             var result = await _reservationService.GetReservationsByStartDate(startDate);
-            if (result.Count > 0)
-            {
-                return Ok(result);
-            }
 
-            return NotFound(AppErrors.FailedToFindReservation);
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => NotFound(err));
         }
 
         /// <summary>
@@ -76,12 +74,10 @@ namespace ACI.Reservations.Controllers
             }
 
             var result = await _reservationService.GetReservationsByEndDate(endDate);
-            if (result.Count > 0)
-            {
-                return Ok(result);
-            }
 
-            return NotFound(AppErrors.FailedToFindReservation);
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => NotFound(err));
         }
 
         /// <summary>
@@ -120,12 +116,10 @@ namespace ACI.Reservations.Controllers
             }
 
             var result = await _reservationService.GetReservationsByProductId(productId);
-            if (result.Count > 0)
-            {
-                return Ok(result);
-            }
 
-            return NotFound(AppErrors.FailedToFindReservation);
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => NotFound(err));
         }
 
         [HttpPost("reservationaction/{reservationId}/{reservationAction}")]
@@ -135,6 +129,7 @@ namespace ACI.Reservations.Controllers
             {
                 return BadRequest();
             }
+
             var action = (ReservationAction)Enum.ToObject(typeof(ReservationAction), reservationAction);
 
             var result = await _reservationService.ExecuteReservationAction(reservationId, action);
