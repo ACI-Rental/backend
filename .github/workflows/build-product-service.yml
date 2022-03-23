@@ -37,6 +37,9 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
+    - name: 'Restore packages'
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+
     - name: 'Compile and run code style checks'
       run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release
 
