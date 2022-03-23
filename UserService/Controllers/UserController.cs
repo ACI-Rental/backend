@@ -46,8 +46,6 @@ namespace UserService.Controllers
         [HttpGet("filter/{searchterm}")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsersBySearchterm(string searchterm)
         {
-            searchterm.ToLower();
-
             var result = await _dbContext.Users.Where(x => x.UserInfo.Name.ToString().ToLower().Contains(searchterm)).ToListAsync();
             return Ok(result);
         }
