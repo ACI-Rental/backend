@@ -27,7 +27,7 @@ finally
     Log.CloseAndFlush();
 }
 
-void Run( )
+void Run()
 {
     var builder = WebApplication.CreateBuilder(args);
 
