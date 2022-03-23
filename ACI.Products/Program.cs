@@ -27,7 +27,7 @@ finally
     Log.CloseAndFlush();
 }
 
-void Run()
+void Run( )
 {
     var builder = WebApplication.CreateBuilder(args);
 
@@ -68,7 +68,6 @@ void Run()
         var context = services.GetRequiredService<ProductContext>();
         context.Database.EnsureCreated();
     }
-
 
     app.UseHttpsRedirection();
 
