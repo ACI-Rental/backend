@@ -26,7 +26,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  build:
+  build-and-lint:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout'
@@ -44,6 +44,7 @@ jobs:
       run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release
 
   test:
+    needs: build-and-lint
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout'
