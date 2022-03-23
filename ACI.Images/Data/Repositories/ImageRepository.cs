@@ -28,7 +28,7 @@ namespace ACI.ImageService.Data.Repositories
         
         public async Task<Either<IError, ProductImageBlob>> AddProductImageBlob(ProductImageBlob productImageBlob)
         {
-            string filepath = "C:/Users/jonah/Pictures/how-it-looks-when-someone-with-an-android-accidentally-turns-18866052.png";
+            string filepath = "C:/Users/marcd/Pictures/talkingben.png";
 
             var ext = Path.GetExtension(filepath);
             BlobClient blob = _blobContainerClient.GetBlobClient("henk.png");
