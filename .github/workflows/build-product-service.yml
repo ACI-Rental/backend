@@ -28,6 +28,20 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+      steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Install dotnet'
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: 'Compile and run code style checks'
+        run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release
+
+  test:
+    runs-on: ubuntu-latest
     steps:
     - name: 'Checkout'
       uses: actions/checkout@v2
@@ -56,7 +70,7 @@ jobs:
       run: dotnet restore ${{ env.PROJECT_PATH }}
 
     - name: 'Build project'
-      run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release
+      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
 
     - name: 'Run unit tests'
       run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
@@ -64,5 +78,6 @@ jobs:
     - name: 'Run integration tests'
       run: dotnet test ${{ env.INTEGRATION_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
 
-    - name: End Sonar scan
+    - name: 'End Sonar scan'
       run: dotnet sonarscanner end /d:sonar.login=${{ env.SONAR_TOKEN }}
+
