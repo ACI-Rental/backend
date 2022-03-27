@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using ACI.ImageService.Data.Repositories.Interfaces;
 using ACI.ImageService.Models;
@@ -22,16 +23,18 @@ namespace ACI.ImageService.Domain.Image
         
         public async Task<Either<IError, ImageResponse>> UploadImage(UploadImageRequest request)
         {
-            var test = new ProductImageBlob()
+            
+            string fileExtension = Path.GetExtension(request.Image.FileName);
+            string blobName = $"{Guid.NewGuid()}{fileExtension}";
+            
+            var newBlob = new ProductImageBlob()
             {
-                Id = new Guid(),
-                ProductId = new Guid(),
-                BlobId = new Guid()
+                ProductId = request.ProductId,
+                BlobId = blobName
             };
-
-
-            await _imageRepository.AddProductImageBlob(test);
-            throw new NotImplementedException();
+            
+            await _imageRepository.AddProductImageBlob(newBlob, request.Image);
+            throw new NotImplementedException("Implement LanguageExt return shit");
         }
     }
 }

@@ -7,6 +7,7 @@ using ACI.ImageService.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using LanguageExt;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -26,14 +27,13 @@ namespace ACI.ImageService.Data.Repositories
             _logger = logger;
         }
         
-        public async Task<Either<IError, ProductImageBlob>> AddProductImageBlob(ProductImageBlob productImageBlob)
+        public async Task<Either<IError, ProductImageBlob>> AddProductImageBlob(ProductImageBlob productImageBlob, IFormFile Image)
         {
-            string filepath = "C:/Users/marcd/Pictures/talkingben.png";
-
-            var ext = Path.GetExtension(filepath);
-            BlobClient blob = _blobContainerClient.GetBlobClient("henk.png");
-            await blob.UploadAsync(filepath);
-            throw new NotImplementedException("cock??");
+            BlobClient blob = _blobContainerClient.GetBlobClient(productImageBlob.BlobId);
+            await blob.UploadAsync(Image.OpenReadStream());
+            
+            // TODO: Upload data to SQL db
+            throw new NotImplementedException("database insert gebeuren");
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ACI.ImageService.Domain.Image;
 using ACI.ImageService.Models.DTO;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -22,9 +22,15 @@ namespace ACI.ImageService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostImage(UploadImageRequest uploadImageRequest)
+        public async Task<IActionResult> PostImage([FromForm] UploadImageRequest uploadImageRequest)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            
             await _imageService.UploadImage(uploadImageRequest);
+            
             return Ok();
         }
     }

@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.ImageService.Models
 {
@@ -12,9 +14,10 @@ namespace ACI.ImageService.Models
         public Guid Id { get; set; }
         
         [Required]
-        public Guid BlobId { get; set; }
+        // The blobs name is the ID ex: f5eac4f1-fa02-491b-8340-1947d6557558.png
+        public string BlobId { get; set; }
         
-        [Required]
+        [FromBody]
         public Guid ProductId { get; set; }
     }
 }
