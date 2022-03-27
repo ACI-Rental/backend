@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using ACI.ImageService.Helpers;
-using LanguageExt;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.ImageService.Models.DTO
 {
