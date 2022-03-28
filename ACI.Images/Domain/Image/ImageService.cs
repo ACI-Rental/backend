@@ -14,27 +14,28 @@ namespace ACI.ImageService.Domain.Image
     {
         private readonly IImageRepository _imageRepository;
         private readonly ILogger<ImageService> _imageServce;
-        
-        public ImageService(IImageRepository  imageRepository, ILogger<ImageService> imageServce)
+        private readonly string _urlPrefix;
+
+        public ImageService(IImageRepository imageRepository, ILogger<ImageService> imageServce, IConfiguration configuration)
         {
             _imageRepository = imageRepository;
             _imageServce = imageServce;
+            _urlPrefix = configuration["AzureBlobStorage:UrlPrefix"];
         }
-        
+
         public async Task<Either<IError, ImageResponse>> UploadImage(UploadImageRequest request)
         {
-            
-            string fileExtension = Path.GetExtension(request.Image.FileName);
-            string blobName = $"{Guid.NewGuid()}{fileExtension}";
-            
-            var newBlob = new ProductImageBlob()
+            var result = await _imageRepository.AddProductImageBlob(request.ProductId, request.Image);
+
+            return result.Map(blobResponse =>
             {
-                ProductId = request.ProductId,
-                BlobId = blobName
-            };
-            
-            await _imageRepository.AddProductImageBlob(newBlob, request.Image);
-            throw new NotImplementedException("Implement LanguageExt return shit");
+                return new ImageResponse() { 
+                    Id = blobResponse.Id, 
+                    ProductId = blobResponse.ProductId, 
+                    BlobUrl = $"{_urlPrefix}/{blobResponse.Id}" };
+            });
         }
+
+        
     }
 }

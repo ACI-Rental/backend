@@ -29,9 +29,15 @@ namespace ACI.ImageService.Controllers
                 return BadRequest();
             }
             
-            await _imageService.UploadImage(uploadImageRequest);
-            
-            return Ok();
+            var result = await _imageService.UploadImage(uploadImageRequest);
+
+            return result.Right<IActionResult>(x => Ok(x)).Left(err => BadRequest(err));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetImage(Guid productId)
+        {
+
         }
     }
 }
