@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "ACI.ImageService": {
+    "ACI.Images": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
