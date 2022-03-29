@@ -70,7 +70,7 @@ namespace ACI.Reservations.Services
             return await _reservationRepository.UpdateReservation(reservationToChange);
         }
 
-        public async Task<Either<IError, Reservation>> ReserveProduct(ProductReservationDTO productReservationDTO)
+        public async Task<Either<IError, Reservation>> CreateReservation(ProductReservationDTO productReservationDTO)
         {
             var result = await ValidateReservationData(productReservationDTO);
             if (result.IsSome)
@@ -141,19 +141,24 @@ namespace ACI.Reservations.Services
             }
 
             var reservationResult = await _reservationRepository.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate);
-            if (reservationResult.ValueUnsafe().Id != Guid.Empty)
+            if (reservationResult.ValueUnsafe() != null && reservationResult.ValueUnsafe().Id != Guid.Empty)
             {
                 return AppErrors.ReservationIsOverlapping;
             }
 
             // TODO: get product from messagebroker to check if it exists.
-            var productResult = await _httpClient.GetAsync($"https://localhost:5001/api/product/flat/{productReservationDTO.ProductId}");
+            var productResult = await GetProduct(productReservationDTO);
             if (!productResult.IsSuccessStatusCode)
             {
                 return AppErrors.ProductDoesNotExist;
             }
 
             return Option<IError>.None;
+        }
+
+        private async Task<HttpResponseMessage> GetProduct(ProductReservationDTO productReservationDTO)
+        {
+            return await _httpClient.GetAsync($"https://localhost:5001/api/product/flat/{productReservationDTO.ProductId}");
         }
 
         private int AmountOfWeekendDays(DateTime startDate, DateTime endDate)

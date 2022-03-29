@@ -95,7 +95,7 @@ namespace ACI.Reservations.Controllers
 
             _logger.LogInformation("Creating new Reservation {productReservation}", productReservation);
 
-            var result = await _reservationService.ReserveProduct(productReservation);
+            var result = await _reservationService.CreateReservation(productReservation);
 
             return result
                 .Right<IActionResult>(Ok)
