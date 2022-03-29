@@ -23,7 +23,7 @@ namespace ACI.ImageService.Data.Repositories
         public ImageRepository(IConfiguration configuration, ILogger<ImageRepository> logger, ImageContext context)
         {
             _blobContainerClient = new BlobContainerClient(configuration["ConnectionStrings:Azurite"], configuration["AzureBlobStorage:Containers:ProductImages"]);
-            _blobContainerClient.CreateIfNotExists();
+            _blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
             _blobServiceClient = new BlobServiceClient(configuration["ConnectionStrings:Azurite"]);
             _logger = logger;
             _context = context;
