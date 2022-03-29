@@ -1,31 +1,32 @@
-name: Build the ProductService
+name: Build, test and analyze the ProductService
 
 on:
   push:
     branches:
       - main
     paths:
-      - "ProductService/**"
-      - "ProductService.Tests/**"
+      - "ACI.Products/**"
+      - "ACI.Products.Test.*/**"
       - ".github/workflows/build-product-service.yml"
   pull_request:
-    branches: 
+    branches:
       - main
       - dev
       - S6_S2022_dev
     paths:
-      - "ProductService/**"
-      - "ProductService.Tests/**"
+      - "ACI.Products/**"
+      - "ACI.Products.Test.*/**"
       - ".github/workflows/build-product-service.yml"
 
 env:
-  PROJECT_PATH: 'ProductService/ProductService.csproj'
-  TEST_PATH: 'ProductService.Tests/ProductService.Tests.csproj'
+  PROJECT_PATH: 'ACI.Products/ACI.Products.csproj'
+  UNIT_TEST_PATH: 'ACI.Products.Test.Unit/ACI.Products.Test.Unit.csproj'
+  INTEGRATION_TEST_PATH: 'ACI.Products.Test.Integration/ACI.Products.Test.Integration.csproj'
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PRODUCT_SERVICE }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  build:
+  build-and-lint:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout'
@@ -34,23 +35,53 @@ jobs:
     - name: 'Install dotnet'
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
+
+    - name: 'Restore packages'
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+
+    - name: 'Compile and run code style checks'
+      run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release -clp:NoSummary
+
+  test:
+    needs: build-and-lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Install dotnet'
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: 'Install Sonar global tool'
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: 'Begin Sonar scan'
+      run: >
+        dotnet sonarscanner begin
+        /d:sonar.host.url="https://sonarcloud.io"
+        /o:"aci-rental"
+        /k:"aci.microservice.product"
+        /d:sonar.login=${{ env.SONAR_TOKEN }}
+        /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+        /d:sonar.sources="ACI.Products/**"
+        /d:sonar.exclusions="ACI.Products.Test.*/**"
+        /d:sonar.test.exclusions="ACI.Products.Test.*/**"
 
     - name: 'Restore packages'
       run: dotnet restore ${{ env.PROJECT_PATH }}
 
     - name: 'Build project'
-      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
+      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -clp:NoSummary
 
-    - name: Run tests
-      run: dotnet test ${{ env.TEST_PATH }}
+    - name: 'Run unit tests'
+      run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
 
-    # https://github.com/highbyte/sonarscan-dotnet
-    - name: SonarScanner for .NET 5
-      uses: highbyte/sonarscan-dotnet@2.0
-      with:
-        sonarProjectKey: aci-rental_backend-product-service
-        sonarProjectName:  backend-product-service
-        sonarOrganization: aci-rental
-        dotnetBuildArguments: ./ProductService
-        dotnetTestArguments: ./ProductService.Tests
+    - name: 'Run integration tests'
+      run: dotnet test ${{ env.INTEGRATION_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
+
+    - name: 'End Sonar scan'
+      run: dotnet sonarscanner end /d:sonar.login=${{ env.SONAR_TOKEN }}
+
