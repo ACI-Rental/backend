@@ -21,10 +21,22 @@ namespace ACI.ImageService.Controllers
             _imageService = imageService;
             _logger = logger;
         }
-
+        
+        [HttpGet]
+        public async Task<IActionResult> GetImage(Guid productId)
+        {
+            _logger.LogInformation("Getting Image by id {ProductId}", productId);
+            var result = await _imageService.GetImageById(productId);
+            return result
+                .Some<IActionResult>(Ok)
+                .None(NotFound);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> PostImage([FromForm] UploadImageRequest uploadImageRequest)
         {
+            _logger.LogInformation("Uploading image blob {ProductImageBlob}", uploadImageRequest);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -33,13 +45,6 @@ namespace ACI.ImageService.Controllers
             var result = await _imageService.UploadImage(uploadImageRequest);
 
             return result.Right<IActionResult>(x => Ok(x)).Left(err => BadRequest(err));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetImage(Guid productId)
-        {
-            var result = await _imageService.GetImageUrl(productId);
-            return result.
         }
     }
 }
