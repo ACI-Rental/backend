@@ -13,6 +13,6 @@ public static class AppUtils
     {
         return (Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("EntryAssembly was null"))
                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
-               ?? throw new InvalidOperationException("InformationalVersionAttribute is missing! Make sure the <version> field is set in your .csproj");
+               ?? throw new InvalidOperationException("InformationalVersionAttribute is missing! Make sure the <Version> field is set in your .csproj");
     }
 }
