@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using ACI.ImageService.Data.Repositories.Interfaces;
 using ACI.ImageService.Domain;
@@ -55,10 +56,8 @@ namespace ACI.ImageService.Data.Repositories
             if (image == null) return Option<ProductImageBlob>.None;
 
             BlobClient blob = _blobContainerClient.GetBlobClient(image.BlobId);
-
-            BlobDownloadInfo download = await blob.DownloadToAsync();
-
-            return download.
+                
+            return blob.Uri.ToString();
         }
     }
 }

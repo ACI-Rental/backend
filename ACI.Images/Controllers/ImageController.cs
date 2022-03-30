@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ACI.ImageService.Domain.Image;
 using ACI.ImageService.Models.DTO;
+using LanguageExt.UnsafeValueAccess;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -37,7 +38,8 @@ namespace ACI.ImageService.Controllers
         [HttpGet]
         public async Task<IActionResult> GetImage(Guid productId)
         {
-
+            var result = await _imageService.GetImageUrl(productId);
+            return result.
         }
     }
 }

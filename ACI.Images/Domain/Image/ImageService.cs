@@ -5,6 +5,7 @@ using ACI.ImageService.Data.Repositories.Interfaces;
 using ACI.ImageService.Models;
 using ACI.ImageService.Models.DTO;
 using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -36,5 +37,12 @@ namespace ACI.ImageService.Domain.Image
                     BlobUrl = $"{_urlPrefix}/{blobResponse.BlobId}" };
             });
         }
+
+        public async Task<Option<IError, ImageResponse>> GetImageUrl(Guid productId)
+        {
+            var result = await _imageRepository.GetImageUrl(productId);
+            return result.Map()
+        }
+        
     }
 }
