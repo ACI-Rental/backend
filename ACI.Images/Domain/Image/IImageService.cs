@@ -8,7 +8,7 @@ namespace ACI.ImageService.Domain.Image
     public interface IImageService
     {
         public Task<Either<IError, ImageResponse>> UploadImage(UploadImageRequest request);
-        public Task<Option<string>> GetImageUrl(Guid productId);
+        public Task<Option<ImageResponse>> GetImageById(Guid productId);
 
     }
 }

@@ -38,10 +38,21 @@ namespace ACI.ImageService.Domain.Image
             });
         }
 
-        public async Task<Option<IError, ImageResponse>> GetImageUrl(Guid productId)
+        public async Task<Option<ImageResponse>> GetImageById(Guid productId)
         {
-            var result = await _imageRepository.GetImageUrl(productId);
-            return result.Map()
+            var result = await _imageRepository.GetProductImageBlobById(productId);
+
+            var blobUri = await _imageRepository.GetBlobUrlFromBlobId(result.ValueUnsafe().BlobId);
+
+            return result.Map(productImageBlob =>
+            {
+                return new ImageResponse()
+                {
+                    Id = productImageBlob.Id,
+                    ProductId = productImageBlob.ProductId,
+                    BlobUrl = blobUri.ValueUnsafe()
+                };
+            });
         }
         
     }
