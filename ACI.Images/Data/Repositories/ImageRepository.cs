@@ -8,6 +8,7 @@ using ACI.ImageService.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using LanguageExt;
+using LanguageExt.Pretty;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -57,6 +58,17 @@ namespace ACI.ImageService.Data.Repositories
 
             return image;
         }
+        
+        public async Task<Option<string>> GetBlobUrlFromBlobId(string blobId)
+        {
+            BlobClient blob = _blobContainerClient.GetBlobClient(blobId);
+
+            var blobUri = blob.Uri.ToString();
+
+            if (blobUri == string.Empty) return Option<string>.None;
+
+            return blobUri;
+
         }
     }
 }
