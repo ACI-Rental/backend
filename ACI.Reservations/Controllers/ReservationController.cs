@@ -107,7 +107,7 @@ namespace ACI.Reservations.Controllers
         /// </summary>
         /// <param name="productId">This parameter is used to get the reservations from the database.</param>
         /// <returns>A List of reservations with the productId.</returns>
-        [HttpGet("Reservation/{productId}")]
+        [HttpGet("{productId}")]
         public async Task<IActionResult> GetReservationsByProductId(Guid productId)
         {
             if (productId == Guid.Empty)
@@ -122,17 +122,22 @@ namespace ACI.Reservations.Controllers
                 .Left(err => NotFound(err));
         }
 
-        [HttpPost("reservationaction/{reservationId}/{reservationAction}")]
-        public async Task<IActionResult> ExecuteReservationAction(Guid reservationId, int reservationAction)
+        [HttpPost("action")]
+        public async Task<IActionResult> ExecuteReservationAction([FromBody] ReservationActionDTO reservationActionDTO)
         {
-            if (reservationId == Guid.Empty || reservationAction > 2 || reservationAction < 0)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var action = (ReservationAction)Enum.ToObject(typeof(ReservationAction), reservationAction);
+            if (reservationActionDTO.ReservationId == Guid.Empty || reservationActionDTO.ReservationAction > 2 || reservationActionDTO.ReservationAction < 0)
+            {
+                return BadRequest();
+            }
 
-            var result = await _reservationService.ExecuteReservationAction(reservationId, action);
+            var action = (ReservationAction)Enum.ToObject(typeof(ReservationAction), reservationActionDTO.ReservationAction);
+
+            var result = await _reservationService.ExecuteReservationAction(reservationActionDTO.ReservationId, action);
 
             return result
                 .Right<IActionResult>(Ok)
