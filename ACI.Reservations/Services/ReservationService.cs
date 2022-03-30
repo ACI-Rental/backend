@@ -15,10 +15,10 @@ namespace ACI.Reservations.Services
         private readonly IReservationRepository _reservationRepository;
         private readonly HttpClient _httpClient;
 
-        public ReservationService(IReservationRepository reservationRepository, HttpClient httpClient)
+        public ReservationService(IReservationRepository reservationRepository)
         {
             _reservationRepository = reservationRepository;
-            _httpClient = httpClient;
+            _httpClient = new HttpClient();
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
