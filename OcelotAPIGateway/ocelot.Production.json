@@ -131,40 +131,6 @@
         }
       ],
       "UpstreamPathTemplate": "/api/products/reserve"
-    },
-    {
-      "DownstreamPathTemplate": "/user/page/{pageindex}/{pagesize}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "aci-user-service",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
-    },
-    {
-      "DownstreamPathTemplate": "/user/blockaction",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "aci-user-service",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/api/user/block"
-    },
-
-    {
-      "DownstreamPathTemplate": "/account/login",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "aci-user-service",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/api/account/login"
     }
   ],
   "GlobalConfiguration": {
