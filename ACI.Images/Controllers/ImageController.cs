@@ -47,5 +47,11 @@ namespace ACI.ImageService.Controllers
 
             return result.Right<IActionResult>(x => Ok(x)).Left(err => BadRequest(err));
         }
+        
+        [HttpDelete("{productId:guid}")]
+        public async Task<IActionResult> DeleteImage(Guid productId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
