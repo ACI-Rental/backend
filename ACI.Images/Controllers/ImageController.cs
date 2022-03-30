@@ -26,6 +26,7 @@ namespace ACI.ImageService.Controllers
         public async Task<IActionResult> GetImage(Guid productId)
         {
             _logger.LogInformation("Getting Image by id {ProductId}", productId);
+            
             var result = await _imageService.GetImageById(productId);
             return result
                 .Some<IActionResult>(Ok)
