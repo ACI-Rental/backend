@@ -15,24 +15,24 @@ namespace ACI.ImageService.Controllers
     {
         private readonly ILogger<ImageController> _logger;
         private readonly IImageService _imageService;
-        
+
         public ImageController(IImageService imageService, ILogger<ImageController> logger)
         {
             _imageService = imageService;
             _logger = logger;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetImage(Guid productId)
         {
             _logger.LogInformation("Getting Image by id {ProductId}", productId);
-            
+
             var result = await _imageService.GetImageById(productId);
             return result
                 .Some<IActionResult>(Ok)
                 .None(NotFound);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> PostImage([FromForm] UploadImageRequest uploadImageRequest)
         {
@@ -42,16 +42,20 @@ namespace ACI.ImageService.Controllers
             {
                 return BadRequest();
             }
-            
+
             var result = await _imageService.UploadImage(uploadImageRequest);
 
             return result.Right<IActionResult>(x => Ok(x)).Left(err => BadRequest(err));
         }
-        
+
         [HttpDelete("{productId:guid}")]
-        public async Task<IActionResult> DeleteImage(Guid productId)
+        public async Task<IActionResult> DeleteImageById(Guid productId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Deleting Image by id {ProductId}", productId);
+
+            var result = await _imageService.DeleteImageById(productId);
+
+            return result.Right<IActionResult>(x => NoContent()).Left(BadRequest);
         }
     }
 }

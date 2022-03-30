@@ -15,13 +15,13 @@ namespace ACI.ImageService.Domain.Image
     public class ImageService : IImageService
     {
         private readonly IImageRepository _imageRepository;
-        private readonly ILogger<ImageService> _imageServce;
+        private readonly ILogger<ImageService> _logger;
         private readonly string _urlPrefix;
 
-        public ImageService(IImageRepository imageRepository, ILogger<ImageService> imageServce, IConfiguration configuration)
+        public ImageService(IImageRepository imageRepository, ILogger<ImageService> logger, IConfiguration configuration)
         {
             _imageRepository = imageRepository;
-            _imageServce = imageServce;
+            _logger = logger;
             _urlPrefix = configuration["AzureBlobStorage:UrlPrefix"];
         }
 
@@ -54,6 +54,28 @@ namespace ACI.ImageService.Domain.Image
                 };
             });
         }
-        
+
+        public async Task<Either<IError, Unit>> DeleteImageById(Guid productId)
+        {
+            var productImageBlob = await _imageRepository.GetProductImageBlobById(productId);
+
+            if (productImageBlob.IsNone)
+            {
+                _logger.LogInformation("Deleting productimageblob {ProductId} failed with error {Error}", productId, AppErrors.ImageNotFoundError);
+                return AppErrors.ImageNotFoundError;
+            }
+
+            var blob = productImageBlob.ValueUnsafe();
+
+            if (blob.IsDeleted) 
+            {
+                _logger.LogInformation("Product {ProductId} is already deleted", productId);
+                return AppErrors.ImageAlreadyDeletedError;
+            }
+
+            await _imageRepository.DeleteImage(blob);
+            return Unit.Default;
+        }
+
     }
 }

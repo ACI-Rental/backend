@@ -9,6 +9,6 @@ namespace ACI.ImageService.Domain.Image
     {
         public Task<Either<IError, ImageResponse>> UploadImage(UploadImageRequest request);
         public Task<Option<ImageResponse>> GetImageById(Guid productId);
-
+        public Task<Either<IError, Unit>> DeleteImageById(Guid productId);
     }
 }
