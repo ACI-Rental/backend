@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
 using ACI.Products.Domain.Category;
 using ACI.Products.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ACI.Products.Controllers;
 
@@ -32,5 +34,13 @@ public class CategoryController : ControllerBase
         return result
             .Right<IActionResult>(Ok)
             .Left(BadRequest);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> All()
+    {
+        _logger.LogInformation("Getting all categories");
+        var result = await _service.GetCategories();
+        return Ok(result);
     }
 }
