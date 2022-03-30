@@ -11,6 +11,6 @@ namespace ACI.ImageService.Data.Repositories.Interfaces
     public interface IImageRepository
     {
         public Task<Either<IError, ProductImageBlob>> AddProductImageBlob(Guid productId, IFormFile file);
-        public Task<Either<IError, ProductImageBlob>> GetImageUrl(Guid productId);
+        public Task<Option<ProductImageBlob>> GetProductImageBlobById(Guid productId);
     }
 }

@@ -50,14 +50,13 @@ namespace ACI.ImageService.Data.Repositories
             return productImageBlob;
         }
 
-        public async Task<Option<ProductImageBlob>> GetImage(Guid productId)
+        public async Task<Option<ProductImageBlob>> GetProductImageBlobById(Guid productId)
         {
             var image = _context.Images.FirstOrDefault(x => x.ProductId == productId);
             if (image == null) return Option<ProductImageBlob>.None;
 
-            BlobClient blob = _blobContainerClient.GetBlobClient(image.BlobId);
-                
-            return blob.Uri.ToString();
+            return image;
+        }
         }
     }
 }
