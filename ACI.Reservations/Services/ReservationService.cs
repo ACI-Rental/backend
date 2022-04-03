@@ -84,7 +84,7 @@ namespace ACI.Reservations.Services
                 return AppErrors.ProductNotFoundError;
             }
 
-            var product = JsonConvert.DeserializeObject<ProductDTO>(productResult.ToString()) ?? new ProductDTO();
+            var product = JsonConvert.DeserializeObject<ProductDTO>(productResult.Content.ToString());
             var reservation = new Reservation()
             {
                 ProductId = productReservationDTO.ProductId,
@@ -93,7 +93,7 @@ namespace ACI.Reservations.Services
                 EndDate = productReservationDTO.EndDate,
             };
 
-            if (product.RequiresApproval && product.Id != Guid.Empty)
+            if (product != null && product.RequiresApproval && product.Id != Guid.Empty)
             {
                 reservation.IsApproved = false;
             }
