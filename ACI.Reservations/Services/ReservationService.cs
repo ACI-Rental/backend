@@ -79,12 +79,13 @@ namespace ACI.Reservations.Services
             }
 
             var productResult = await _httpClient.GetAsync($"https://localhost:5019/products/{productReservationDTO.ProductId}");
+            var content = await productResult.Content.ReadAsStringAsync();
             if (!productResult.IsSuccessStatusCode)
             {
                 return AppErrors.ProductNotFoundError;
             }
 
-            var product = JsonConvert.DeserializeObject<ProductDTO>(productResult.Content.ToString());
+            var product = JsonConvert.DeserializeObject<ProductDTO>(content.ToString());
             var reservation = new Reservation()
             {
                 ProductId = productReservationDTO.ProductId,
