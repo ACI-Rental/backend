@@ -78,13 +78,13 @@ namespace ACI.Reservations.Services
                 return result.ValueUnsafe();
             }
 
-            var productResult = await _httpClient.GetAsync($"https://localhost:5001/api/product/flat/{productReservationDTO.ProductId}");
+            var productResult = await _httpClient.GetAsync($"https://localhost:5019/Products/{productReservationDTO.ProductId}");
             if (!productResult.IsSuccessStatusCode)
             {
                 return AppErrors.ProductNotFoundError;
             }
 
-            var product = JsonConvert.DeserializeObject<ProductDTO>(productResult.ToString()) ?? new ProductDTO();
+            var product = JsonConvert.DeserializeObject<ProductDTO>(productResult.Content.ToString());
             var reservation = new Reservation()
             {
                 ProductId = productReservationDTO.ProductId,
@@ -93,7 +93,7 @@ namespace ACI.Reservations.Services
                 EndDate = productReservationDTO.EndDate,
             };
 
-            if (product.RequiresApproval && product.Id != Guid.Empty)
+            if (product != null && product.RequiresApproval && product.Id != Guid.Empty)
             {
                 reservation.IsApproved = false;
             }
@@ -141,13 +141,13 @@ namespace ACI.Reservations.Services
             }
 
             var reservationResult = await _reservationRepository.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate);
-            if (reservationResult.ValueUnsafe().Id != Guid.Empty)
+            if (reservationResult.ValueUnsafe() != null && reservationResult.ValueUnsafe().Id != Guid.Empty)
             {
                 return AppErrors.ReservationIsOverlapping;
             }
 
             // TODO: get product from messagebroker to check if it exists.
-            var productResult = await _httpClient.GetAsync($"https://localhost:5001/api/product/flat/{productReservationDTO.ProductId}");
+            var productResult = await _httpClient.GetAsync($"https://localhost:5019/Products/{productReservationDTO.ProductId}");
             if (!productResult.IsSuccessStatusCode)
             {
                 return AppErrors.ProductDoesNotExist;
