@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/product/{all}",
+      "DownstreamPathTemplate": "/api/product/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -9,10 +9,75 @@
           "Port": 5010
         }
       ],
-      "UpstreamPathTemplate": "/api/product/{all}",
+      "UpstreamPathTemplate": "/product/{all}",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Auth0",
         "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "uid": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value",
+        "email": "Claims[http://acirental/email] > value",
+        "name": "Claims[http://acirental/name] > value"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/product/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5010
+        }
+      ],
+      "UpstreamPathTemplate": "/product/",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Auth0",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "uid": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value",
+        "email": "Claims[http://acirental/email] > value",
+        "name": "Claims[http://acirental/name] > value"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/Category/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Category/{all}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Auth0",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "uid": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value",
+        "email": "Claims[http://acirental/email] > value",
+        "name": "Claims[http://acirental/name] > value"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/Category/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Category/",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Auth0",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "uid": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value",
+        "email": "Claims[http://acirental/email] > value",
+        "name": "Claims[http://acirental/name] > value"
       }
     },
     {
@@ -28,6 +93,31 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Auth0",
         "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "uid": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value",
+        "email": "Claims[http://acirental/email] > value",
+        "name": "Claims[http://acirental/name] > value"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/reservation/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5030
+        }
+      ],
+      "UpstreamPathTemplate": "/api/reservation/}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Auth0",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "uid": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value",
+        "email": "Claims[http://acirental/email] > value",
+        "name": "Claims[http://acirental/name] > value"
       }
     }
   ],
