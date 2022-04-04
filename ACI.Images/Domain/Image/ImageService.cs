@@ -1,14 +1,8 @@
 ﻿using System;
-using System.IO;
-using System.Threading.Tasks;
 using ACI.ImageService.Data.Repositories.Interfaces;
-using ACI.ImageService.Models;
 using ACI.ImageService.Models.DTO;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace ACI.ImageService.Domain.Image
 {
@@ -38,11 +32,23 @@ namespace ACI.ImageService.Domain.Image
             });
         }
 
-        public async Task<Option<ImageResponse>> GetImageById(Guid productId)
+        public async Task<Either<IError, ImageResponse>> GetImageById(Guid productId)
         {
             var result = await _imageRepository.GetProductImageBlobById(productId);
 
+            if (result.IsNull())
+            {
+                _logger.LogInformation("Getting productimageblob {ProductId} failed with error {Error}", productId, AppErrors.ImageNotFoundError);
+                return AppErrors.ImageNotFoundError;
+            }
+
             var blobUri = await _imageRepository.GetBlobUrlFromBlobId(result.ValueUnsafe().BlobId);
+
+            if (blobUri.IsNone)
+            {
+                _logger.LogInformation("Getting blobUri {ProductId} failed with error {Error}", productId, AppErrors.ImageNotFoundError);
+                return AppErrors.ImageNotFoundError;
+            }
 
             return result.Map(productImageBlob =>
             {
@@ -59,7 +65,7 @@ namespace ACI.ImageService.Domain.Image
         {
             var productImageBlob = await _imageRepository.GetProductImageBlobById(productId);
 
-            if (productImageBlob.IsNone)
+            if (productImageBlob.IsNull())
             {
                 _logger.LogInformation("Deleting productimageblob {ProductId} failed with error {Error}", productId, AppErrors.ImageNotFoundError);
                 return AppErrors.ImageNotFoundError;
@@ -67,9 +73,9 @@ namespace ACI.ImageService.Domain.Image
 
             var blob = productImageBlob.ValueUnsafe();
 
-            if (blob.IsDeleted) 
+            if (blob.IsNull()) 
             {
-                _logger.LogInformation("Product {ProductId} is already deleted", productId);
+                _logger.LogInformation("Productimageblob {ProductId} is already deleted", productId);
                 return AppErrors.ImageAlreadyDeletedError;
             }
 

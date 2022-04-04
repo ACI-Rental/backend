@@ -28,9 +28,8 @@ namespace ACI.ImageService.Controllers
             _logger.LogInformation("Getting Image by id {ProductId}", productId);
 
             var result = await _imageService.GetImageById(productId);
-            return result
-                .Some<IActionResult>(Ok)
-                .None(NotFound);
+
+            return result.Right<IActionResult>(x => Ok(x)).Left(err => BadRequest(err));
         }
 
         [HttpPost]

@@ -51,10 +51,11 @@ namespace ACI.ImageService.Data.Repositories
             return productImageBlob;
         }
 
-        public async Task<Option<ProductImageBlob>> GetProductImageBlobById(Guid productId)
+        public async Task<Either<IError, ProductImageBlob>> GetProductImageBlobById(Guid productId)
         {
             var image = _context.Images.FirstOrDefault(x => x.ProductId == productId);
-            if (image == null) return Option<ProductImageBlob>.None;
+
+            if (image == null) return AppErrors.ImageNotFoundError;
 
             return image;
         }
@@ -70,5 +71,18 @@ namespace ACI.ImageService.Data.Repositories
             return blobUri;
 
         }
+
+        public async Task<Either<IError, Unit>> DeleteImage(ProductImageBlob blob)
+        {
+            BlobClient blobClient = _blobContainerClient.GetBlobClient(blob.BlobId);
+
+            blobClient.Delete();
+
+            _context.Images.Remove(blob);
+            await _context.SaveChangesAsync();
+
+            return Unit.Default;
+        }
+
     }
 }
