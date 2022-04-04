@@ -111,7 +111,7 @@ namespace ACI.Reservations.Repositories
         public async Task<Either<IError, Reservation>> CreateReservation(Reservation reservation)
         {
             await _dbContext.Reservations.AddAsync(reservation);
-            if (_dbContext.SaveChangesAsync().IsCompletedSuccessfully)
+            if (await _dbContext.SaveChangesAsync() > 0)
             {
                 return reservation;
             }

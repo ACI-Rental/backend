@@ -69,6 +69,12 @@ void Run()
         context.Database.EnsureCreated();
     }
 
+    app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+
     app.UseHttpsRedirection();
 
     app.UseAuthorization();

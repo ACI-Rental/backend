@@ -78,13 +78,14 @@ namespace ACI.Reservations.Services
                 return result.ValueUnsafe();
             }
 
-            var productResult = await _httpClient.GetAsync($"https://localhost:5019/Products/{productReservationDTO.ProductId}");
+            var productResult = await _httpClient.GetAsync($"https://localhost:5019/products/{productReservationDTO.ProductId}");
+            var content = await productResult.Content.ReadAsStringAsync();
             if (!productResult.IsSuccessStatusCode)
             {
                 return AppErrors.ProductNotFoundError;
             }
 
-            var product = JsonConvert.DeserializeObject<ProductDTO>(productResult.Content.ToString());
+            var product = JsonConvert.DeserializeObject<ProductDTO>(content.ToString());
             var reservation = new Reservation()
             {
                 ProductId = productReservationDTO.ProductId,
@@ -147,7 +148,7 @@ namespace ACI.Reservations.Services
             }
 
             // TODO: get product from messagebroker to check if it exists.
-            var productResult = await _httpClient.GetAsync($"https://localhost:5019/Products/{productReservationDTO.ProductId}");
+            var productResult = await _httpClient.GetAsync($"https://localhost:5019/products/{productReservationDTO.ProductId}");
             if (!productResult.IsSuccessStatusCode)
             {
                 return AppErrors.ProductDoesNotExist;
