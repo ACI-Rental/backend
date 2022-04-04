@@ -2,17 +2,16 @@
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Services.Interfaces;
-using LanguageExt.UnsafeValueAccess;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.Reservations.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ReservationController : ControllerBase
+    public class ReservationsController : ControllerBase
     {
         private readonly IReservationService _reservationService;
-        private readonly ILogger<ReservationController> _logger;
+        private readonly ILogger<ReservationsController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReservationController"/> class.
@@ -20,7 +19,7 @@ namespace ACI.Reservations.Controllers
         /// </summary>
         /// <param name="reservationService">Interface for the ReservationService.</param>
         /// <param name="logger">This is the logger that logs application actions.</param>
-        public ReservationController(IReservationService reservationService, ILogger<ReservationController> logger)
+        public ReservationsController(IReservationService reservationService, ILogger<ReservationsController> logger)
         {
             _reservationService = reservationService;
             _logger = logger;
@@ -122,6 +121,7 @@ namespace ACI.Reservations.Controllers
                 .Left(err => NotFound(err));
         }
 
+        // TODO: Delete this when replaced by individual Cancel/Pickup/Return endpoints
         [HttpPost("action")]
         public async Task<IActionResult> ExecuteReservationAction([FromBody] ReservationActionDTO reservationActionDTO)
         {

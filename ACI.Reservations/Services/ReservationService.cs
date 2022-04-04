@@ -1,11 +1,11 @@
-﻿using ACI.Reservations.DBContext;
-using ACI.Reservations.Domain;
+﻿using ACI.Reservations.Domain;
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Repositories.Interfaces;
 using ACI.Reservations.Services.Interfaces;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace ACI.Reservations.Services
@@ -15,10 +15,13 @@ namespace ACI.Reservations.Services
         private readonly IReservationRepository _reservationRepository;
         private readonly HttpClient _httpClient;
 
-        public ReservationService(IReservationRepository reservationRepository)
+        private const int MAX_RESERVATION_DAYS = 5;
+
+        public ReservationService(IReservationRepository reservationRepository, IOptions<AppConfig> options, HttpClient httpClient)
         {
             _reservationRepository = reservationRepository;
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = options.Value.ApiGatewayBaseUrl;
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
@@ -78,7 +81,7 @@ namespace ACI.Reservations.Services
                 return result.ValueUnsafe();
             }
 
-            var productResult = await _httpClient.GetAsync($"https://localhost:5019/products/{productReservationDTO.ProductId}");
+            var productResult = await _httpClient.GetAsync($"/products/{productReservationDTO.ProductId}");
             var content = await productResult.Content.ReadAsStringAsync();
             if (!productResult.IsSuccessStatusCode)
             {
@@ -124,37 +127,51 @@ namespace ACI.Reservations.Services
                 return AppErrors.EndDateBeforeStartDate;
             }
 
-            if (productReservationDTO.StartDate.DayOfWeek == DayOfWeek.Saturday || productReservationDTO.StartDate.DayOfWeek == DayOfWeek.Sunday)
+            if (productReservationDTO.StartDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 return AppErrors.StartDateInWeekend;
             }
 
-            if (productReservationDTO.EndDate.DayOfWeek == DayOfWeek.Saturday || productReservationDTO.EndDate.DayOfWeek == DayOfWeek.Sunday)
+            if (productReservationDTO.EndDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 return AppErrors.EndDateInWeekend;
             }
 
-            int weekenddays = AmountOfWeekendDays(productReservationDTO.StartDate, productReservationDTO.EndDate);
-            double totalamountofdays = (productReservationDTO.EndDate - productReservationDTO.StartDate).TotalDays - weekenddays;
-            if (totalamountofdays > 5)
+            if (ExceedsDayLimit(productReservationDTO))
             {
                 return AppErrors.ReservationIsTooLong;
             }
 
-            var reservationResult = await _reservationRepository.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate);
-            if (reservationResult.ValueUnsafe() != null && reservationResult.ValueUnsafe().Id != Guid.Empty)
+            if (await HasOverlappingReservation(productReservationDTO))
             {
                 return AppErrors.ReservationIsOverlapping;
             }
 
             // TODO: get product from messagebroker to check if it exists.
-            var productResult = await _httpClient.GetAsync($"https://localhost:5019/products/{productReservationDTO.ProductId}");
+            var productResult = await _httpClient.GetAsync($"/products/{productReservationDTO.ProductId}");
+
             if (!productResult.IsSuccessStatusCode)
             {
                 return AppErrors.ProductDoesNotExist;
             }
 
             return Option<IError>.None;
+        }
+
+        private async Task<bool> HasOverlappingReservation(ProductReservationDTO dto)
+        {
+            var result = await _reservationRepository.GetOverlappingReservation(dto.ProductId, dto.StartDate, dto.EndDate);
+
+            return result.IsRight;
+        }
+
+        private bool ExceedsDayLimit(ProductReservationDTO productReservationDTO)
+        {
+            // Weekend days don't count toward the limit
+            var weekendDays = AmountOfWeekendDays(productReservationDTO.StartDate, productReservationDTO.EndDate);
+
+            var totalDays = (productReservationDTO.EndDate - productReservationDTO.StartDate).TotalDays - weekendDays;
+            return totalDays < MAX_RESERVATION_DAYS;
         }
 
         private int AmountOfWeekendDays(DateTime startDate, DateTime endDate)

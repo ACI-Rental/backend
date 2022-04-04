@@ -12,9 +12,10 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
+Log.Information("Starting ACI.Reservations microservice");
+
 try
 {
-    Log.Information("Starting ACI.Products microservice");
     Run();
 }
 catch (Exception ex)
@@ -33,8 +34,17 @@ void Run()
 
     builder.Host.AddAciLogging();
 
+    // Bind app settings to configurations
+    builder.Services
+        .AddOptions<AppConfig>()
+        .Bind(builder.Configuration.GetSection(AppConfig.Key))
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+
     // Add services to the container.
     builder.Services.AddControllers();
+
+    builder.Services.AddHttpClient();
 
     builder.Services.AddDbContext<ReservationDBContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
