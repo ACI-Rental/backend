@@ -10,6 +10,7 @@ using Azure.Storage.Blobs.Models;
 using LanguageExt;
 using LanguageExt.Pretty;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -33,6 +34,14 @@ namespace ACI.ImageService.Data.Repositories
         
         public async Task<Either<IError, ProductImageBlob>> AddProductImageBlob(Guid productId, IFormFile image)
         {
+            var productIdExists = await _context.Images.AnyAsync(x => x.ProductId.Equals(productId));
+
+            if (productIdExists)
+            {
+                _logger.LogInformation("Adding image {image} failed with error {Error}", productId, AppErrors.ProductIdAlreadyExistsError);
+                return AppErrors.ProductIdAlreadyExistsError;
+            }
+
             string fileExtension = Path.GetExtension(image.FileName);
             string blobName = $"{Guid.NewGuid()}{fileExtension}";
 
