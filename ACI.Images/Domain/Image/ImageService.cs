@@ -36,7 +36,7 @@ namespace ACI.ImageService.Domain.Image
         {
             var result = await _imageRepository.GetProductImageBlobById(productId);
 
-            if (result.IsNull())
+            if (result.IsLeft)
             {
                 _logger.LogInformation("Getting productimageblob {ProductId} failed with error {Error}", productId, AppErrors.ImageNotFoundError);
                 return AppErrors.ImageNotFoundError;
