@@ -1,4 +1,4 @@
-﻿namespace ACI.ImageService.Domain
+﻿namespace ACI.Images.Domain
 {
     public record IError(int Code, string Message);
 }

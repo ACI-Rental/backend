@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageService", "ImageService\ImageService.csproj", "{F995E3A8-6147-4788-B8C7-7F9766059A4A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService", "ProductService\ProductService.csproj", "{B7A4974C-85F7-4B96-8667-F77F8897711D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReservationService", "ReservationService\ReservationService.csproj", "{68AC3E54-EE24-451E-92A7-322FB3377425}"
@@ -15,13 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotAPIGateway", "OcelotA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Tests", "ProductService.Tests\ProductService.Tests.csproj", "{C2AD7114-0EBC-4B23-8D30-260182B6B397}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageService.Tests", "ImageService.Tests\ImageService.Tests.csproj", "{7560BACB-265D-46C0-83F5-1B271DB2440E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReservationService.Tests", "ReservationService.Tests\ReservationService.Tests.csproj", "{A98416B2-CA03-4DBC-B355-CE6252A54F23}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteService.Tests", "NoteService.Tests\NoteService.Tests.csproj", "{E062F40E-740B-49EF-9AFC-685E8C19C3BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.Images", "ACI.Images\ACI.Images.csproj", "{19B83DC5-5E41-4E8F-976C-B20C24943FDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Images", "ACI.Images\ACI.Images.csproj", "{19B83DC5-5E41-4E8F-976C-B20C24943FDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACI.Images.Test.Unit", "ACI.Images.Test.Unit\ACI.Images.Test.Unit.csproj", "{E30C343C-ACE4-430C-8880-378508458B8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F995E3A8-6147-4788-B8C7-7F9766059A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F995E3A8-6147-4788-B8C7-7F9766059A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F995E3A8-6147-4788-B8C7-7F9766059A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F995E3A8-6147-4788-B8C7-7F9766059A4A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7A4974C-85F7-4B96-8667-F77F8897711D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7A4974C-85F7-4B96-8667-F77F8897711D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7A4974C-85F7-4B96-8667-F77F8897711D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,10 +47,6 @@ Global
 		{C2AD7114-0EBC-4B23-8D30-260182B6B397}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2AD7114-0EBC-4B23-8D30-260182B6B397}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2AD7114-0EBC-4B23-8D30-260182B6B397}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7560BACB-265D-46C0-83F5-1B271DB2440E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7560BACB-265D-46C0-83F5-1B271DB2440E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7560BACB-265D-46C0-83F5-1B271DB2440E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7560BACB-265D-46C0-83F5-1B271DB2440E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A98416B2-CA03-4DBC-B355-CE6252A54F23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A98416B2-CA03-4DBC-B355-CE6252A54F23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A98416B2-CA03-4DBC-B355-CE6252A54F23}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +59,10 @@ Global
 		{19B83DC5-5E41-4E8F-976C-B20C24943FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19B83DC5-5E41-4E8F-976C-B20C24943FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19B83DC5-5E41-4E8F-976C-B20C24943FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E30C343C-ACE4-430C-8880-378508458B8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E30C343C-ACE4-430C-8880-378508458B8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E30C343C-ACE4-430C-8880-378508458B8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E30C343C-ACE4-430C-8880-378508458B8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

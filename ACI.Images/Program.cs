@@ -1,7 +1,7 @@
-using ACI.ImageService.Data;
-using ACI.ImageService.Data.Repositories;
-using ACI.ImageService.Data.Repositories.Interfaces;
-using ACI.ImageService.Domain.Image;
+using ACI.Images.Data;
+using ACI.Images.Data.Repositories;
+using ACI.Images.Data.Repositories.Interfaces;
+using ACI.Images.Domain.Image;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

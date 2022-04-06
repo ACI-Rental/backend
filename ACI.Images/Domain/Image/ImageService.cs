@@ -1,10 +1,10 @@
 ﻿using System;
-using ACI.ImageService.Data.Repositories.Interfaces;
-using ACI.ImageService.Models.DTO;
+using ACI.Images.Data.Repositories.Interfaces;
+using ACI.Images.Models.DTO;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
 
-namespace ACI.ImageService.Domain.Image
+namespace ACI.Images.Domain.Image
 {
     public class ImageService : IImageService
     {

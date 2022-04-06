@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ACI.ImageService.Data.Repositories.Interfaces;
-using ACI.ImageService.Domain;
-using ACI.ImageService.Models;
+using ACI.Images.Data.Repositories.Interfaces;
+using ACI.Images.Domain;
+using ACI.Images.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using LanguageExt;
@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace ACI.ImageService.Data.Repositories
+namespace ACI.Images.Data.Repositories
 {
     public class ImageRepository : IImageRepository
     {

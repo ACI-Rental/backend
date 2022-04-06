@@ -1,8 +1,8 @@
-﻿using ACI.ImageService.Models;
+﻿using ACI.Images.Models;
 using Microsoft.EntityFrameworkCore;
 #pragma warning disable CS8618 // DbSets nullable and initialized by EF Core
 
-namespace ACI.ImageService.Data
+namespace ACI.Images.Data
 {
     public class ImageContext : DbContext
     {

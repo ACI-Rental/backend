@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ACI.ImageService.Domain.Image;
-using ACI.ImageService.Models.DTO;
+using ACI.Images.Domain.Image;
+using ACI.Images.Models.DTO;
 using LanguageExt.UnsafeValueAccess;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace ACI.ImageService.Controllers
+namespace ACI.Images.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ACI.ImageService.Models
+namespace ACI.Images.Models
 {
     public class ProductImageBlob
     {

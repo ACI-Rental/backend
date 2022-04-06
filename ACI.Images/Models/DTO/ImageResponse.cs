@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ACI.ImageService.Models.DTO
+namespace ACI.Images.Models.DTO
 {
     public class ImageResponse
     {

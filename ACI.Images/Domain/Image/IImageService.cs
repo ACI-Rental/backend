@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ACI.ImageService.Models.DTO;
+using ACI.Images.Models.DTO;
 using LanguageExt;
 
-namespace ACI.ImageService.Domain.Image
+namespace ACI.Images.Domain.Image
 {
     public interface IImageService
     {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ACI.ImageService.Domain;
-using ACI.ImageService.Models;
+using ACI.Images.Domain;
+using ACI.Images.Models;
 using LanguageExt;
 using LanguageExt.ClassInstances;
 using Microsoft.AspNetCore.Http;
 
-namespace ACI.ImageService.Data.Repositories.Interfaces
+namespace ACI.Images.Data.Repositories.Interfaces
 {
     public interface IImageRepository
     {

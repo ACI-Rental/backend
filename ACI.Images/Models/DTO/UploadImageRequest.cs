@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using ACI.ImageService.Helpers;
+using ACI.Images.Helpers;
 using Microsoft.AspNetCore.Http;
 
-namespace ACI.ImageService.Models.DTO
+namespace ACI.Images.Models.DTO
 {
     public class UploadImageRequest
     {

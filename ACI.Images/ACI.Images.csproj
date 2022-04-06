@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <RootNamespace>ACI.ImageService</RootNamespace>
+        <RootNamespace>ACI.Images</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace ACI.ImageService.Helpers
+namespace ACI.Images.Helpers
 {
     public class AllowedExtensionsAttribute : ValidationAttribute
     {
