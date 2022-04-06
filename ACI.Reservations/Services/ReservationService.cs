@@ -171,7 +171,7 @@ namespace ACI.Reservations.Services
             var weekendDays = AmountOfWeekendDays(productReservationDTO.StartDate, productReservationDTO.EndDate);
 
             var totalDays = (productReservationDTO.EndDate - productReservationDTO.StartDate).TotalDays - weekendDays;
-            return totalDays < MAX_RESERVATION_DAYS;
+            return totalDays > MAX_RESERVATION_DAYS;
         }
 
         private int AmountOfWeekendDays(DateTime startDate, DateTime endDate)
