@@ -18,6 +18,7 @@ namespace ACI.Reservations.Test.Unit
     {
         private readonly Mock<IReservationRepository> _mockReservationRepository;
         private readonly IReservationService _reservationService;
+        private readonly TestData _testData;
 
         public ReservationServiceTests()
         {
@@ -28,31 +29,15 @@ namespace ACI.Reservations.Test.Unit
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
             _reservationService = new ReservationService(_mockReservationRepository.Object, options, new HttpClient(handlerMock.Object));
+
+            _testData = new TestData();
         }
 
         [Fact]
         public async Task Get_Reservations_Succes()
         {
             // Arrange
-            var reservations = new List<Reservation>()
-            {
-                new Reservation()
-                {
-                    Id = Guid.Parse("30067706-ae02-4bf2-8426-52df52e43684"),
-                    StartDate = DateTime.Now.AddDays(1),
-                    EndDate = DateTime.Now.AddDays(3),
-                    RenterId = Guid.NewGuid(),
-                    ProductId = Guid.NewGuid(),
-                },
-                new Reservation()
-                {
-                    Id = Guid.NewGuid(),
-                    StartDate = DateTime.Now.AddDays(1),
-                    EndDate = DateTime.Now.AddDays(3),
-                    RenterId = Guid.NewGuid(),
-                    ProductId = Guid.NewGuid(),
-                },
-            };
+            var reservations = _testData.GetReservationData();
 
             _mockReservationRepository
                 .Setup(s => s.GetReservations())
@@ -64,8 +49,52 @@ namespace ACI.Reservations.Test.Unit
             // Assert
             result.ShouldBeRight(r =>
             {
-                r.Count.Should().Be(2);
-                r[0].Id.Should().Be(Guid.Parse("30067706-ae02-4bf2-8426-52df52e43684"));
+                r.Count.Should().Be(5);
+                r[0].Id.Should().Be(Guid.Parse("10067706-ae02-4bf2-8426-52df52e43684"));
+            });
+        }
+
+        [Fact]
+        public async Task Get_Reservations_By_Startdate_Succes()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var reservations = _testData.GetReservationData();
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationsByStartDate(nextMonday))
+                .ReturnsAsync(reservations);
+
+            // Act
+            var result = await _reservationService.GetReservationsByStartDate(nextMonday);
+
+            // Assert
+            result.ShouldBeRight(r =>
+            {
+                r.Count.Should().Be(5);
+                r[0].Id.Should().Be(Guid.Parse("10067706-ae02-4bf2-8426-52df52e43684"));
+            });
+        }
+
+        [Fact]
+        public async Task Get_Reservations_By_EndDate_Succes()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var reservations = _testData.GetReservationData();
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationsByStartDate(nextMonday.AddDays(3)))
+                .ReturnsAsync(reservations);
+
+            // Act
+            var result = await _reservationService.GetReservationsByStartDate(nextMonday.AddDays(3));
+
+            // Assert
+            result.ShouldBeRight(r =>
+            {
+                r.Count.Should().Be(5);
+                r[0].Id.Should().Be(Guid.Parse("10067706-ae02-4bf2-8426-52df52e43684"));
             });
         }
     }
