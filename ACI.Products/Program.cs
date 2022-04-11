@@ -32,12 +32,6 @@ finally
 void Run()
 {
     var builder = WebApplication.CreateBuilder(args);
-    var isDevelopment = builder.Environment.IsDevelopment();
-
-    if (isDevelopment)
-    {
-        IdentityModelEventSource.ShowPII = true;
-    }
 
     builder.Host.AddAciLogging();
 
@@ -62,20 +56,7 @@ void Run()
     {
         options.Authority = builder.Configuration["Jwt:Authority"];
         options.Audience = builder.Configuration["Jwt:Audience"];
-        options.RequireHttpsMetadata = !isDevelopment;
-
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = c =>
-            {
-                c.NoResult();
-
-                c.Response.StatusCode = 401;
-                c.Response.ContentType = "text/plain";
-                var response = isDevelopment ? c.Exception.ToString() : "Authentication failed";
-                return c.Response.WriteAsync(response);
-            },
-        };
+        options.RequireHttpsMetadata = builder.Environment.IsProduction();
     });
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -91,6 +72,7 @@ void Run()
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+        IdentityModelEventSource.ShowPII = true;
     }
 
     using (var scope = app.Services.CreateScope())
