@@ -12,11 +12,11 @@ namespace ACI.Reservations.Services
 {
     public class ReservationService : IReservationService
     {
+        private const int MaxReservationDays = 5;
+
         private readonly IReservationRepository _reservationRepository;
         private readonly HttpClient _httpClient;
         private readonly ITimeProvider _timeProvider;
-
-        private const int MAX_RESERVATION_DAYS = 5;
 
         public ReservationService(IReservationRepository reservationRepository, IOptions<AppConfig> options, HttpClient httpClient, ITimeProvider timeProvider)
         {
@@ -174,7 +174,7 @@ namespace ACI.Reservations.Services
             var weekendDays = AmountOfWeekendDays(productReservationDTO.StartDate, productReservationDTO.EndDate);
 
             var totalDays = (productReservationDTO.EndDate - productReservationDTO.StartDate).TotalDays - weekendDays;
-            return totalDays > MAX_RESERVATION_DAYS;
+            return totalDays > MaxReservationDays;
         }
 
         private int AmountOfWeekendDays(DateTime startDate, DateTime endDate)
