@@ -28,6 +28,7 @@ namespace ACI.Reservations.Test.Unit
         private readonly IReservationService _reservationService;
         private readonly Mock<HttpMessageHandler> _mockMessageHandler;
         private readonly TestData _testData;
+        private readonly Mock<ITimeProvider> _mockTimeProvider;
         private static ProductDTO product = new ProductDTO()
         {
             Id = Guid.Parse("66d56f3d-f285-4f11-c9fe-08da17ab56b2"),
@@ -53,13 +54,9 @@ namespace ACI.Reservations.Test.Unit
                     Content = new StringContent(JsonConvert.SerializeObject(product)),
                 });
 
-            //var handler = new Mock<HttpMessageHandler>();
-            //var client = handler.CreateClient();
+            _mockTimeProvider = new Mock<ITimeProvider>();
 
-            //handler.SetupRequest(HttpMethod.Get, $"{options.Value.ApiGatewayBaseUrl}/products/{productId}")
-            //    .ReturnsResponse("{\"id\":\"66d56f3d-f285-4f11-c9fe-08da17ab56b2\",\"name\":\"tv\",\"description\":\"tv\",\"requiresApproval\":false,\"isDeleted\":false,\"categoryId\":1}");
-
-            _reservationService = new ReservationService(_mockReservationRepository.Object, options, new HttpClient(_mockMessageHandler.Object));
+            _reservationService = new ReservationService(_mockReservationRepository.Object, options, new HttpClient(_mockMessageHandler.Object), _mockTimeProvider.Object);
 
             _testData = new TestData();
         }
@@ -153,6 +150,151 @@ namespace ACI.Reservations.Test.Unit
         }
 
         [Fact]
+        public async Task Execute_ReservationAction_Cancel()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            var changedReservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+                Cancelled = true,
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservation.Id))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(changedReservation);
+
+            // Act
+            var result = await _reservationService.ExecuteReservationAction(reservation.Id, ReservationAction.CANCEL);
+
+            // Assert
+            result.ShouldBeRight(r =>
+            {
+                r.Cancelled.Should().Be(true);
+            });
+        }
+
+        [Fact]
+        public async Task Execute_ReservationAction_Pickup()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            var changedReservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+                PickedUpDate = nextMonday.AddDays(1),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservation.Id))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(changedReservation);
+
+            // Act
+            var result = await _reservationService.ExecuteReservationAction(reservation.Id, ReservationAction.PICKUP);
+
+            // Assert
+            result.ShouldBeRight(r =>
+            {
+                r.PickedUpDate.Should().Be(nextMonday.AddDays(1));
+            });
+        }
+
+        [Fact]
+        public async Task Execute_ReservationAction_Return()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            var changedReservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+                PickedUpDate = nextMonday.AddDays(1),
+                ReturnDate = nextMonday.AddDays(2),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservation.Id))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(changedReservation);
+
+            // Act
+            var result = await _reservationService.ExecuteReservationAction(reservation.Id, ReservationAction.PICKUP);
+
+            // Assert
+            result.ShouldBeRight(r =>
+            {
+                r.ReturnDate.Should().Be(nextMonday.AddDays(2));
+            });
+        }
+
+        [Fact]
         public async Task Reserve_Product_Succes()
         {
             // Arrange
@@ -188,6 +330,372 @@ namespace ACI.Reservations.Test.Unit
             result.ShouldBeRight(r =>
             {
                 r.ProductId.Should().Be(product.Id);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_No_ProductId()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = Guid.Empty,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(2),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = Guid.Empty,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(2),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.ProductNotFoundError);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_StartDate_Before_CurrentDate()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday.AddDays(-1),
+                EndDate = nextMonday.AddDays(2),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday.AddDays(-1),
+                EndDate = nextMonday.AddDays(2),
+            };
+
+            _mockTimeProvider
+                .Setup(s => s.GetDateTimeNow())
+                .Returns(nextMonday);
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.InvalidStartDate);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_EndDate_Before_CurrentDate()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday.AddDays(2),
+                EndDate = nextMonday,
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday.AddDays(2),
+                EndDate = nextMonday,
+            };
+
+            _mockTimeProvider
+                .Setup(s => s.GetDateTimeNow())
+                .Returns(nextMonday.AddDays(1));
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.InvalidEndDate);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_EndDate_Before_StartDate()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday.AddDays(2),
+                EndDate = nextMonday.AddDays(1),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday.AddDays(2),
+                EndDate = nextMonday.AddDays(1),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.EndDateBeforeStartDate);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_StartDate_In_Weekend()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday.AddDays(6),
+                EndDate = nextMonday.AddDays(9),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday.AddDays(6),
+                EndDate = nextMonday.AddDays(9),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.StartDateInWeekend);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_EndDate_In_Weekend()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(6),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(6),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.EndDateInWeekend);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_ExeedsDayLimit()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(9),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(9),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.ReservationIsTooLong);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_OverlappingReservation()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(reservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.ReservationIsOverlapping);
+            });
+        }
+
+        [Fact]
+        public async Task Reserve_Product_Fail_ProductDoesNotExist()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            var productReservationDTO = new ProductReservationDTO()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            _mockMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                });
+
+            _mockReservationRepository
+                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            // Act
+            var result = await _reservationService.ReserveProduct(productReservationDTO);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.ProductDoesNotExist);
             });
         }
     }
