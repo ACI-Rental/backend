@@ -1,0 +1,81 @@
+name: Build, test and analyze the ReservationService
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "ACI.Reservations/**"
+      - "ACI.Reservations.Test.*/**"
+      - ".github/workflows/build-reservation-service.yml"
+  pull_request:
+    branches:
+      - main
+      - dev
+      - S6_S2022_dev
+    paths:
+      - "ACI.Reservations/**"
+      - "ACI.Reservations.Test.*/**"
+      - ".github/workflows/build-reservation-service.yml"
+
+env:
+  PROJECT_PATH: 'ACI.Reservations/ACI.Reservations.csproj'
+  UNIT_TEST_PATH: 'ACI.Reservations.Test.Unit/ACI.Reservations.Test.Unit.csproj'
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PRODUCT_SERVICE }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Install dotnet'
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: 'Restore packages'
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+
+    - name: 'Compile and run code style checks'
+      run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release -clp:NoSummary
+
+  test:
+    needs: build-and-lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Install dotnet'
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: 'Install Sonar global tool'
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: 'Begin Sonar scan'
+      run: >
+        dotnet sonarscanner begin
+        /d:sonar.host.url="https://sonarcloud.io"
+        /o:"aci-rental"
+        /k:"aci.microservice.reservation"
+        /d:sonar.login=${{ env.SONAR_TOKEN }}
+        /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+        /d:sonar.sources="ACI.Reservations/**"
+        /d:sonar.exclusions="ACI.Reservations.Test.*/**"
+        /d:sonar.test.exclusions="ACI.Reservations.Test.*/**"
+    - name: 'Restore packages'
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+
+    - name: 'Build project'
+      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -clp:NoSummary
+
+    - name: 'Run unit tests'
+      run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
+
+    - name: 'End Sonar scan'
+      run: dotnet sonarscanner end /d:sonar.login=${{ env.SONAR_TOKEN }}
