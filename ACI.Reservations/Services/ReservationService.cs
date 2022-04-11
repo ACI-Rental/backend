@@ -14,14 +14,16 @@ namespace ACI.Reservations.Services
     {
         private readonly IReservationRepository _reservationRepository;
         private readonly HttpClient _httpClient;
+        private readonly ITimeProvider _timeProvider;
 
         private const int MAX_RESERVATION_DAYS = 5;
 
-        public ReservationService(IReservationRepository reservationRepository, IOptions<AppConfig> options, HttpClient httpClient)
+        public ReservationService(IReservationRepository reservationRepository, IOptions<AppConfig> options, HttpClient httpClient, ITimeProvider timeProvider)
         {
             _reservationRepository = reservationRepository;
             _httpClient = httpClient;
             _httpClient.BaseAddress = options.Value.ApiGatewayBaseUrl;
+            _timeProvider = timeProvider;
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
@@ -107,17 +109,18 @@ namespace ACI.Reservations.Services
 
         private async Task<Option<IError>> ValidateReservationData(ProductReservationDTO productReservationDTO)
         {
+            var now = _timeProvider.GetDateTimeNow();
             if (productReservationDTO.ProductId == Guid.Empty)
             {
                 return AppErrors.ProductNotFoundError;
             }
 
-            if (productReservationDTO.StartDate < DateTime.Now)
+            if (productReservationDTO.StartDate.Date < now)
             {
                 return AppErrors.InvalidStartDate;
             }
 
-            if (productReservationDTO.EndDate < DateTime.Now)
+            if (productReservationDTO.EndDate.Date < now)
             {
                 return AppErrors.InvalidEndDate;
             }
