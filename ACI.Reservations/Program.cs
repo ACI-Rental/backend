@@ -1,4 +1,5 @@
 using ACI.Reservations.DBContext;
+using ACI.Reservations.Domain;
 using ACI.Reservations.Models;
 using ACI.Reservations.Repositories;
 using ACI.Reservations.Repositories.Interfaces;
@@ -52,6 +53,7 @@ void Run()
     // Add Dependency injection.
     builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
     builder.Services.AddScoped<IReservationService, ReservationService>();
+    builder.Services.AddScoped<ITimeProvider, TimeProvider>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
