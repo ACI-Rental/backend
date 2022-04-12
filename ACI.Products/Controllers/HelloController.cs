@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ACI.Products.Controllers;
 
 [ApiController]
-[Authorize(Roles = "employee")]
+[Authorize]
 [Route("[controller]")]
 public class HelloController : ControllerBase
 {
