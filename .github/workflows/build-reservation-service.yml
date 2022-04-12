@@ -21,6 +21,7 @@ on:
 env:
   PROJECT_PATH: 'ACI.Reservations/ACI.Reservations.csproj'
   UNIT_TEST_PATH: 'ACI.Reservations.Test.Unit/ACI.Reservations.Test.Unit.csproj'
+  INTEGRATION_TEST_PATH: 'ACI.Reservations.Test.Integration/ACI.Reservations.Test.Integration.csproj'
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PRODUCT_SERVICE }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -76,6 +77,9 @@ jobs:
 
     - name: 'Run unit tests'
       run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
+    
+    - name: 'Run integration tests'
+      run: dotnet test ${{ env.INTEGRATION_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
 
     - name: 'End Sonar scan'
       run: dotnet sonarscanner end /d:sonar.login=${{ env.SONAR_TOKEN }}
