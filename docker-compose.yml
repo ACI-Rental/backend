@@ -29,7 +29,11 @@ services:
     command: /bin/bash -c 'until /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P "AdminACI321" -Q "create database Keycloak"; do sleep 5; done'
 
   keycloak:
-    image: quay.io/keycloak/keycloak:legacy
+    image: jboss/keycloak
+    volumes:
+      - ./keycloak:/opt/jboss/keycloak/keycloak
+    command: 
+      - "-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/keycloak/realm-export.json"
     depends_on:
       - mssql
       - keycloak-migration
