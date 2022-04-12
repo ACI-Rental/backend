@@ -22,7 +22,7 @@ namespace ACI.Reservations.Domain
             }
 
             var content = await productResult.Content.ReadAsStringAsync();
-            var product = JsonConvert.DeserializeObject<ProductDTO>(content.ToString());
+            var product = JsonConvert.DeserializeObject<ProductDTO>(content.ToString()) ?? new ProductDTO();
 
             return product;
         }
