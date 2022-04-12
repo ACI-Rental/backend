@@ -1,10 +1,11 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.Products.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Roles = "employee")]
 [Route("[controller]")]
 public class HelloController : ControllerBase
 {
@@ -18,6 +19,12 @@ public class HelloController : ControllerBase
     [HttpGet(Name = "Hello")]
     public IActionResult GetHelloWorld()
     {
-        return Ok("Hello world!");
+        var user = new
+        {
+            id = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "unknown",
+            name = User.Identity?.Name,
+        };
+
+        return Ok($"Hello, {user}!");
     }
 }

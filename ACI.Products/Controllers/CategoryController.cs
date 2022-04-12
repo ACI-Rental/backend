@@ -1,8 +1,7 @@
-using System.Threading.Tasks;
 using ACI.Products.Domain.Category;
 using ACI.Products.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace ACI.Products.Controllers;
 
@@ -20,6 +19,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> AddCategory([FromBody] CreateCategoryRequest request)
     {
         if (!ModelState.IsValid)
