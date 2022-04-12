@@ -3,10 +3,10 @@ using LanguageExt;
 
 namespace ACI.Reservations.Domain
 {
-    public class MockProductClient //: IProductClient
+    public class MockProductClient // : IProductClient
     {
-        //public async Task<Either<IError, ProductDTO>> GetProduct(Guid productId)
-        //{
+        // public async Task<Either<IError, ProductDTO>> GetProduct(Guid productId)
+        // {
         //    var productDTO = new ProductDTO()
         //    {
         //        Id = Guid.Parse("08bc0982-49ef-469b-a276-f9e515586481"),
@@ -17,7 +17,7 @@ namespace ACI.Reservations.Domain
         //        CategoryId = 1,
         //    };
 
-        //    return productDTO;
-        //}
+        // return productDTO;
+        // }
     }
 }
