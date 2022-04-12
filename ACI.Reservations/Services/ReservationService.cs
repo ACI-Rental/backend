@@ -17,6 +17,7 @@ namespace ACI.Reservations.Services
         private readonly IReservationRepository _reservationRepository;
         private readonly HttpClient _httpClient;
         private readonly ITimeProvider _timeProvider;
+        private readonly IProductClient _productClient;
 
         public ReservationService(IReservationRepository reservationRepository, IOptions<AppConfig> options, HttpClient httpClient, ITimeProvider timeProvider)
         {
@@ -24,6 +25,7 @@ namespace ACI.Reservations.Services
             _httpClient = httpClient;
             _httpClient.BaseAddress = options.Value.ApiGatewayBaseUrl;
             _timeProvider = timeProvider;
+            _productClient = new ProductClient(_httpClient);
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
@@ -83,14 +85,12 @@ namespace ACI.Reservations.Services
                 return result.ValueUnsafe();
             }
 
-            var productResult = await _httpClient.GetAsync($"/products/{productReservationDTO.ProductId}");
-            var content = await productResult.Content.ReadAsStringAsync();
-            if (!productResult.IsSuccessStatusCode)
+            var productResult = await _productClient.GetProduct(productReservationDTO.ProductId);
+            if (!productResult.IsRight)
             {
                 return AppErrors.ProductNotFoundError;
             }
 
-            var product = JsonConvert.DeserializeObject<ProductDTO>(content.ToString());
             var reservation = new Reservation()
             {
                 ProductId = productReservationDTO.ProductId,
@@ -99,6 +99,7 @@ namespace ACI.Reservations.Services
                 EndDate = productReservationDTO.EndDate,
             };
 
+            var product = productResult.ValueUnsafe();
             if (product != null && product.RequiresApproval && product.Id != Guid.Empty)
             {
                 reservation.IsApproved = false;
@@ -151,9 +152,9 @@ namespace ACI.Reservations.Services
             }
 
             // TODO: get product from messagebroker to check if it exists.
-            var productResult = await _httpClient.GetAsync($"/products/{productReservationDTO.ProductId}");
+            var productResult = await _productClient.GetProduct(productReservationDTO.ProductId);
 
-            if (!productResult.IsSuccessStatusCode)
+            if (!productResult.IsRight)
             {
                 return AppErrors.ProductDoesNotExist;
             }
