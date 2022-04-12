@@ -44,7 +44,7 @@ namespace ACI.Reservations.Controllers
         /// </summary>
         /// <param name="startDate">The parameter to get reservations with the same StartDate.</param>
         /// <returns>A List with reservations that have the specified StartDate.</returns>
-        [HttpGet("bystartdate/{datetime}")]
+        [HttpGet("bystartdate/{startDate}")]
         public async Task<IActionResult> GetReservationsWithSimilarStartDate(DateTime startDate)
         {
             if (startDate == DateTime.MinValue)
@@ -64,7 +64,7 @@ namespace ACI.Reservations.Controllers
         /// </summary>
         /// <param name="endDate">The parameter to get reservations with the same EndDate.</param>
         /// <returns>A List with reservations that have the specified EndDate.</returns>
-        [HttpGet("byenddate/{datetime}")]
+        [HttpGet("byenddate/{endDate}")]
         public async Task<IActionResult> GetReservationsWithSimilarEndDate(DateTime endDate)
         {
             if (endDate == DateTime.MinValue)
@@ -130,7 +130,7 @@ namespace ACI.Reservations.Controllers
                 return BadRequest();
             }
 
-            if (reservationActionDTO.ReservationId == Guid.Empty || reservationActionDTO.ReservationAction > 2 || reservationActionDTO.ReservationAction < 0)
+            if (reservationActionDTO.ReservationId == Guid.Empty || reservationActionDTO.ReservationAction > 3 || reservationActionDTO.ReservationAction < 1)
             {
                 return BadRequest();
             }
