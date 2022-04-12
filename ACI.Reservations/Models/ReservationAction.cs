@@ -3,8 +3,9 @@
     #pragma warning disable SA1602 // Enumeration items should be documented
     public enum ReservationAction
     {
-        CANCEL = 0,
-        PICKUP = 1,
-        RETURN = 2,
+        NONE = 0,
+        CANCEL = 1,
+        PICKUP = 2,
+        RETURN = 3,
     }
 }
