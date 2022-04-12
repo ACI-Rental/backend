@@ -11,7 +11,7 @@ using Serilog;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .CreateBootstrapLogger();
+    .CreateLogger();
 
 Log.Information("Starting ACI.Reservations microservice");
 
@@ -91,4 +91,9 @@ void Run()
     app.MapControllers();
 
     app.Run();
+}
+
+public partial class Program
+{
+    // Expose the Program class for use with WebApplicationFactory<T>
 }
