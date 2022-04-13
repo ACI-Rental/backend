@@ -11,5 +11,5 @@ public class CategoryResponse
         Name = name;
     }
 
-    public static CategoryResponse From(ProductCategory model) => new(model.Id, model.Name);
+    public static CategoryResponse MapFromModel(ProductCategory model) => new(model.Id, model.Name);
 }

@@ -7,7 +7,7 @@ namespace ACI.Products.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductsController : ControllerBase
+public class ProductsController : BaseController
 {
     private readonly ILogger<ProductsController> _logger;
     private readonly IProductService _service;

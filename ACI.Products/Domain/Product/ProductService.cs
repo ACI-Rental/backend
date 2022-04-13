@@ -18,7 +18,7 @@ public class ProductService : IProductService
 
     public async Task<Either<IError, ProductResponse>> AddProduct(CreateProductRequest request)
     {
-        var result = await _repository.AddProduct(request.ToProduct());
+        var result = await _repository.AddProduct(request.MapToModel());
         return result.Map(ProductResponse.From);
     }
 

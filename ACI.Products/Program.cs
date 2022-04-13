@@ -2,6 +2,7 @@ using ACI.Products.Data;
 using ACI.Products.Data.Repositories;
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Domain.Category;
+using ACI.Products.Domain.Note;
 using ACI.Products.Domain.Product;
 using ACI.Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -44,9 +45,11 @@ void Run()
     // Core services
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+    builder.Services.AddScoped<INoteRepository, NoteRepository>();
 
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddScoped<ICategoryService, CategoryService>();
+    builder.Services.AddScoped<INoteService, NoteService>();
 
     builder.Services.AddAuthentication(options =>
     {
@@ -73,14 +76,6 @@ void Run()
         app.UseSwagger();
         app.UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
-    }
-
-    using (var scope = app.Services.CreateScope())
-    {
-        var services = scope.ServiceProvider;
-
-        var context = services.GetRequiredService<ProductContext>();
-        context.Database.EnsureCreated();
     }
 
     app.UseCors(x => x
