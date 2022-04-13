@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/product",
+      "DownstreamPathTemplate": "/products",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -9,14 +9,10 @@
           "Port": 5020
         }
       ],
-      "UpstreamPathTemplate": "/api/product",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/products"
     },
     {
-      "DownstreamPathTemplate": "/product/page/{pageIndex}/{pageSize}/{searchfilter}",
+      "DownstreamPathTemplate": "/products/page/{pageIndex}/{pageSize}/{searchfilter}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -24,11 +20,7 @@
           "Port": 5020
         }
       ],
-      "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/products/page/{pageIndex}/{pageSize}/{searchfilter}"
     },
     {
       "DownstreamPathTemplate": "/reservation/similar/{pageIndex}/{pageSize}",
@@ -39,14 +31,10 @@
           "Port": 5022
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/similar/{pageIndex}/{pageSize}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/reservation/similar/{pageIndex}/{pageSize}"
     },
     {
-      "DownstreamPathTemplate": "/product/lastcatalog",
+      "DownstreamPathTemplate": "/products/lastcatalog",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -54,19 +42,10 @@
           "Port": 5019
         }
       ],
-      "UpstreamPathTemplate": "/api/product/lastcatalog",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      },
-      "AddHeadersToRequest": {
-        "uid": "Claims[http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier] > value",
-        "email": "Claims[http://acirental/email] > value",
-        "name": "Claims[http://acirental/name] > value"
-      }
+      "UpstreamPathTemplate": "/api/products/lastcatalog"
     },
     {
-      "DownstreamPathTemplate": "/product/{archiveProductId}",
+      "DownstreamPathTemplate": "/products/{archiveProductId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -74,11 +53,7 @@
           "Port": 5020
         }
       ],
-      "UpstreamPathTemplate": "/api/product/{archiveProductId}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/products/{archiveProductId}"
     },
     {
       "DownstreamPathTemplate": "/reservation/{productId}",
@@ -89,11 +64,7 @@
           "Port": 5022
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/{productId}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/reservation/{productId}"
     },
     {
       "DownstreamPathTemplate": "/reservation/similar",
@@ -104,11 +75,7 @@
           "Port": 5022
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/similar",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/reservation/similar"
     },
     {
       "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
@@ -119,11 +86,7 @@
           "Port": 5022
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/similar/{reservationId}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/reservation/similar/{reservationId}"
     },
     {
       "DownstreamPathTemplate": "/category",
@@ -134,11 +97,7 @@
           "Port": 5020
         }
       ],
-      "UpstreamPathTemplate": "/api/category",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/category"
     },
     {
       "DownstreamPathTemplate": "/image",
@@ -149,11 +108,7 @@
           "Port": 5020
         }
       ],
-      "UpstreamPathTemplate": "/api/image",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/image"
     },
     {
       "DownstreamPathTemplate": "/image/{productId}",
@@ -164,11 +119,7 @@
           "Port": 5013
         }
       ],
-      "UpstreamPathTemplate": "/api/image/{productId}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/image/{productId}"
     },
     {
       "DownstreamPathTemplate": "/reservation/reserveproducts",
@@ -179,11 +130,7 @@
           "Port": 5022
         }
       ],
-      "UpstreamPathTemplate": "/api/products/reserve",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/products/reserve"
     },
     {
       "DownstreamPathTemplate": "/reservation/similar/{reservationId}",
@@ -194,11 +141,7 @@
           "Port": 5022
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/{reservationId}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/reservation/{reservationId}"
     },
     {
       "DownstreamPathTemplate": "/reservation/reservationaction",
@@ -209,11 +152,7 @@
           "Port": 5022
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/reservation"
     },
     {
       "DownstreamPathTemplate": "/user/page/{pageindex}/{pagesize}",
@@ -224,42 +163,7 @@
           "Port": 5018
         }
       ],
-      "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/user/blockaction",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5018
-        }
-      ],
-      "UpstreamPathTemplate": "/api/user/block",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
-    },
-
-    {
-      "DownstreamPathTemplate": "/account/login",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5018
-        }
-      ],
-      "UpstreamPathTemplate": "/api/account/login",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Auth0",
-        "AllowedScopes": []
-      }
+      "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
     }
   ],
   "GlobalConfiguration": {

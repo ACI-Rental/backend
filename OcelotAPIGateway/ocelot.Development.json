@@ -1,29 +1,7 @@
 {
     "Routes": [
         {
-            "DownstreamPathTemplate": "/pdf/{productId}",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "localhost",
-                    "Port": 5011
-                }
-            ],
-            "UpstreamPathTemplate": "/api/pdf/{productId}"
-        },
-        {
-            "DownstreamPathTemplate": "/pdf",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "localhost",
-                    "Port": 5011
-                }
-            ],
-            "UpstreamPathTemplate": "/api/pdf"
-        },
-        {
-            "DownstreamPathTemplate": "/product",
+            "DownstreamPathTemplate": "/products",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
@@ -31,10 +9,10 @@
                     "Port": 5020
                 }
             ],
-            "UpstreamPathTemplate": "/api/product"
+            "UpstreamPathTemplate": "/api/products"
         },
         {
-            "DownstreamPathTemplate": "/product/page/{pageIndex}/{pageSize}/{searchfilter}",
+            "DownstreamPathTemplate": "/products/page/{pageIndex}/{pageSize}/{searchfilter}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
@@ -42,7 +20,7 @@
                     "Port": 5020
                 }
             ],
-            "UpstreamPathTemplate": "/api/product/page/{pageIndex}/{pageSize}/{searchfilter}"
+            "UpstreamPathTemplate": "/api/products/page/{pageIndex}/{pageSize}/{searchfilter}"
         },
         {
             "DownstreamPathTemplate": "/reservation/similar/{pageIndex}/{pageSize}",
@@ -56,18 +34,18 @@
             "UpstreamPathTemplate": "/api/reservation/similar/{pageIndex}/{pageSize}"
         },
         {
-            "DownstreamPathTemplate": "/product/lastcatalog",
-            "DownstreamScheme": "http",
+            "DownstreamPathTemplate": "/products/lastcatalog",
+            "DownstreamScheme": "https",
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 5020
+                    "Port": 5019
                 }
             ],
-            "UpstreamPathTemplate": "/api/product/lastcatalog"
+            "UpstreamPathTemplate": "/api/products/lastcatalog"
         },
         {
-            "DownstreamPathTemplate": "/product/{archiveProductId}",
+            "DownstreamPathTemplate": "/products/{archiveProductId}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
@@ -75,7 +53,7 @@
                     "Port": 5020
                 }
             ],
-            "UpstreamPathTemplate": "/api/product/{archiveProductId}"
+            "UpstreamPathTemplate": "/api/products/{archiveProductId}"
         },
         {
             "DownstreamPathTemplate": "/reservation/{productId}",
@@ -186,33 +164,9 @@
                 }
             ],
             "UpstreamPathTemplate": "/api/user/page/{pageindex}/{pagesize}"
-        },
-        {
-            "DownstreamPathTemplate": "/user/blockaction",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "localhost",
-                    "Port": 5018
-                }
-            ],
-            "UpstreamPathTemplate": "/api/user/block"
-        },
-
-    {
-      "DownstreamPathTemplate": "/account/login",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5018
         }
-      ],
-      "UpstreamPathTemplate": "/api/account/login"
-    }
-
     ],
-  "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5001"
-  }
+    "GlobalConfiguration": {
+        "BaseUrl": "http://localhost:5001"
+    }
 }
