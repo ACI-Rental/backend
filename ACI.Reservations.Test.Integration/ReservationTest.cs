@@ -23,6 +23,17 @@ namespace ACI.Reservations.Test.Integration
             _apiClient = factory.CreateClient();
         }
 
+        public static DateTime GetNextMonday()
+        {
+            DateTime date = DateTime.Today;
+            while (date.DayOfWeek != DayOfWeek.Monday)
+            {
+                date = date.AddDays(1);
+            }
+
+            return date;
+        }
+
         [Fact]
         public async void Get_All_Reservations()
         {
@@ -45,6 +56,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var monday = GetNextMonday();
+
             // Act
             var response = await _apiClient.GetReservationsByStartDate(monday);
 
@@ -62,6 +74,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var monday = GetNextMonday();
+
             // Act
             var response = await _apiClient.GetReservationsByStartDate(monday.AddDays(20));
 
@@ -79,6 +92,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var monday = DateTime.MinValue;
+
             // Act
             var response = await _apiClient.GetReservationsByStartDate(monday);
 
@@ -91,6 +105,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var endDate = GetNextMonday().AddDays(2);
+
             // Act
             var response = await _apiClient.GetReservationsByEndDate(endDate);
 
@@ -108,6 +123,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var monday = GetNextMonday();
+
             // Act
             var response = await _apiClient.GetReservationsByEndDate(monday.AddDays(20));
 
@@ -125,6 +141,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var monday = DateTime.MinValue;
+
             // Act
             var response = await _apiClient.GetReservationsByEndDate(monday);
 
@@ -137,6 +154,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var productId = Guid.Parse("70661e4b-a4f5-47e8-8c80-5b2c7ab959ff");
+
             // Act
             var response = await _apiClient.GetReservationsByProductId(productId);
 
@@ -154,6 +172,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var productId = Guid.Parse("72661e4b-a4f5-47e8-8c80-5b2c7ab959ff");
+
             // Act
             var response = await _apiClient.GetReservationsByProductId(productId);
 
@@ -171,6 +190,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var productId = Guid.Empty;
+
             // Act
             var response = await _apiClient.GetReservationsByProductId(productId);
 
@@ -178,30 +198,12 @@ namespace ACI.Reservations.Test.Integration
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
-        //[Fact]
-        //public async void ReserveProduct()
-        //{
-        //    // Arrange
-        //    ProductReservationDTO productReservationDTO = new ProductReservationDTO() 
-        //    {ProductId = Guid.Parse("08bc0982-49ef-469b-a276-f9e515586481"), RenterId = Guid.NewGuid(), StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2) };
-
-        //    // Act
-        //    var response = await _apiClient.ReserveProduct(productReservationDTO);
-
-        //    // Assert
-        //    response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        //    var reservation = await response.Content.ReadFromJsonAsync<Reservation>();
-
-        //    reservation.Should().NotBeNull();
-        //    reservation.ProductId.Should().Be(productReservationDTO.ProductId);
-        //}
-
         [Fact]
         public async void Execute_ReservationAction_Cancel()
         {
             // Arrange
             var reservationActionDTO = new ReservationActionDTO() { ReservationId = Guid.Parse("03b0a851-93b7-4397-a64e-e3d7e6f8f891"), ReservationAction = (int)ReservationAction.CANCEL };
+
             // Act
             var response = await _apiClient.ExecuteReservationAction(reservationActionDTO);
 
@@ -214,6 +216,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var reservationActionDTO = new ReservationActionDTO() { ReservationId = Guid.Parse("03b0a851-93b7-4397-a64e-e3d7e6f8f891"), ReservationAction = (int)ReservationAction.PICKUP };
+
             // Act
             var response = await _apiClient.ExecuteReservationAction(reservationActionDTO);
 
@@ -226,6 +229,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var reservationActionDTO = new ReservationActionDTO() { ReservationId = Guid.Parse("03b0a851-93b7-4397-a64e-e3d7e6f8f891"), ReservationAction = (int)ReservationAction.RETURN };
+
             // Act
             var response = await _apiClient.ExecuteReservationAction(reservationActionDTO);
 
@@ -238,6 +242,7 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var reservationActionDTO = new ReservationActionDTO() { ReservationAction = (int)ReservationAction.RETURN };
+
             // Act
             var response = await _apiClient.ExecuteReservationAction(reservationActionDTO);
 
@@ -250,22 +255,12 @@ namespace ACI.Reservations.Test.Integration
         {
             // Arrange
             var reservationActionDTO = new ReservationActionDTO() { ReservationId = Guid.Parse("03b0a851-93b7-4397-a64e-e3d7e6f8f891"), ReservationAction = 5 };
+
             // Act
             var response = await _apiClient.ExecuteReservationAction(reservationActionDTO);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        }
-
-        public static DateTime GetNextMonday()
-        {
-            DateTime date = DateTime.Today;
-            while (date.DayOfWeek != DayOfWeek.Monday)
-            {
-                date = date.AddDays(1);
-            }
-
-            return date;
         }
     }
 }
