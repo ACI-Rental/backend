@@ -34,7 +34,7 @@ namespace ACI.Images.Domain.Image
 
         public async Task<Either<IError, ImageResponse>> GetImageById(Guid productId)
         {
-            var result = await _imageRepository.GetProductImageBlobById(productId);
+            var result = await _imageRepository.GetProductImageBlobByProductId(productId);
 
             if (result.IsLeft)
             {
@@ -63,7 +63,7 @@ namespace ACI.Images.Domain.Image
 
         public async Task<Either<IError, Unit>> DeleteImageById(Guid productId)
         {
-            var productImageBlob = await _imageRepository.GetProductImageBlobById(productId);
+            var productImageBlob = await _imageRepository.GetProductImageBlobByProductId(productId);
 
             if (productImageBlob.IsNull())
             {
