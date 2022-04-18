@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/product/{all}",
+      "DownstreamPathTemplate": "/products/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -9,10 +9,10 @@
           "Port": 5010
         }
       ],
-      "UpstreamPathTemplate": "/api/product/{all}"
+      "UpstreamPathTemplate": "/api/products/{all}"
     },
     {
-      "DownstreamPathTemplate": "/product/",
+      "DownstreamPathTemplate": "/products/",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -20,7 +20,7 @@
           "Port": 5010
         }
       ],
-      "UpstreamPathTemplate": "/api/product/"
+      "UpstreamPathTemplate": "/api/products/"
     },
     {
       "DownstreamPathTemplate": "/Category/{all}",
