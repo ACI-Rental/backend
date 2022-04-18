@@ -45,11 +45,6 @@ namespace OcelotAPIGateway
                 options.AddPolicy("read:users", policy => policy.Requirements.Add(new HasScopeRequirement("read:users", domain)));
             });
             
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "OcelotAPIGateway", Version = "v1" });
-            });
-            
             services.AddOcelot();
             
             services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
@@ -61,8 +56,6 @@ namespace OcelotAPIGateway
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OcelotAPIGateway v1"));
             }
 
             app.UseCors(x => x
