@@ -1,4 +1,5 @@
 using ACI.Reservations.DBContext;
+using ACI.Reservations.Domain;
 using ACI.Reservations.Models;
 using ACI.Reservations.Repositories;
 using ACI.Reservations.Repositories.Interfaces;
@@ -10,11 +11,12 @@ using Serilog;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .CreateBootstrapLogger();
+    .CreateLogger();
+
+Log.Information("Starting ACI.Reservations microservice");
 
 try
 {
-    Log.Information("Starting ACI.Products microservice");
     Run();
 }
 catch (Exception ex)
@@ -33,8 +35,17 @@ void Run()
 
     builder.Host.AddAciLogging();
 
+    // Bind app settings to configurations
+    builder.Services
+        .AddOptions<AppConfig>()
+        .Bind(builder.Configuration.GetSection(AppConfig.Key))
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+
     // Add services to the container.
     builder.Services.AddControllers();
+
+    builder.Services.AddHttpClient();
 
     builder.Services.AddDbContext<ReservationDBContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
@@ -42,6 +53,7 @@ void Run()
     // Add Dependency injection.
     builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
     builder.Services.AddScoped<IReservationService, ReservationService>();
+    builder.Services.AddScoped<ITimeProvider, TimeProvider>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -79,4 +91,9 @@ void Run()
     app.MapControllers();
 
     app.Run();
+}
+
+public partial class Program
+{
+    // Expose the Program class for use with WebApplicationFactory<T>
 }
