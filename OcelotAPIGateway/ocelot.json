@@ -45,7 +45,7 @@
       "UpstreamPathTemplate": "/api/Category/"
     },
     {
-      "DownstreamPathTemplate": "/reservation/{all}",
+      "DownstreamPathTemplate": "/reservations/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -53,10 +53,10 @@
           "Port": 5030
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/{all}"
+      "UpstreamPathTemplate": "/api/reservations/{all}"
     },
     {
-      "DownstreamPathTemplate": "/reservation/",
+      "DownstreamPathTemplate": "/reservations/",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -64,7 +64,7 @@
           "Port": 5030
         }
       ],
-      "UpstreamPathTemplate": "/api/reservation/"
+      "UpstreamPathTemplate": "/api/reservations/"
     }
   ],
   "GlobalConfiguration": {
