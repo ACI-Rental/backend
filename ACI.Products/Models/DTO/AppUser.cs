@@ -15,7 +15,5 @@ public class AppUser
 
     public string Name { get; }
     public string Id { get; }
-
-
 }
 
