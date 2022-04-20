@@ -33,6 +33,7 @@ public class NoteRepository : INoteRepository
     {
         var result = await _ctx.Notes.AddAsync(note);
         await _ctx.SaveChangesAsync();
+
         return result.Entity;
     }
 }

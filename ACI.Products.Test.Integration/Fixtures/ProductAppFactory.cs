@@ -19,9 +19,6 @@ public class ProductAppFactory : WebApplicationFactory<Program>
 
             serviceCollection.Configure<TestAuthHandlerOptions>(options => options.DefaultUserId = DefaultUserId);
 
-            // serviceCollection.AddAuthentication(TestAuthHandler.AuthenticationScheme)
-            //     .AddScheme<TestAuthHandlerOptions, TestAuthHandler>(TestAuthHandler.AuthenticationScheme, options => { });
-
             serviceCollection.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = "Test";
