@@ -31,11 +31,12 @@ public static class ServiceCollectionExt
         var logger = scopedServices
             .GetRequiredService<ILogger<ProductTest>>();
 
+        db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
 
         try
         {
-            DbSetup.InitializeForTests(db);
+            DbSetup.Clean(db);
         }
         catch (Exception ex)
         {

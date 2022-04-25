@@ -1,17 +1,29 @@
 using System.IO;
+using ACI.Products.Test.Integration.Fixtures.Auth;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace ACI.Products.Test.Integration.Fixtures;
 
 public class ProductAppFactory : WebApplicationFactory<Program>
 {
+    public static string DefaultUserId = "urn:schac:personalUniqueCode:nl:local:example.edu:employeeid:x12-3456";
+
     protected override IHost CreateHost(IHostBuilder builder)
     {
         builder.ConfigureServices(serviceCollection =>
         {
             serviceCollection.UseTestDatabase();
+
+            serviceCollection.Configure<TestAuthHandlerOptions>(options => options.DefaultUserId = DefaultUserId);
+
+            serviceCollection.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Test";
+                options.DefaultChallengeScheme = "Test";
+            }).AddScheme<TestAuthHandlerOptions, TestAuthHandler>(TestAuthHandler.AuthenticationScheme, options => { });
         });
 
         builder.ConfigureAppConfiguration((_, configurationBuilder) =>

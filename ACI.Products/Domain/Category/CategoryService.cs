@@ -26,18 +26,21 @@ public class CategoryService : ICategoryService
         }
 
         var result = await _repository.AddCategory(req.Name);
-        return CategoryResponse.From(result);
+
+        return CategoryResponse.MapFromModel(result);
     }
 
     public async Task<Option<CategoryResponse>> GetCategory(int categoryId)
     {
         var model = await _repository.GetCategory(categoryId);
-        return model.Map(CategoryResponse.From);
+
+        return model.Map(CategoryResponse.MapFromModel);
     }
 
     public async Task<List<CategoryResponse>> GetCategories()
     {
         var models = await _repository.GetAllCategories();
-        return models.Select(CategoryResponse.From).ToList();
+
+        return models.Select(CategoryResponse.MapFromModel).ToList();
     }
 }

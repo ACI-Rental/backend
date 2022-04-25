@@ -2,9 +2,12 @@ using ACI.Products.Data;
 using ACI.Products.Data.Repositories;
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Domain.Category;
+using ACI.Products.Domain.Note;
 using ACI.Products.Domain.Product;
 using ACI.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -42,9 +45,22 @@ void Run()
     // Core services
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+    builder.Services.AddScoped<INoteRepository, NoteRepository>();
 
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddScoped<ICategoryService, CategoryService>();
+    builder.Services.AddScoped<INoteService, NoteService>();
+
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["Jwt:Authority"];
+        options.Audience = builder.Configuration["Jwt:Audience"];
+        options.RequireHttpsMetadata = builder.Environment.IsProduction();
+    });
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -59,14 +75,7 @@ void Run()
     {
         app.UseSwagger();
         app.UseSwaggerUI();
-    }
-
-    using (var scope = app.Services.CreateScope())
-    {
-        var services = scope.ServiceProvider;
-
-        var context = services.GetRequiredService<ProductContext>();
-        context.Database.EnsureCreated();
+        IdentityModelEventSource.ShowPII = true;
     }
 
     app.UseCors(x => x
@@ -77,6 +86,7 @@ void Run()
 
     app.UseHttpsRedirection();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();
