@@ -19,6 +19,11 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=AdminACI321
+  rabbitMQ:
+    image: rabbitmq:3.9-management
+    ports:
+      - 5672:5672
+      - 15672:15672
 
 networks:
   gateway-network:

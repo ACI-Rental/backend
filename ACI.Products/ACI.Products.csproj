@@ -14,6 +14,9 @@
 
     <ItemGroup>
         <PackageReference Include="LanguageExt.Core" Version="4.0.7-beta" />
+        <PackageReference Include="MassTransit" Version="7.3.1" />
+        <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />

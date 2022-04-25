@@ -1,3 +1,4 @@
+using System;
 using ACI.Reservations.DBContext;
 using ACI.Reservations.Domain;
 using ACI.Reservations.Models;
@@ -6,7 +7,12 @@ using ACI.Reservations.Repositories.Interfaces;
 using ACI.Reservations.Services;
 using ACI.Reservations.Services.Interfaces;
 using ACI.Shared;
+using MassTransit;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -42,6 +48,21 @@ void Run()
         .ValidateDataAnnotations()
         .ValidateOnStart();
 
+    builder.Services.AddMassTransit(x =>
+    {
+        x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+        {
+            // config.UseHealthCheck(provider);
+            config.Host(new Uri("rabbitmq://localhost"), h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+        }));
+    });
+    
+    builder.Services.AddMassTransitHostedService();
+    
     // Add services to the container.
     builder.Services.AddControllers();
 
@@ -58,6 +79,8 @@ void Run()
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+
 
     var app = builder.Build();
 
