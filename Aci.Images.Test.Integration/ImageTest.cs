@@ -1,15 +1,10 @@
-using ACI.Images.Models.DTO;
-using ACI.Images.Test.Integration.Fixtures;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
-using Moq;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
+using ACI.Images.Models.DTO;
+using ACI.Images.Test.Integration.Fixtures;
+using FluentAssertions;
 using Xunit;
 
 namespace Aci.Images.Test.Integration
@@ -23,34 +18,61 @@ namespace Aci.Images.Test.Integration
             _apiClient = factory.CreateClient();
         }
 
+        // [Fact]
+        // public async void AddNewImage_Returns_SuccessResponse()
+        // {
+        //     //Arrange
+        //     var expectedContentType = "text/html; charset=utf-8";
+        //
+        //     // Act
+        //     var file = File.OpenRead(@"TestPhoto\camera.jpg");
+        //     HttpContent fileStreamContent = new StreamContent(file);
+        //
+        //     var formData = new MultipartFormDataContent
+        //     {
+        //         { fileStreamContent, "camera", "camera.jpg" }
+        //     };
+        //
+        //     var request = new UploadImageRequest { ProductId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Image = formData };
+        //
+        //     var response = await _apiClient.PostCreateImage(request);
+        //
+        //     // Assert
+        //     response.StatusCode.Should().Be(HttpStatusCode.OK);
+        //     response.EnsureSuccessStatusCode();
+        //     var responseString = await response.Content.ReadAsStringAsync();
+        //
+        //     Assert.NotEmpty(responseString);
+        //     Assert.Equal(expectedContentType, response.Content.Headers.ContentType.ToString());
+        //
+        //     response.Dispose();
+        // }
+
         [Fact]
         public async void AddNewImage_Returns_SuccessResponse()
         {
-            //Arrange
-            var expectedContentType = "text/html; charset=utf-8";
+            await using var stream = System.IO.File.OpenRead("./TestPhoto/camera.jpg");
 
-            // Act
-            var file = File.OpenRead(@"TestPhoto\camera.jpg");
-            HttpContent fileStreamContent = new StreamContent(file);
-
-            var formData = new MultipartFormDataContent
+            var payload = new
             {
-                { fileStreamContent, "camera", "camera.jpg" }
+                ProductId = "62FA647C-AD54-4BCC-A860-E5A2664B019D"
             };
 
-            var request = new UploadImageRequest { ProductId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Image = formData };
+            using var request = new HttpRequestMessage(HttpMethod.Post, "image");
 
-            var response = await _apiClient.PostCreateImage(request);
+            using var content = new MultipartFormDataContent
+            {
+                // file
+                { new StreamContent(stream), "Image", "camera.jpg" },
 
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.EnsureSuccessStatusCode();
-            var responseString = await response.Content.ReadAsStringAsync();
+                // payload
+                { new StringContent(payload.ProductId), "Data.ProductId" },
+            };
 
-            Assert.NotEmpty(responseString);
-            Assert.Equal(expectedContentType, response.Content.Headers.ContentType.ToString());
+            request.Content = content;
 
-            response.Dispose();
+            var result = await _apiClient.SendAsync(request);
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
