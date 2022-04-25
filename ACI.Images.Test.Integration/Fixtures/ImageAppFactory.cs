@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using System.IO;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using System.IO;
 
 namespace ACI.Images.Test.Integration.Fixtures
 {
