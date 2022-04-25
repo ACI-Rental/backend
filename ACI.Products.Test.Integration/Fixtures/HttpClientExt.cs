@@ -28,9 +28,19 @@ public static class HttpClientExt
         return await client.GetAsync("products");
     }
 
+    public static async Task<HttpResponseMessage> GetAllNotes(this HttpClient client, Guid productId)
+    {
+        return await client.GetAsync($"notes/product/{productId}");
+    }
+
     public static async Task<HttpResponseMessage> GetProductById(this HttpClient client, Guid productId)
     {
         return await client.GetAsync($"products/{productId}");
+    }
+
+    public static async Task<HttpResponseMessage> GetNoteById(this HttpClient client, Guid noteId)
+    {
+        return await client.GetAsync($"notes/{noteId}");
     }
 
     public static async Task<HttpResponseMessage> DeleteProductById(this HttpClient client, Guid productId)
