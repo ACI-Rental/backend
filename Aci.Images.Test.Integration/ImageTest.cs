@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using ACI.Images.Domain;
 using ACI.Images.Models.DTO;
 using ACI.Images.Test.Integration.Fixtures;
 using FluentAssertions;
@@ -18,36 +19,6 @@ namespace Aci.Images.Test.Integration
             _apiClient = factory.CreateClient();
         }
 
-        // [Fact]
-        // public async void AddNewImage_Returns_SuccessResponse()
-        // {
-        //     //Arrange
-        //     var expectedContentType = "text/html; charset=utf-8";
-        //
-        //     // Act
-        //     var file = File.OpenRead(@"TestPhoto\camera.jpg");
-        //     HttpContent fileStreamContent = new StreamContent(file);
-        //
-        //     var formData = new MultipartFormDataContent
-        //     {
-        //         { fileStreamContent, "camera", "camera.jpg" }
-        //     };
-        //
-        //     var request = new UploadImageRequest { ProductId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Image = formData };
-        //
-        //     var response = await _apiClient.PostCreateImage(request);
-        //
-        //     // Assert
-        //     response.StatusCode.Should().Be(HttpStatusCode.OK);
-        //     response.EnsureSuccessStatusCode();
-        //     var responseString = await response.Content.ReadAsStringAsync();
-        //
-        //     Assert.NotEmpty(responseString);
-        //     Assert.Equal(expectedContentType, response.Content.Headers.ContentType.ToString());
-        //
-        //     response.Dispose();
-        // }
-
         [Fact]
         public async void AddNewImage_Returns_SuccessResponse()
         {
@@ -55,7 +26,7 @@ namespace Aci.Images.Test.Integration
 
             var payload = new
             {
-                ProductId = "62FA647C-AD54-4BCC-A860-E5A2664B019D"
+                ProductId = "62FA647C-AD54-4BCC-A860-E5A2664B019F"
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, "image");
@@ -66,13 +37,49 @@ namespace Aci.Images.Test.Integration
                 { new StreamContent(stream), "Image", "camera.jpg" },
 
                 // payload
-                { new StringContent(payload.ProductId), "Data.ProductId" },
+                { new StringContent(payload.ProductId), "ProductId" },
             };
 
             request.Content = content;
 
             var result = await _apiClient.SendAsync(request);
+
             result.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async void AddNewImage_Returns_ErrorResponse()
+        {
+            await using var stream = System.IO.File.OpenRead("./TestPhoto/camera.jpg");
+
+            var payload = new
+            {
+                //image with this productId should already exist
+                ProductId = "62FA647C-AD54-4BCC-A860-E5A2664B019D" 
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, "image");
+
+            using var content = new MultipartFormDataContent
+            {
+                // file
+                { new StreamContent(stream), "Image", "camera.jpg" },
+
+                // payload
+                { new StringContent(payload.ProductId), "ProductId" },
+            };
+
+            request.Content = content;
+
+            var result = await _apiClient.SendAsync(request);
+
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var expectedError = AppErrors.ProductIdAlreadyExistsError;
+            var error = await result.Content.ReadFromJsonAsync<IError>();
+
+            error.Should().NotBeNull();
+            error.Should().Be(expectedError);
         }
 
         [Fact]
@@ -86,9 +93,10 @@ namespace Aci.Images.Test.Integration
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.OK);
+
             var foundImage = await result.Content.ReadFromJsonAsync<ImageResponse>();
 
-            foundImage.ProductId.Equals(productId);
+            foundImage.ProductId.Should().Be(productId);
         }
     }
 }

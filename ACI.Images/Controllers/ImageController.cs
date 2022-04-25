@@ -22,7 +22,7 @@ namespace ACI.Images.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("{productId:guid}")]
         public async Task<IActionResult> GetImage(Guid productId)
         {
             _logger.LogInformation("Getting Image by id {ProductId}", productId);

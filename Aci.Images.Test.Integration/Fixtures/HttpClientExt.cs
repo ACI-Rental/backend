@@ -8,11 +8,6 @@ namespace ACI.Images.Test.Integration.Fixtures
 {
     public static class HttpClientExt
     {
-        public static async Task<HttpResponseMessage> PostCreateImage(this HttpClient client, UploadImageRequest request)
-        {
-            return await client.PostAsJsonAsync("image", request);
-        }
-
         public static async Task<HttpResponseMessage> GetImageByProductId(this HttpClient client, Guid productId)
         {
             return await client.GetAsync($"image/{productId}");
