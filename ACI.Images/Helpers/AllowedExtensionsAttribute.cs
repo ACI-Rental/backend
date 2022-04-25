@@ -14,7 +14,7 @@ namespace ACI.Images.Helpers
         {
             _extensions = extensions.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
-    
+
         protected override ValidationResult IsValid(
             object? value, ValidationContext validationContext)
         {
@@ -27,8 +27,8 @@ namespace ACI.Images.Helpers
                     return new ValidationResult(GetErrorMessage());
                 }
             }
-        
-            return ValidationResult.Success ?? throw new ApplicationException("Unknown validation exception");
+
+            return ValidationResult.Success;
         }
 
         public string GetErrorMessage()
