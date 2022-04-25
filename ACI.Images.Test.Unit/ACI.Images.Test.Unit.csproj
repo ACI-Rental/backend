@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ACI.Images\ACI.Images.csproj" />
-    <ProjectReference Include="..\ProductService\ProductService.csproj" />
   </ItemGroup>
 
 </Project>

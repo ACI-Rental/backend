@@ -16,7 +16,7 @@ namespace ACI.Images.Helpers
         }
     
         protected override ValidationResult IsValid(
-            object value, ValidationContext validationContext)
+            object? value, ValidationContext validationContext)
         {
             var file = value as IFormFile;
             if (file != null)
@@ -28,7 +28,7 @@ namespace ACI.Images.Helpers
                 }
             }
         
-            return ValidationResult.Success;
+            return ValidationResult.Success ?? throw new ApplicationException("Unknown validation exception");
         }
 
         public string GetErrorMessage()

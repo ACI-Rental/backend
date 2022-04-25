@@ -107,7 +107,7 @@ namespace ACI.Images.Test.Unit
         }
 
         [Fact]
-        public async Task Get_Image_By_ProductId_Succeeds()
+        public void Get_Image_By_ProductId_Succeeds()
         {
             //Arrange
             var request = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");
@@ -115,14 +115,14 @@ namespace ACI.Images.Test.Unit
 
             _mockImageRepo
             .Setup(s => s.GetProductImageBlobByProductId(request))
-            .ReturnsAsync(new ProductImageBlob { ProductId = new Guid("022e4d43-e585-4eb2-b864-0faab2bf3a4d"), Id = new Guid("b724a2c0-5eae-4727-a5b1-d75156148c80"), BlobId = blobId });
+            .Returns(new ProductImageBlob { ProductId = new Guid("022e4d43-e585-4eb2-b864-0faab2bf3a4d"), Id = new Guid("b724a2c0-5eae-4727-a5b1-d75156148c80"), BlobId = blobId });
 
             _mockImageRepo
             .Setup(s => s.GetBlobUrlFromBlobId(blobId))
-            .ReturnsAsync(blobId);
+            .Returns(blobId);
 
             //Act
-            var result = await _imageService.GetImageById(request);
+            var result = _imageService.GetImageById(request);
 
             //Assert
             result.ShouldBeRight(r =>
@@ -133,17 +133,17 @@ namespace ACI.Images.Test.Unit
         }
 
         [Fact]
-        public async Task Get_Image_By_ProductId_Fails_NoImage()
+        public void Get_Image_By_ProductId_Fails_NoImage()
         {
             //Arrange
             var request = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");
 
             _mockImageRepo
             .Setup(s => s.GetProductImageBlobByProductId(request))
-            .ReturnsAsync(AppErrors.ImageNotFoundError);
+            .Returns(AppErrors.ImageNotFoundError);
 
             //Act
-            var result = await _imageService.GetImageById(request);
+            var result = _imageService.GetImageById(request);
 
             //Assert
             result.ShouldBeLeft(r =>
@@ -153,7 +153,7 @@ namespace ACI.Images.Test.Unit
         }
 
         [Fact]
-        public async Task Get_Image_By_ProductId_Fails_NoBlobUrl()
+        public void Get_Image_By_ProductId_Fails_NoBlobUrl()
         {
             //Arrange
             var request = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");
@@ -161,14 +161,14 @@ namespace ACI.Images.Test.Unit
 
             _mockImageRepo
             .Setup(s => s.GetProductImageBlobByProductId(request))
-            .ReturnsAsync(new ProductImageBlob { ProductId = new Guid("022e4d43-e585-4eb2-b864-0faab2bf3a4d"), Id = new Guid("b724a2c0-5eae-4727-a5b1-d75156148c80"), BlobId = blobId });
+            .Returns(new ProductImageBlob { ProductId = new Guid("022e4d43-e585-4eb2-b864-0faab2bf3a4d"), Id = new Guid("b724a2c0-5eae-4727-a5b1-d75156148c80"), BlobId = blobId });
 
             _mockImageRepo
             .Setup(s => s.GetBlobUrlFromBlobId(blobId))
-            .ReturnsAsync(Option<string>.None);
+            .Returns(Option<string>.None);
 
             //Act
-            var result = await _imageService.GetImageById(request);
+            var result = _imageService.GetImageById(request);
 
             //Assert
             result.ShouldBeLeft(r =>
@@ -186,7 +186,7 @@ namespace ACI.Images.Test.Unit
 
             _mockImageRepo
             .Setup(s => s.GetProductImageBlobByProductId(request))
-            .ReturnsAsync(new ProductImageBlob { ProductId = new Guid("022e4d43-e585-4eb2-b864-0faab2bf3a4d"), Id = new Guid("b724a2c0-5eae-4727-a5b1-d75156148c80"), BlobId = blobId });
+            .Returns(new ProductImageBlob { ProductId = new Guid("022e4d43-e585-4eb2-b864-0faab2bf3a4d"), Id = new Guid("b724a2c0-5eae-4727-a5b1-d75156148c80"), BlobId = blobId });
 
             //Act
             var result = await _imageService.DeleteImageById(request);
@@ -206,7 +206,7 @@ namespace ACI.Images.Test.Unit
 
             _mockImageRepo
             .Setup(s => s.GetProductImageBlobByProductId(request))
-            .ReturnsAsync(AppErrors.ImageNotFoundError);
+            .Returns(AppErrors.ImageNotFoundError);
 
             //Act
             var result = await _imageService.DeleteImageById(request);
@@ -226,7 +226,7 @@ namespace ACI.Images.Test.Unit
 
             _mockImageRepo
             .Setup(s => s.GetProductImageBlobByProductId(request))
-            .ReturnsAsync(AppErrors.ImageAlreadyDeletedError);
+            .Returns(AppErrors.ImageAlreadyDeletedError);
 
             //Act
             var result = await _imageService.DeleteImageById(request);

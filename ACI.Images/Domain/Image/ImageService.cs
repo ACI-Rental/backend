@@ -32,9 +32,9 @@ namespace ACI.Images.Domain.Image
             });
         }
 
-        public async Task<Either<IError, ImageResponse>> GetImageById(Guid productId)
+        public Either<IError, ImageResponse> GetImageById(Guid productId)
         {
-            var result = await _imageRepository.GetProductImageBlobByProductId(productId);
+            var result = _imageRepository.GetProductImageBlobByProductId(productId);
 
             if (result.IsLeft)
             {
@@ -42,7 +42,7 @@ namespace ACI.Images.Domain.Image
                 return AppErrors.ImageNotFoundError;
             }
 
-            var blobUri = await _imageRepository.GetBlobUrlFromBlobId(result.ValueUnsafe().BlobId);
+            var blobUri = _imageRepository.GetBlobUrlFromBlobId(result.ValueUnsafe().BlobId);
 
             if (blobUri.IsNone)
             {
@@ -63,7 +63,7 @@ namespace ACI.Images.Domain.Image
 
         public async Task<Either<IError, Unit>> DeleteImageById(Guid productId)
         {
-            var productImageBlob = await _imageRepository.GetProductImageBlobByProductId(productId);
+            var productImageBlob = _imageRepository.GetProductImageBlobByProductId(productId);
 
             if (productImageBlob.IsNull())
             {

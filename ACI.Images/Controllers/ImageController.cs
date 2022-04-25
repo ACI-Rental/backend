@@ -23,11 +23,11 @@ namespace ACI.Images.Controllers
         }
 
         [HttpGet("{productId:guid}")]
-        public async Task<IActionResult> GetImage(Guid productId)
+        public IActionResult GetImage(Guid productId)
         {
             _logger.LogInformation("Getting Image by id {ProductId}", productId);
 
-            var result = await _imageService.GetImageById(productId);
+            var result = _imageService.GetImageById(productId);
 
             return result.Right<IActionResult>(x => Ok(x)).Left(err => BadRequest(err));
         }

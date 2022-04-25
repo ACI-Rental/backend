@@ -60,7 +60,7 @@ namespace ACI.Images.Data.Repositories
             return productImageBlob;
         }
 
-        public async Task<Either<IError, ProductImageBlob>> GetProductImageBlobByProductId(Guid productId)
+        public Either<IError, ProductImageBlob> GetProductImageBlobByProductId(Guid productId)
         {
             var image = _context.Images.FirstOrDefault(x => x.ProductId == productId);
 
@@ -69,7 +69,7 @@ namespace ACI.Images.Data.Repositories
             return image;
         }
         
-        public async Task<Option<string>> GetBlobUrlFromBlobId(string blobId)
+        public Option<string> GetBlobUrlFromBlobId(string blobId)
         {
             BlobClient blob = _blobContainerClient.GetBlobClient(blobId);
 
