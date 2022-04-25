@@ -18,6 +18,11 @@ public static class HttpClientExt
         return await client.PostAsJsonAsync("products", request);
     }
 
+    public static async Task<HttpResponseMessage> PostCreateNote(this HttpClient client, CreateNoteRequest request)
+    {
+        return await client.PostAsJsonAsync("notes", request);
+    }
+
     public static async Task<HttpResponseMessage> GetAllProducts(this HttpClient client)
     {
         return await client.GetAsync("products");

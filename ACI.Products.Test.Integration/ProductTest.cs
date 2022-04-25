@@ -93,19 +93,6 @@ public class ProductTest : IClassFixture<ProductAppFactory>
     }
 
     [Fact]
-    public async void GetAllProducts_ReturnsExpectedAmount()
-    {
-        // Arrange
-        var expectedProductCount = DbSetup.ProductsPerCategory * DbSetup.GetCategories().Count;
-
-        // Act
-        var result = await GetAllProducts();
-
-        // Assert
-        result.Count.Should().Be(expectedProductCount);
-    }
-
-    [Fact]
     public async void GetProductById_Returns_SuccessResult()
     {
         // Arrange
@@ -126,7 +113,12 @@ public class ProductTest : IClassFixture<ProductAppFactory>
     public async void DeleteProductById_Returns_Success()
     {
         // Arrange
-        var allProducts = await GetAllProducts();
+        var res = await _apiClient.GetAllProducts();
+        res.EnsureSuccessStatusCode();
+
+        var allProducts = await res.Content.ReadFromJsonAsync<List<ProductResponse>>()
+               ?? throw new ArgumentException("Unable to deserialize list of products");
+
         var searchProduct = allProducts.First();
 
         // Act
