@@ -1,0 +1,73 @@
+{
+    "Routes": [
+        {
+            "DownstreamPathTemplate": "/products/{all}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5010
+                }
+            ],
+            "UpstreamPathTemplate": "/api/products/{all}"
+        },
+        {
+            "DownstreamPathTemplate": "/products/",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5010
+                }
+            ],
+            "UpstreamPathTemplate": "/api/products/"
+        },
+        {
+            "DownstreamPathTemplate": "/Category/{all}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5010
+                }
+            ],
+            "UpstreamPathTemplate": "/api/Category/{all}"
+        },
+        {
+            "DownstreamPathTemplate": "/Category/",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5010
+                }
+            ],
+            "UpstreamPathTemplate": "/api/Category/"
+        },
+        {
+            "DownstreamPathTemplate": "/reservations/{all}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5030
+                }
+            ],
+            "UpstreamPathTemplate": "/api/reservations/{all}"
+        },
+        {
+            "DownstreamPathTemplate": "/reservations/",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5030
+                }
+            ],
+            "UpstreamPathTemplate": "/api/reservations/"
+        }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl": "https:/localhost:5001"
+    }
+}
