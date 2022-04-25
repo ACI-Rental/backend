@@ -18,12 +18,10 @@ namespace ACI.Images.Test.Integration.Fixtures
 
         public static List<ProductImageBlob> GetImages(int amount = Images)
         {
-            var guid = Guid.NewGuid();
-
             return new Faker<ProductImageBlob>()
-                .RuleFor(p => p.Id, guid)
+                .RuleFor(p => p.Id, f => f.Random.Guid())
                 .RuleFor(p => p.BlobId, "testString")
-                .RuleFor(p => p.ProductId, guid)
+                .RuleFor(p => p.ProductId, f => f.Random.Guid())
                 .Generate(amount);
         }
     }

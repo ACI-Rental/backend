@@ -2,11 +2,7 @@ using ACI.Images.Data;
 using ACI.Images.Data.Repositories;
 using ACI.Images.Data.Repositories.Interfaces;
 using ACI.Images.Domain.Image;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,3 +44,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program
+{
+    // Expose the Program class for use with WebApplicationFactory<T>
+}
