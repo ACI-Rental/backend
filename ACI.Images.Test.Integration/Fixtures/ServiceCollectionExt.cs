@@ -1,10 +1,10 @@
-﻿using Aci.Images.Test.Integration;
+﻿using System;
+using System.Linq;
 using ACI.Images.Data;
+using Aci.Images.Test.Integration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
 
 namespace ACI.Images.Test.Integration.Fixtures
 {

@@ -1,8 +1,8 @@
-﻿using ACI.Images.Data;
+﻿using System;
+using System.Collections.Generic;
+using ACI.Images.Data;
 using ACI.Images.Models;
 using Bogus;
-using System;
-using System.Collections.Generic;
 
 namespace ACI.Images.Test.Integration.Fixtures
 {

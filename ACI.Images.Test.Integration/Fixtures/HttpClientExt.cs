@@ -1,7 +1,5 @@
-﻿using ACI.Images.Models.DTO;
-using System;
+﻿using System;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace ACI.Images.Test.Integration.Fixtures
