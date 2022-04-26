@@ -38,6 +38,7 @@ public class NotesController : BaseController
             .None(NotFound);
     }
 
+    [HttpPost]
     [Authorize(Roles = "employee")]
     public async Task<IActionResult> AddNote([FromBody] CreateNoteRequest request)
     {
