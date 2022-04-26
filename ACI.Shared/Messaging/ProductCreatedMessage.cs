@@ -1,9 +1,8 @@
 ﻿using System;
-using ACI.Reservations.Models.DTO;
 
-namespace ACI.Reservations.Models
+namespace ACI.Shared.Messaging
 {
-    public class ProductDTO
+    public class ProductCreatedMessage
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

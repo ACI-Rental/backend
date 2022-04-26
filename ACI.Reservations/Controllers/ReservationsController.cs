@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ACI.Reservations.Domain;
+using ACI.Reservations.Domain.Messaging;
+using ACI.Reservations.Messaging.Consumers;
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Services.Interfaces;
@@ -17,8 +19,6 @@ namespace ACI.Reservations.Controllers
     {
         private readonly IReservationService _reservationService;
         private readonly ILogger<ReservationsController> _logger;
-        private readonly IBus _bus;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ReservationController"/> class.
         /// Constructor is used to define Interfaces.
@@ -26,31 +26,12 @@ namespace ACI.Reservations.Controllers
         /// <param name="reservationService">Interface for the ReservationService.</param>
         /// <param name="logger">This is the logger that logs application actions.</param>
         /// <param name="bus">This is the messaging bus.</param>
-        public ReservationsController(IReservationService reservationService, ILogger<ReservationsController> logger, IBus bus)
+        public ReservationsController(IReservationService reservationService, ILogger<ReservationsController> logger, IBus bus, ProductCreatedConsumer createdConsumer, IProductMessaging productMessaging)
         {
             _reservationService = reservationService;
             _logger = logger;
-            _bus = bus;
         }
-
-        [HttpGet("HelloMessage")]
-        public async Task<IActionResult> HelloMessage()
-        {
-            string message = "Hello Message";
-            
-            var helloWorldMessage = new HelloWorldMessage()
-            {
-                Message = message,
-            };
-
-            Uri uri = new Uri("rabbitmq://localhost/ticketQueue");
-            var endPoint = await _bus.GetSendEndpoint(uri);
-
-            await endPoint.Send(helloWorldMessage);
-
-            return Ok(helloWorldMessage);
-        }
-
+        
         /// <summary>
         /// Get all the Reservations from the database.
         /// </summary>

@@ -1,10 +1,20 @@
+using System;
+using ACI.Products.Consumers;
 using ACI.Products.Data;
 using ACI.Products.Data.Repositories;
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Domain.Category;
 using ACI.Products.Domain.Product;
+using ACI.Products.Messaging;
+using ACI.Reservations.Models;
 using ACI.Shared;
+using GreenPipes;
+using MassTransit;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -46,30 +56,33 @@ void Run()
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+    builder.Services.AddScoped<IProductMessaging, ProductMessaging>();
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     
     
+    // Bind app settings to configurations
+    builder.Services
+        .AddOptions<AppConfig>()
+        .Bind(builder.Configuration.GetSection(AppConfig.Key))
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+    
     builder.Services.AddMassTransit(x =>
     {
-        x.AddConsumer<TicketConsumer>();
-        x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+        x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
         {
-            cfg.UseHealthCheck(provider);
-            cfg.Host(new Uri("rabbitmq://localhost"),h =>
+            // config.UseHealthCheck(provider);
+            config.Host(new Uri(builder.Configuration.GetSection(AppConfig.Key)["RabbitMQBaseUrl"]), h =>
             {
                 h.Username("guest");
                 h.Password("guest");
             });
-            cfg.ReceiveEndpoint("ticketQueue", ep =>
-            {
-                ep.PrefetchCount = 16;
-                ep.UseMessageRetry(r => r.Interval(2, 100));
-                ep.ConfigureConsumer<TicketConsumer>(provider);
-            });
         }));
     });
+    
     builder.Services.AddMassTransitHostedService();
 
     var app = builder.Build();
