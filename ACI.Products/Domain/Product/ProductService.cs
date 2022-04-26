@@ -66,4 +66,11 @@ public class ProductService : IProductService
 
         return result.Select(ProductResponse.MapFromModel).ToList();
     }
+
+    public async Task<Either<IError, ProductResponse>> EditProduct(ProductUpdateRequest request)
+    {
+        var result = await _repository.EditProduct(request);
+
+        return result.Map(ProductResponse.MapFromModel);
+    }
 }

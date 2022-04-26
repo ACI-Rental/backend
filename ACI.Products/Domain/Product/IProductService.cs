@@ -14,4 +14,6 @@ public interface IProductService
     public Task<List<ProductResponse>> GetCategoryProducts(int categoryId);
 
     public Task<List<ProductResponse>> GetAllProducts();
+
+    public Task<Either<IError, ProductResponse>> EditProduct(ProductUpdateRequest request);
 }

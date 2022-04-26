@@ -1,8 +1,10 @@
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Domain;
 using ACI.Products.Models;
+using ACI.Products.Models.DTO;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
+#pragma warning disable CS8600
 
 namespace ACI.Products.Data.Repositories;
 
@@ -59,5 +61,26 @@ public class ProductRepository : IProductRepository
     public async Task<List<Product>> GetAllProducts()
     {
         return await _ctx.Products.Where(x => !x.IsDeleted).ToListAsync();
+    }
+
+    public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
+    {
+        Product retrievedProduct = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == request.Id);
+
+        // check category
+
+        if (retrievedProduct == null)
+        {
+            _logger.LogInformation("Editing product {Product} failed with error {Error}", request.CategoryId, AppErrors.ProductNotFoundError);
+            return AppErrors.ProductNotFoundError;
+        }
+
+        retrievedProduct.Name = request.Name;
+        retrievedProduct.Description = request.Description;
+        retrievedProduct.RequiresApproval = request.RequiresApproval;
+        retrievedProduct.CategoryId = request.CategoryId;
+
+        await _ctx.SaveChangesAsync();
+        return retrievedProduct;
     }
 }

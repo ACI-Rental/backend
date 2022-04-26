@@ -66,4 +66,21 @@ public class ProductsController : BaseController
             .Right<IActionResult>(_ => NoContent())
             .Left(BadRequest);
     }
+
+    [HttpPut]
+    public async Task<IActionResult> EditProduct([FromBody] ProductUpdateRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        _logger.LogInformation("Editing product {Product}", request);
+
+        var result = await _service.EditProduct(request);
+
+        return result
+            .Right<IActionResult>(Ok)
+            .Left(BadRequest);
+    }
 }

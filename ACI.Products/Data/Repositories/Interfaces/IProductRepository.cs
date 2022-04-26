@@ -1,5 +1,6 @@
 using ACI.Products.Domain;
 using ACI.Products.Models;
+using ACI.Products.Models.DTO;
 using LanguageExt;
 
 namespace ACI.Products.Data.Repositories.Interfaces;
@@ -15,4 +16,6 @@ public interface IProductRepository
     public Task<Either<IError, Unit>> DeleteProduct(Product product);
 
     public Task<List<Product>> GetAllProducts();
+
+    public Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request);
 }
