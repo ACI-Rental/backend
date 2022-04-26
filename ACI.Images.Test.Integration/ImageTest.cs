@@ -98,5 +98,43 @@ namespace Aci.Images.Test.Integration
 
             foundImage.ProductId.Should().Be(productId);
         }
+
+        [Fact]
+        public async void GetImageByProductId_Returns_ErrorResult()
+        {
+            // Arrange
+            var productId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019E"); //Should be no image with this guid
+
+            // Act
+            var result = await _apiClient.GetImageByProductId(productId);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var expectedError = AppErrors.ImageNotFoundError;
+            var error = await result.Content.ReadFromJsonAsync<IError>();
+
+            error.Should().NotBeNull();
+            error.Should().Be(expectedError);
+        }
+
+        [Fact]
+        public async void DeleteImageByProductId_Returns_ErrorResult()
+        {
+            // Arrange
+            var productId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019E"); //No image with this productId
+
+            // Act
+            var result = await _apiClient.DeleteImageByProductId(productId);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var expectedError = AppErrors.ImageAlreadyDeletedError;
+            var error = await result.Content.ReadFromJsonAsync<IError>();
+
+            error.Should().NotBeNull();
+            error.Should().Be(expectedError);
+        }
     }
 }

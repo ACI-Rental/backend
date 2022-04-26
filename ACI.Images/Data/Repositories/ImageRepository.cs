@@ -1,18 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using ACI.Images.Data.Repositories.Interfaces;
+﻿using ACI.Images.Data.Repositories.Interfaces;
 using ACI.Images.Domain;
 using ACI.Images.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using LanguageExt;
-using LanguageExt.Pretty;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace ACI.Images.Data.Repositories
 {
@@ -64,7 +56,10 @@ namespace ACI.Images.Data.Repositories
         {
             var image = _context.Images.FirstOrDefault(x => x.ProductId == productId);
 
-            if (image == null) return AppErrors.ImageNotFoundError;
+            if (image == null)
+            {
+                return AppErrors.ImageNotFoundError;
+            }
 
             return image;
         }

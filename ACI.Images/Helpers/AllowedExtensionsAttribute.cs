@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ACI.Images.Helpers
 {

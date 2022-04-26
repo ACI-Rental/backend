@@ -1,10 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using ACI.Images.Domain;
+﻿using ACI.Images.Domain;
 using ACI.Images.Models;
 using LanguageExt;
-using LanguageExt.ClassInstances;
-using Microsoft.AspNetCore.Http;
 
 namespace ACI.Images.Data.Repositories.Interfaces
 {

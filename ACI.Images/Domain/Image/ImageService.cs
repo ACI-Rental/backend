@@ -1,5 +1,4 @@
-﻿using System;
-using ACI.Images.Data.Repositories.Interfaces;
+﻿using ACI.Images.Data.Repositories.Interfaces;
 using ACI.Images.Models.DTO;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
