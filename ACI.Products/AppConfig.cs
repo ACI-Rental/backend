@@ -9,5 +9,8 @@ namespace ACI.Reservations.Models
         
         [Required]
         public Uri RabbitMQBaseUrl { get; set; }
+
+        public string RabbitMQUsername { get; set; }
+        public string RabbitMQPassword  { get; set; }
     }
 }
