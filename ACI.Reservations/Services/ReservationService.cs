@@ -86,8 +86,7 @@ namespace ACI.Reservations.Services
             }
             
             var productResult = await _productRepository.GetProductById(productReservationDTO.ProductId);
-            
-            if (!productResult.IsNone)
+            if (productResult.IsNone)
             {
                 return AppErrors.ProductNotFoundError;
             }
@@ -154,7 +153,7 @@ namespace ACI.Reservations.Services
             
             var productResult = await _productRepository.GetProductById(productReservationDTO.ProductId);
 
-            if (!productResult.IsNone)
+            if (productResult.IsNone)
             {
                 return AppErrors.ProductDoesNotExist;
             }
