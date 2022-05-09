@@ -8,5 +8,6 @@ namespace ACI.Products.Messaging
     public interface IProductMessaging
     {
         Task SendProductResponse(ProductCreatedMessage productCreatedMessage);
+        Task SendProductDeletedMessage(ProductDeletedMessage productDeletedMessage);
     }
 }

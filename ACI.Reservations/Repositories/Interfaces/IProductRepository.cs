@@ -11,5 +11,6 @@ namespace ACI.Reservations.Repositories.Interfaces
     {
         public Task<Either<IError, Product>> AddProduct(Product product);
         public Task<Option<Product>> GetProductById(Guid id);
+        public Task<Option<Unit>> DeleteProductById(Guid id);
     }
 }

@@ -70,6 +70,16 @@ public class ProductService : IProductService
         }
 
         await _repository.DeleteProduct(product);
+
+
+        var productDeletedMessage = new ProductDeletedMessage()
+        {
+            Id = product.Id,
+            IsDeleted = true
+        };
+
+        await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
+        
         return Unit.Default;
     }
 

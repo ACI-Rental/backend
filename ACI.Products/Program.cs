@@ -76,8 +76,8 @@ void Run()
             // config.UseHealthCheck(provider);
             config.Host(new Uri(builder.Configuration.GetSection(AppConfig.Key)["RabbitMQBaseUrl"]), h =>
             {
-                h.Username("guest");
-                h.Password("guest");
+                h.Username(builder.Configuration.GetSection(AppConfig.Key)["RabbitMQUsername"]);
+                h.Password(builder.Configuration.GetSection(AppConfig.Key)["RabbitMQPassword"]);
             });
         }));
     });

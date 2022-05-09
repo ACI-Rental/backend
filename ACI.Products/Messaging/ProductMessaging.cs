@@ -12,21 +12,31 @@ namespace ACI.Products.Messaging
 {
     public class ProductMessaging : IProductMessaging
     {
-        private const string ProductQueue = "productCreatedQueue";
-        private readonly Uri _rabbitMQProductQueue;
+        private const string ProductCreatedQueue = "productCreatedQueue";
+        private const string ProductDeletedQueue = "productDeletedQueue";
+        private readonly Uri _rabbitMQProductCreatedQueue;
+        private readonly Uri _rabbitMQProductDeletedQueue;
         private readonly IBus _bus;
         
         public ProductMessaging(IOptions<AppConfig> options, IBus bus)
         {
-            _rabbitMQProductQueue = new Uri($"{options.Value.RabbitMQBaseUrl}/{ProductQueue}");
+            _rabbitMQProductCreatedQueue = new Uri($"{options.Value.RabbitMQBaseUrl}/{ProductCreatedQueue}");
+            _rabbitMQProductCreatedQueue = new Uri($"{options.Value.RabbitMQBaseUrl}/{ProductDeletedQueue}");
             _bus = bus;
         }
 
         public async Task SendProductResponse(ProductCreatedMessage productCreatedMessage)
         {
-            var endPoint = await _bus.GetSendEndpoint(_rabbitMQProductQueue);
+            var endPoint = await _bus.GetSendEndpoint(_rabbitMQProductCreatedQueue);
             
             await endPoint.Send(productCreatedMessage);
+        }
+
+        public async Task SendProductDeletedMessage(ProductDeletedMessage productDeletedMessage)
+        {
+            var endPoint = await _bus.GetSendEndpoint(_rabbitMQProductCreatedQueue);
+            
+            await endPoint.Send(productDeletedMessage);
         }
     }
 }

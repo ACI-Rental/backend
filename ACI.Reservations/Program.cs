@@ -54,6 +54,7 @@ void Run()
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<ProductCreatedConsumer>();
+        x.AddConsumer<ProductDeletedConsumer>();
         
         x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
         {
@@ -69,6 +70,13 @@ void Run()
                 ep.PrefetchCount = 16;
                 ep.UseMessageRetry(r => r.Interval(2, 100));
                 ep.ConfigureConsumer<ProductCreatedConsumer>(provider);
+            });
+            config.ReceiveEndpoint("productDeletedQueue", ep =>
+            {
+                ep.PrefetchCount = 16;
+                ep.UseMessageRetry(r => r.Interval(2, 100));
+                ep.ConfigureConsumer<ProductCreatedConsumer>(provider);
+                ep.ConfigureConsumer<ProductDeletedConsumer>(provider);
             });
         }));
     });
