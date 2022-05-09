@@ -21,7 +21,7 @@ namespace ACI.Reservations.Messaging.Consumers
         
         public async Task Consume(ConsumeContext<ProductCreatedMessage> context)
         {
-            _logger.LogInformation("Consuming");
+            _logger.LogInformation("Consuming ProductCreatedMessage",  context);
             
             var product = new Product()
             {
