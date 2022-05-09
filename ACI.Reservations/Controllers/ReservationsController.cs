@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ACI.Reservations.Domain;
-using ACI.Reservations.Domain.Messaging;
 using ACI.Reservations.Messaging.Consumers;
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
@@ -26,7 +25,7 @@ namespace ACI.Reservations.Controllers
         /// <param name="reservationService">Interface for the ReservationService.</param>
         /// <param name="logger">This is the logger that logs application actions.</param>
         /// <param name="bus">This is the messaging bus.</param>
-        public ReservationsController(IReservationService reservationService, ILogger<ReservationsController> logger, IBus bus, ProductCreatedConsumer createdConsumer, IProductMessaging productMessaging)
+        public ReservationsController(IReservationService reservationService, ILogger<ReservationsController> logger, IBus bus, ProductCreatedConsumer createdConsumer)
         {
             _reservationService = reservationService;
             _logger = logger;

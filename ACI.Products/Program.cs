@@ -1,5 +1,4 @@
 using System;
-using ACI.Products.Consumers;
 using ACI.Products.Data;
 using ACI.Products.Data.Repositories;
 using ACI.Products.Data.Repositories.Interfaces;

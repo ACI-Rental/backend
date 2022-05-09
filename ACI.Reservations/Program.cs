@@ -1,7 +1,6 @@
 using System;
 using ACI.Reservations.DBContext;
 using ACI.Reservations.Domain;
-using ACI.Reservations.Domain.Messaging;
 using ACI.Reservations.Messaging;
 using ACI.Reservations.Messaging.Consumers;
 using ACI.Reservations.Models;
