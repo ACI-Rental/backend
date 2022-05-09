@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ACI.Reservations.DBContext;
 using ACI.Reservations.Domain;
-using ACI.Reservations.Domain.Messaging;
 using ACI.Reservations.Models;
 using ACI.Reservations.Repositories.Interfaces;
 using LanguageExt;
+using Microsoft.EntityFrameworkCore;
 
 namespace ACI.Reservations.Repositories
 {
@@ -22,6 +23,13 @@ namespace ACI.Reservations.Repositories
             var result = await _dbContext.Products.AddAsync(product);
             await _dbContext.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public async Task<Option<Product>> GetProductById(Guid id)
+        {
+            return await _dbContext.Products
+                    .Where(x => !x.IsDeleted)
+                    .FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
         }
     }
 }
