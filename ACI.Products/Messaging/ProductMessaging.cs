@@ -34,7 +34,7 @@ namespace ACI.Products.Messaging
 
         public async Task SendProductDeletedMessage(ProductDeletedMessage productDeletedMessage)
         {
-            var endPoint = await _bus.GetSendEndpoint(_rabbitMQProductCreatedQueue);
+            var endPoint = await _bus.GetSendEndpoint(_rabbitMQProductDeletedQueue);
             
             await endPoint.Send(productDeletedMessage);
         }
