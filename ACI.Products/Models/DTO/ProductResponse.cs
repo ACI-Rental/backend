@@ -1,8 +1,10 @@
+using System;
+
 namespace ACI.Products.Models.DTO;
 
 public class ProductResponse
 {
-    public Guid Id { get; }
+    public Guid Id { get;}
     public string Name { get; }
     public string Description { get; }
     public bool RequiresApproval { get; }

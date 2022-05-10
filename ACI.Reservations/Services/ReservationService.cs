@@ -1,4 +1,8 @@
-﻿using ACI.Reservations.Domain;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using ACI.Reservations.Domain;
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Repositories.Interfaces;
@@ -6,7 +10,6 @@ using ACI.Reservations.Services.Interfaces;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace ACI.Reservations.Services
 {
@@ -15,17 +18,14 @@ namespace ACI.Reservations.Services
         private const int MaxReservationDays = 5;
 
         private readonly IReservationRepository _reservationRepository;
-        private readonly HttpClient _httpClient;
+        private readonly IProductRepository _productRepository;
         private readonly ITimeProvider _timeProvider;
-        private readonly IProductClient _productClient;
 
-        public ReservationService(IReservationRepository reservationRepository, IOptions<AppConfig> options, HttpClient httpClient, ITimeProvider timeProvider)
+        public ReservationService(IReservationRepository reservationRepository, IOptions<AppConfig> options, ITimeProvider timeProvider, IProductRepository productRepository)
         {
             _reservationRepository = reservationRepository;
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = options.Value.ApiGatewayBaseUrl;
             _timeProvider = timeProvider;
-            _productClient = new ProductClient(_httpClient);
+            _productRepository = productRepository;
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
@@ -84,9 +84,9 @@ namespace ACI.Reservations.Services
             {
                 return result.ValueUnsafe();
             }
-
-            var productResult = await _productClient.GetProduct(productReservationDTO.ProductId);
-            if (!productResult.IsRight)
+            
+            var productResult = await _productRepository.GetProductById(productReservationDTO.ProductId);
+            if (productResult.IsNone)
             {
                 return AppErrors.ProductNotFoundError;
             }
@@ -150,11 +150,10 @@ namespace ACI.Reservations.Services
             {
                 return AppErrors.ReservationIsOverlapping;
             }
+            
+            var productResult = await _productRepository.GetProductById(productReservationDTO.ProductId);
 
-            // TODO: get product from messagebroker to check if it exists.
-            var productResult = await _productClient.GetProduct(productReservationDTO.ProductId);
-
-            if (!productResult.IsRight)
+            if (productResult.IsNone)
             {
                 return AppErrors.ProductDoesNotExist;
             }

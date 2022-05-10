@@ -5,6 +5,7 @@ using ACI.Reservations.Repositories.Interfaces;
 using ACI.Reservations.Services;
 using ACI.Reservations.Services.Interfaces;
 using FluentAssertions;
+using LanguageExt;
 using LanguageExt.UnitTesting;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -25,6 +26,7 @@ namespace ACI.Reservations.Test.Unit
     public class ReservationServiceTests
     {
         private readonly Mock<IReservationRepository> _mockReservationRepository;
+        private readonly Mock<IProductRepository> _mockProductRepository;
         private readonly IReservationService _reservationService;
         private readonly Mock<HttpMessageHandler> _mockMessageHandler;
         private readonly TestData _testData;
@@ -42,6 +44,7 @@ namespace ACI.Reservations.Test.Unit
         public ReservationServiceTests()
         {
             _mockReservationRepository = new Mock<IReservationRepository>();
+            _mockProductRepository = new Mock<IProductRepository>();
 
             var options = Options.Create(new AppConfig() { ApiGatewayBaseUrl = new Uri("https://test.com") });
 
@@ -56,7 +59,7 @@ namespace ACI.Reservations.Test.Unit
 
             _mockTimeProvider = new Mock<ITimeProvider>();
 
-            _reservationService = new ReservationService(_mockReservationRepository.Object, options, new HttpClient(_mockMessageHandler.Object), _mockTimeProvider.Object);
+            _reservationService = new ReservationService(_mockReservationRepository.Object, options, _mockTimeProvider.Object, _mockProductRepository.Object);
 
             _testData = new TestData();
         }
@@ -307,6 +310,16 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(2),
             };
 
+            var returnProduct = new Product()
+            {
+                Id = product.Id,
+                CategoryId = product.CategoryId,
+                Description = product.Description,
+                IsDeleted = false,
+                Name = product.Name,
+                RequiresApproval = product.RequiresApproval,
+            };
+
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
@@ -314,6 +327,10 @@ namespace ACI.Reservations.Test.Unit
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(2),
             };
+
+            _mockProductRepository
+                .Setup(s => s.GetProductById(productReservationDTO.ProductId))
+                .ReturnsAsync(returnProduct);
 
             _mockReservationRepository
                 .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
@@ -673,13 +690,10 @@ namespace ACI.Reservations.Test.Unit
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
-
-            _mockMessageHandler.Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                });
+            
+            _mockProductRepository
+                .Setup(s => s.GetProductById(productReservationDTO.ProductId))
+                .ReturnsAsync(Option<Product>.None);
 
             _mockReservationRepository
                 .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
