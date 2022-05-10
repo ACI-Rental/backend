@@ -21,7 +21,7 @@ public class CreateProductRequest
     [Required]
     public int CategoryId { get; set; }
 
-    public Product ToProduct()
+    public Product MapToModel()
     {
         return new Product
         {

@@ -24,6 +24,9 @@ public class Product
     public bool RequiresApproval { get; set; }
 
     [Required]
+    public DateTime CreatedUTC { get; set; }
+
+    [Required]
     public int CategoryId { get; set; }
 
     [Required]

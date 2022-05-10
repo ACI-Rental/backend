@@ -1,12 +1,13 @@
 using ACI.Products.Domain.Product;
 using ACI.Products.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.Products.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductsController : ControllerBase
+public class ProductsController : BaseController
 {
     private readonly ILogger<ProductsController> _logger;
     private readonly IProductService _service;
@@ -18,6 +19,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> AddProduct([FromBody] CreateProductRequest request)
     {
         if (!ModelState.IsValid)
@@ -54,6 +56,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> DeleteProduct(Guid id)
     {
         _logger.LogInformation("Deleting product by id {ProductId}", id);

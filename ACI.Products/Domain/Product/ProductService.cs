@@ -72,6 +72,7 @@ public class ProductService : IProductService
         await _repository.DeleteProduct(product);
 
 
+
         var productDeletedMessage = new ProductDeletedMessage()
         {
             Id = product.Id,
@@ -85,18 +86,21 @@ public class ProductService : IProductService
     public async Task<Option<ProductResponse>> GetProductById(Guid productId)
     {
         var result = await _repository.GetProductById(productId);
-        return result.Map(ProductResponse.From);
+
+        return result.Map(ProductResponse.MapFromModel);
     }
 
     public async Task<List<ProductResponse>> GetCategoryProducts(int categoryId)
     {
         var result = await _repository.GetProductsByCategory(categoryId);
-        return result.Select(ProductResponse.From).ToList();
+
+        return result.Select(ProductResponse.MapFromModel).ToList();
     }
 
     public async Task<List<ProductResponse>> GetAllProducts()
     {
         var result = await _repository.GetAllProducts();
-        return result.Select(ProductResponse.From).ToList();
+
+        return result.Select(ProductResponse.MapFromModel).ToList();
     }
 }

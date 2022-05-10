@@ -21,7 +21,7 @@ public class ProductResponse
         CategoryId = categoryId;
     }
 
-    public static ProductResponse From(Product model)
+    public static ProductResponse MapFromModel(Product model)
         => new(
             model.Id,
             model.Name,

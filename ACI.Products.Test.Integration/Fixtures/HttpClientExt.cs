@@ -18,14 +18,29 @@ public static class HttpClientExt
         return await client.PostAsJsonAsync("products", request);
     }
 
+    public static async Task<HttpResponseMessage> PostCreateNote(this HttpClient client, CreateNoteRequest request)
+    {
+        return await client.PostAsJsonAsync("notes", request);
+    }
+
     public static async Task<HttpResponseMessage> GetAllProducts(this HttpClient client)
     {
         return await client.GetAsync("products");
     }
 
+    public static async Task<HttpResponseMessage> GetAllNotes(this HttpClient client, Guid productId)
+    {
+        return await client.GetAsync($"notes/product/{productId}");
+    }
+
     public static async Task<HttpResponseMessage> GetProductById(this HttpClient client, Guid productId)
     {
         return await client.GetAsync($"products/{productId}");
+    }
+
+    public static async Task<HttpResponseMessage> GetNoteById(this HttpClient client, Guid noteId)
+    {
+        return await client.GetAsync($"notes/{noteId}");
     }
 
     public static async Task<HttpResponseMessage> DeleteProductById(this HttpClient client, Guid productId)
