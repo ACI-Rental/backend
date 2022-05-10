@@ -50,39 +50,7 @@ public class ProductService : IProductService
 
         return result;
     }
-
-    public async Task<Either<IError, Unit>> DeleteProduct(Guid productId)
-    {
-        var optProduct = await _repository.GetProductById(productId);
-
-        if (optProduct.IsNone)
-        {
-            _logger.LogInformation("Deleting product {ProductId} failed with error {Error}", productId, AppErrors.ProductNotFoundError);
-            return AppErrors.ProductNotFoundError;
-        }
-
-        var product = optProduct.ValueUnsafe();
-
-        if (product.IsDeleted)
-        {
-            _logger.LogInformation("Product {ProductId} is already deleted", productId);
-            return AppErrors.ProductAlreadyDeletedError;
-        }
-
-        await _repository.DeleteProduct(product);
-
-
-
-        var productDeletedMessage = new ProductDeletedMessage()
-        {
-            Id = product.Id,
-        };
-
-        await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
-        
-        return Unit.Default;
-    }
-
+    
     public async Task<Option<ProductResponse>> GetProductById(Guid productId)
     {
         var result = await _repository.GetProductById(productId);
@@ -115,6 +83,13 @@ public class ProductService : IProductService
     {
         var result = await _repository.ArchiveProduct(request);
 
+        var productDeletedMessage = new ProductDeletedMessage()
+        {
+            Id = result.ValueUnsafe().Id,
+        };
+
+        await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
+        
         return result.Map(ProductResponse.MapFromModel);
     }
 }
