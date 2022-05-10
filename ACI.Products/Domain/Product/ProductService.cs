@@ -75,7 +75,6 @@ public class ProductService : IProductService
         var productDeletedMessage = new ProductDeletedMessage()
         {
             Id = product.Id,
-            IsDeleted = true
         };
 
         await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
