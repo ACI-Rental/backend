@@ -1,3 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using ACI.Reservations.Domain;
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
@@ -12,25 +19,12 @@ using Moq;
 using Moq.Contrib.HttpClient;
 using Moq.Protected;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ACI.Reservations.Test.Unit
 {
     public class ReservationServiceTests
     {
-        private readonly Mock<IReservationRepository> _mockReservationRepository;
-        private readonly Mock<IProductRepository> _mockProductRepository;
-        private readonly IReservationService _reservationService;
-        private readonly Mock<HttpMessageHandler> _mockMessageHandler;
-        private readonly TestData _testData;
-        private readonly Mock<ITimeProvider> _mockTimeProvider;
         private static ProductDTO product = new ProductDTO()
         {
             Id = Guid.Parse("66d56f3d-f285-4f11-c9fe-08da17ab56b2"),
@@ -40,6 +34,13 @@ namespace ACI.Reservations.Test.Unit
             IsDeleted = false,
             CategoryId = 1,
         };
+
+        private readonly Mock<IReservationRepository> _mockReservationRepository;
+        private readonly Mock<IProductRepository> _mockProductRepository;
+        private readonly IReservationService _reservationService;
+        private readonly Mock<HttpMessageHandler> _mockMessageHandler;
+        private readonly TestData _testData;
+        private readonly Mock<ITimeProvider> _mockTimeProvider;
 
         public ReservationServiceTests()
         {
@@ -690,7 +691,7 @@ namespace ACI.Reservations.Test.Unit
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
-            
+
             _mockProductRepository
                 .Setup(s => s.GetProductById(productReservationDTO.ProductId))
                 .ReturnsAsync(Option<Product>.None);

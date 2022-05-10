@@ -28,4 +28,3 @@ namespace ACI.Reservations.Models
         public int CategoryId { get; set; }
     }
 }
-

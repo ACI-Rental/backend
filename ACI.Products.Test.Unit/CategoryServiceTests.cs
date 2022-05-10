@@ -25,7 +25,6 @@ public class CategoryServiceTests
         _categoryService = new CategoryService(_mockCategoryRepo.Object, Mock.Of<ILogger<CategoryService>>());
     }
 
-
     [Fact]
     public async Task Creating_NewUniqueCategory_Succeeds()
     {

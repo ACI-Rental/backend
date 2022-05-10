@@ -44,13 +44,13 @@ public class ProductService : IProductService
                 CategoryId = productResponse.CategoryId,
                 RequiresApproval = productResponse.RequiresApproval,
             };
-            
+
             await _productMessaging.SendProductResponse(productCreatedMessage);
         }
 
         return result;
     }
-    
+
     public async Task<Option<ProductResponse>> GetProductById(Guid productId)
     {
         var result = await _repository.GetProductById(productId);
@@ -89,7 +89,7 @@ public class ProductService : IProductService
         };
 
         await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
-        
+
         return result.Map(ProductResponse.MapFromModel);
     }
 }

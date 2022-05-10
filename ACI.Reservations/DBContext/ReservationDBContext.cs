@@ -29,7 +29,7 @@ namespace ACI.Reservations.DBContext
         }
 
         /// <summary>
-        /// Sets the Reservation class, A DbSet represents the collection of all entities in the context
+        /// Gets or sets the Reservation class, A DbSet represents the collection of all entities in the context
         /// or that can be queried from the database, of a given type. DbSet objects are created from
         /// a DbContext using the DbContext.Set method.
         /// </summary>

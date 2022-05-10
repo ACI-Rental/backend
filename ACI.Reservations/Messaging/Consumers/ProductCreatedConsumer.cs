@@ -18,11 +18,11 @@ namespace ACI.Reservations.Messaging.Consumers
             _productRepository = productRepository;
             _logger = logger;
         }
-        
+
         public async Task Consume(ConsumeContext<ProductCreatedMessage> context)
         {
             _logger.LogInformation("Consuming ProductCreatedMessage",  context);
-            
+
             var product = new Product()
             {
                 Id = context.Message.Id,
