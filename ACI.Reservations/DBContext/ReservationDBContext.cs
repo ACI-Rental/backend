@@ -34,5 +34,7 @@ namespace ACI.Reservations.DBContext
         /// a DbContext using the DbContext.Set method.
         /// </summary>
         public DbSet<Reservation> Reservations { get; set; }
+
+        public DbSet<Product> Products { get; set; }
     }
 }

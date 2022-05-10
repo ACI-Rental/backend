@@ -1,10 +1,16 @@
+using System;
 using ACI.Products.Data;
 using ACI.Products.Data.Repositories;
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Domain.Category;
 using ACI.Products.Domain.Note;
 using ACI.Products.Domain.Product;
+using ACI.Products.Messaging;
+using ACI.Reservations.Models;
 using ACI.Shared;
+using GreenPipes;
+using MassTransit;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
@@ -35,7 +41,7 @@ void Run()
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Host.AddAciLogging();
-
+    
     // Add services to the container.
     builder.Services.AddControllers();
 
@@ -62,9 +68,34 @@ void Run()
         options.RequireHttpsMetadata = builder.Environment.IsProduction();
     });
 
+    builder.Services.AddScoped<IProductMessaging, ProductMessaging>();
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    
+    
+    // Bind app settings to configurations
+    builder.Services
+        .AddOptions<AppConfig>()
+        .Bind(builder.Configuration.GetSection(AppConfig.Key))
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+    
+    builder.Services.AddMassTransit(x =>
+    {
+        x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+        {
+            // config.UseHealthCheck(provider);
+            config.Host(new Uri(builder.Configuration.GetSection(AppConfig.Key)["RabbitMQBaseUrl"]), h =>
+            {
+                h.Username(builder.Configuration.GetSection(AppConfig.Key)["RabbitMQUsername"]);
+                h.Password(builder.Configuration.GetSection(AppConfig.Key)["RabbitMQPassword"]);
+            });
+        }));
+    });
+    
+    builder.Services.AddMassTransitHostedService();
 
     var app = builder.Build();
 

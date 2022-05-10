@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.0.4" />
+    <PackageReference Include="MassTransit" Version="7.3.1" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
@@ -28,7 +31,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="ACI.Reservations.Test.Integration"/>
+		<InternalsVisibleTo Include="ACI.Reservations.Test.Integration" />
 	</ItemGroup>
 
 </Project>
