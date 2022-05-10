@@ -21,7 +21,7 @@ namespace ACI.Products.Messaging
         public ProductMessaging(IOptions<AppConfig> options, IBus bus)
         {
             _rabbitMQProductCreatedQueue = new Uri($"{options.Value.RabbitMQBaseUrl}/{ProductCreatedQueue}");
-            _rabbitMQProductCreatedQueue = new Uri($"{options.Value.RabbitMQBaseUrl}/{ProductDeletedQueue}");
+            _rabbitMQProductDeletedQueue = new Uri($"{options.Value.RabbitMQBaseUrl}/{ProductDeletedQueue}");
             _bus = bus;
         }
 
