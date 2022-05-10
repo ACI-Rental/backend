@@ -17,8 +17,5 @@ namespace ACI.Products.Models.DTO
 
         [Required]
         public bool RequiresApproval { get; set; }
-
-        [Required]
-        public int CategoryId { get; set; }
     }
 }

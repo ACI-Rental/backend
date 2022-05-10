@@ -13,9 +13,8 @@ public interface IProductRepository
 
     public Task<Either<IError, Product>> AddProduct(Product product);
 
-    public Task<Either<IError, Unit>> DeleteProduct(Product product);
-
     public Task<List<Product>> GetAllProducts();
 
     public Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request);
+    public Task<Either<IError, Product>> ArchiveProduct(ProductArchiveRequest request);
 }

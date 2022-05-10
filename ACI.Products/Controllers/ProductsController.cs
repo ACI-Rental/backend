@@ -55,19 +55,26 @@ public class ProductsController : BaseController
         return Ok(result);
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpPut("Archive")]
     [Authorize(Roles = "employee")]
-    public async Task<IActionResult> DeleteProduct(Guid id)
+    public async Task<IActionResult> ArchiveProduct([FromBody] ProductArchiveRequest request)
     {
-        _logger.LogInformation("Deleting product by id {ProductId}", id);
-        var result = await _service.DeleteProduct(id);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        _logger.LogInformation("Archiving product {Product}", request);
+
+        var result = await _service.ArchiveProduct(request);
 
         return result
-            .Right<IActionResult>(_ => NoContent())
+            .Right<IActionResult>(Ok)
             .Left(BadRequest);
     }
 
-    [HttpPut]
+    [HttpPut("Edit")]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> EditProduct([FromBody] ProductUpdateRequest request)
     {
         if (!ModelState.IsValid)

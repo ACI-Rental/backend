@@ -23,29 +23,6 @@ public class ProductService : IProductService
         return result.Map(ProductResponse.MapFromModel);
     }
 
-    public async Task<Either<IError, Unit>> DeleteProduct(Guid productId)
-    {
-        var optProduct = await _repository.GetProductById(productId);
-
-        if (optProduct.IsNone)
-        {
-            _logger.LogInformation("Deleting product {ProductId} failed with error {Error}", productId, AppErrors.ProductNotFoundError);
-            return AppErrors.ProductNotFoundError;
-        }
-
-        var product = optProduct.ValueUnsafe();
-
-        if (product.IsDeleted)
-        {
-            _logger.LogInformation("Product {ProductId} is already deleted", productId);
-            return AppErrors.ProductAlreadyDeletedError;
-        }
-
-        await _repository.DeleteProduct(product);
-
-        return Unit.Default;
-    }
-
     public async Task<Option<ProductResponse>> GetProductById(Guid productId)
     {
         var result = await _repository.GetProductById(productId);
@@ -70,6 +47,13 @@ public class ProductService : IProductService
     public async Task<Either<IError, ProductResponse>> EditProduct(ProductUpdateRequest request)
     {
         var result = await _repository.EditProduct(request);
+
+        return result.Map(ProductResponse.MapFromModel);
+    }
+
+    public async Task<Either<IError, ProductResponse>> ArchiveProduct(ProductArchiveRequest request)
+    {
+        var result = await _repository.ArchiveProduct(request);
 
         return result.Map(ProductResponse.MapFromModel);
     }

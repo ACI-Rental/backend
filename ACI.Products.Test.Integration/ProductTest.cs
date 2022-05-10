@@ -110,7 +110,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
     }
 
     [Fact]
-    public async void DeleteProductById_Returns_Success()
+    public async void ArchiveProduct_Returns_Success()
     {
         // Arrange
         var res = await _apiClient.GetAllProducts();
@@ -121,13 +121,100 @@ public class ProductTest : IClassFixture<ProductAppFactory>
 
         var searchProduct = allProducts.First();
 
+        ProductArchiveRequest productArchiveRequest = new()
+        {
+            Id = searchProduct.Id,
+            IsDeleted = true,
+        };
+
         // Act
-        var delResult = await _apiClient.DeleteProductById(searchProduct.Id);
-        var getResult = await _apiClient.GetProductById(searchProduct.Id);
+        var delResult = await _apiClient.ArchiveProduct(productArchiveRequest);
+        var archivedProduct = await delResult.Content.ReadFromJsonAsync<ProductResponse>();
 
         // Assert
-        delResult.StatusCode.Should().Be(HttpStatusCode.NoContent);
-        getResult.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        delResult.StatusCode.Should().Be(HttpStatusCode.OK);
+        archivedProduct.IsDeleted.Should().BeTrue();
+    }
+
+    [Fact]
+    public async void ArchiveProduct_Returns_Error()
+    {
+        // Arrange
+        var res = await _apiClient.GetAllProducts();
+        res.EnsureSuccessStatusCode();
+
+        ProductArchiveRequest productArchiveRequest = new()
+        {
+            Id = Guid.Empty, // product does not exist.
+            IsDeleted = true,
+        };
+
+        // Act
+        var delResult = await _apiClient.ArchiveProduct(productArchiveRequest);
+        var error = await delResult.Content.ReadFromJsonAsync<IError>();
+
+        // Assert
+        delResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var expectedError = AppErrors.ProductNotFoundError;
+        error.Should().NotBeNull();
+        error.Should().Be(expectedError);
+    }
+
+    [Fact]
+    public async void EditProduct_Returns_Success()
+    {
+        // Arrange
+        var res = await _apiClient.GetAllProducts();
+        res.EnsureSuccessStatusCode();
+
+        var allProducts = await res.Content.ReadFromJsonAsync<List<ProductResponse>>()
+               ?? throw new ArgumentException("Unable to deserialize list of products");
+
+        var searchProduct = allProducts.First();
+
+        ProductUpdateRequest productUpdateRequest = new()
+        {
+            Id = searchProduct.Id,
+            Name = "ChangedName",
+            Description = "ChangedDescription",
+            RequiresApproval = true,
+        };
+
+        // Act
+        var editResult = await _apiClient.EditProduct(productUpdateRequest);
+        var changedProduct = await editResult.Content.ReadFromJsonAsync<ProductResponse>();
+
+        // Assert
+        editResult.StatusCode.Should().Be(HttpStatusCode.OK);
+        changedProduct.Name.Should().Be("ChangedName");
+        changedProduct.Description.Should().Be("ChangedDescription");
+    }
+
+    [Fact]
+    public async void EditProduct_Returns_Error()
+    {
+        // Arrange
+        var res = await _apiClient.GetAllProducts();
+        res.EnsureSuccessStatusCode();
+
+        ProductUpdateRequest productUpdateRequest = new()
+        {
+            Id = Guid.Empty, // product does not exist.
+            Name = "ChangedName",
+            Description = "ChangedDescription",
+            RequiresApproval = true,
+        };
+
+        // Act
+        var editResult = await _apiClient.EditProduct(productUpdateRequest);
+        var error = await editResult.Content.ReadFromJsonAsync<IError>();
+
+        // Assert
+        editResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var expectedError = AppErrors.ProductNotFoundError;
+        error.Should().NotBeNull();
+        error.Should().Be(expectedError);
     }
 
     private async Task<List<ProductResponse>> GetAllProducts()
