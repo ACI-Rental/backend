@@ -83,6 +83,11 @@ public class ProductService : IProductService
     {
         var result = await _repository.ArchiveProduct(request);
 
+        if (result.IsLeft)
+        {
+            return AppErrors.ProductNotFoundError;
+        }
+
         var productDeletedMessage = new ProductDeletedMessage()
         {
             Id = result.ValueUnsafe().Id,
