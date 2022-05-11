@@ -79,12 +79,7 @@ namespace ACI.Reservations.Test.Integration
             var response = await _apiClient.GetReservationsByStartDate(monday.AddDays(20));
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
-
-            reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(0);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -128,12 +123,7 @@ namespace ACI.Reservations.Test.Integration
             var response = await _apiClient.GetReservationsByEndDate(monday.AddDays(20));
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
-
-            reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(0);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -177,12 +167,7 @@ namespace ACI.Reservations.Test.Integration
             var response = await _apiClient.GetReservationsByProductId(productId);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
-
-            reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(0);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]

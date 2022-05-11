@@ -16,8 +16,6 @@ namespace ACI.Reservations.Test.Integration.Fixtures
         {
             db.Reservations.AddRange(GetReservations());
             db.SaveChanges();
-
-            db.SaveChanges();
         }
 
         public static void Clean(ReservationDBContext db)

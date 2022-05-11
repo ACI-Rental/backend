@@ -19,81 +19,81 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
         {
-            var result = await _dbContext.Reservations.ToListAsync() ?? Option<List<Reservation>>.None;
+            var result = await _dbContext.Reservations.ToListAsync();
 
-            if (result == Option<List<Reservation>>.None)
+            if (result.Count <= 0)
             {
                 return AppErrors.FailedToFindReservation;
             }
 
-            return result.ValueUnsafe();
+            return result;
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate)
         {
-            var result = await _dbContext.Reservations.Where(x => x.StartDate.Date == startDate.Date).ToListAsync() ?? Option<List<Reservation>>.None;
+            var result = await _dbContext.Reservations.Where(x => x.StartDate.Date == startDate.Date).ToListAsync();
 
-            if (result == Option<List<Reservation>>.None)
+            if (result.Count <= 0)
             {
                 return AppErrors.FailedToFindReservation;
             }
 
-            return result.ValueUnsafe();
+            return result;
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservationsByEndDate(DateTime endDate)
         {
-            var result = await _dbContext.Reservations.Where(x => x.EndDate.Date == endDate.Date).ToListAsync() ?? Option<List<Reservation>>.None;
+            var result = await _dbContext.Reservations.Where(x => x.EndDate.Date == endDate.Date).ToListAsync();
 
-            if (result == Option<List<Reservation>>.None)
+            if (result.Count <= 0)
             {
                 return AppErrors.FailedToFindReservation;
             }
 
-            return result.ValueUnsafe();
+            return result;
         }
 
         public async Task<Either<IError, List<Reservation>>> GetReservationsByProductId(Guid productId)
         {
-            var result = await _dbContext.Reservations.Where(x => x.ProductId == productId).ToListAsync() ?? Option<List<Reservation>>.None;
+            var result = await _dbContext.Reservations.Where(x => x.ProductId == productId).ToListAsync();
 
-            if (result == Option<List<Reservation>>.None)
+            if (result.Count <= 0)
             {
                 return AppErrors.FailedToFindReservation;
             }
 
-            return result.ValueUnsafe();
+            return result;
         }
 
         public async Task<Either<IError, Reservation>> GetReservationByReservationId(Guid reservationId)
         {
-            var result = await _dbContext.Reservations.Where(x => x.Id == reservationId).FirstOrDefaultAsync() ?? Option<Reservation>.None;
+            var result = await _dbContext.Reservations.Where(x => x.Id == reservationId).FirstOrDefaultAsync();
 
-            if (result == Option<Reservation>.None)
+            if (result == null)
             {
                 return AppErrors.FailedToFindReservation;
             }
 
-            return result.ValueUnsafe();
+            return result;
         }
 
         public async Task<Either<IError, Reservation>> GetOverlappingReservation(Guid productId, DateTime startDate, DateTime endDate)
         {
-            var result = await _dbContext.Reservations.Where(x => x.ProductId == productId && x.StartDate <= endDate && startDate < x.EndDate).FirstOrDefaultAsync() ?? Option<Reservation>.None;
+            var result = await _dbContext.Reservations.Where(x => x.ProductId == productId && x.StartDate <= endDate && startDate < x.EndDate).FirstOrDefaultAsync();
 
-            if (result == Option<Reservation>.None)
+            if (result == null)
             {
                 return AppErrors.FailedToFindReservation;
             }
 
-            return result.ValueUnsafe();
+            return result;
         }
 
         public async Task<Either<IError, Reservation>> UpdateReservation(Reservation reservation)
         {
-            var reservationToUpdate = await _dbContext.Reservations.Where(x => x.Id == reservation.Id).FirstOrDefaultAsync() ?? Option<Reservation>.None;
+            var reservationToUpdate = await _dbContext.Reservations.Where(x => x.Id == reservation.Id).FirstOrDefaultAsync();
 
-            if (reservationToUpdate == Option<Reservation>.None)
+            if (reservationToUpdate == null)
             {
                 return AppErrors.FailedToFindReservation;
             }
@@ -102,7 +102,7 @@ namespace ACI.Reservations.Repositories
 
             if (_dbContext.SaveChangesAsync().IsCompletedSuccessfully)
             {
-                return reservationToUpdate.ValueUnsafe();
+                return reservationToUpdate;
             }
 
             return AppErrors.FailedToSaveReservation;
