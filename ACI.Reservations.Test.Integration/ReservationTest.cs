@@ -247,5 +247,44 @@ namespace ACI.Reservations.Test.Integration
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
+
+        [Fact]
+        public async void Reserve_Product_Succes()
+        {
+            // Arrange
+            var newReservation = new ProductReservationDTO()
+            {
+                ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"),
+                RenterId = Guid.NewGuid(),
+                StartDate = GetNextMonday().AddDays(1),
+                EndDate = GetNextMonday().AddDays(2),
+            };
+
+            // Act
+            var response = await _apiClient.ReserveProduct(newReservation);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async void Reserve_Product_Fail_Overlapping()
+        {
+            // Arrange
+            var newReservation = new ProductReservationDTO()
+            {
+                ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"),
+                RenterId = Guid.NewGuid(),
+                StartDate = GetNextMonday().AddDays(1),
+                EndDate = GetNextMonday().AddDays(2),
+            };
+            await _apiClient.ReserveProduct(newReservation);
+
+            // Act
+            var response = await _apiClient.ReserveProduct(newReservation);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
     }
 }

@@ -100,7 +100,7 @@ namespace ACI.Reservations.Repositories
 
             reservationToUpdate = reservation;
 
-            if (_dbContext.SaveChangesAsync().IsCompletedSuccessfully)
+            if (await _dbContext.SaveChangesAsync() > 0)
             {
                 return reservationToUpdate;
             }
