@@ -17,7 +17,7 @@ namespace ACI.Reservations.Repositories
         {
             _dbContext = dbContext;
         }
-        
+
         public async Task<Either<IError, Product>> AddProduct(Product product)
         {
             var result = await _dbContext.Products.AddAsync(product);
@@ -36,7 +36,7 @@ namespace ACI.Reservations.Repositories
         {
             var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
             product.IsDeleted = true;
-            
+
             await _dbContext.SaveChangesAsync();
 
             return Unit.Default;

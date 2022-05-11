@@ -1,8 +1,10 @@
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Domain;
 using ACI.Products.Models;
+using ACI.Products.Models.DTO;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
+#pragma warning disable CS8600
 
 namespace ACI.Products.Data.Repositories;
 
@@ -47,17 +49,42 @@ public class ProductRepository : IProductRepository
         return result.Entity;
     }
 
-    public async Task<Either<IError, Unit>> DeleteProduct(Product product)
-    {
-        product.IsDeleted = true;
-        _ctx.Products.Update(product);
-        await _ctx.SaveChangesAsync();
-
-        return Unit.Default;
-    }
-
     public async Task<List<Product>> GetAllProducts()
     {
-        return await _ctx.Products.Where(x => !x.IsDeleted).ToListAsync();
+        return await _ctx.Products.ToListAsync();
+    }
+
+    public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
+    {
+        Product retrievedProduct = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == request.Id);
+
+        if (retrievedProduct == null)
+        {
+            _logger.LogInformation("Editing product failed with error {Error}", AppErrors.ProductNotFoundError);
+            return AppErrors.ProductNotFoundError;
+        }
+
+        retrievedProduct.Name = request.Name;
+        retrievedProduct.Description = request.Description;
+        retrievedProduct.RequiresApproval = request.RequiresApproval;
+
+        await _ctx.SaveChangesAsync();
+        return retrievedProduct;
+    }
+
+    public async Task<Either<IError, Product>> ArchiveProduct(ProductArchiveRequest request)
+    {
+        Product retrievedProduct = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == request.Id);
+
+        if (retrievedProduct == null)
+        {
+            _logger.LogInformation("Archiving product failed with error {Error}", AppErrors.ProductNotFoundError);
+            return AppErrors.ProductNotFoundError;
+        }
+
+        retrievedProduct.IsDeleted = request.IsDeleted;
+
+        await _ctx.SaveChangesAsync();
+        return retrievedProduct;
     }
 }

@@ -43,8 +43,13 @@ public static class HttpClientExt
         return await client.GetAsync($"notes/{noteId}");
     }
 
-    public static async Task<HttpResponseMessage> DeleteProductById(this HttpClient client, Guid productId)
+    public static async Task<HttpResponseMessage> ArchiveProduct(this HttpClient client, ProductArchiveRequest request)
     {
-        return await client.DeleteAsync($"products/{productId}");
+        return await client.PutAsJsonAsync("products/archive", request);
+    }
+
+    public static async Task<HttpResponseMessage> EditProduct(this HttpClient client, ProductUpdateRequest request)
+    {
+        return await client.PutAsJsonAsync("products/edit", request);
     }
 }

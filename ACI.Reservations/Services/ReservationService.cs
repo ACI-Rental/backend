@@ -84,7 +84,7 @@ namespace ACI.Reservations.Services
             {
                 return result.ValueUnsafe();
             }
-            
+
             var productResult = await _productRepository.GetProductById(productReservationDTO.ProductId);
             if (productResult.IsNone)
             {
@@ -150,7 +150,7 @@ namespace ACI.Reservations.Services
             {
                 return AppErrors.ReservationIsOverlapping;
             }
-            
+
             var productResult = await _productRepository.GetProductById(productReservationDTO.ProductId);
 
             if (productResult.IsNone)

@@ -1,8 +1,4 @@
-﻿using ACI.Reservations.Models;
-using ACI.Reservations.Models.DTO;
-using ACI.Reservations.Test.Integration.Fixtures;
-using FluentAssertions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,6 +6,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using ACI.Reservations.Models;
+using ACI.Reservations.Models.DTO;
+using ACI.Reservations.Test.Integration.Fixtures;
+using FluentAssertions;
 using Xunit;
 
 namespace ACI.Reservations.Test.Integration
@@ -48,7 +48,7 @@ namespace ACI.Reservations.Test.Integration
             var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
 
             reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(100);
+            reservations.Count.Should().Be(101);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace ACI.Reservations.Test.Integration
             var monday = GetNextMonday();
 
             // Act
-            var response = await _apiClient.GetReservationsByStartDate(monday);
+            var response = await _apiClient.GetReservationsByStartDate(monday.AddDays(7));
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -66,7 +66,7 @@ namespace ACI.Reservations.Test.Integration
             var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
 
             reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(100);
+            reservations.Count.Should().Be(98);
         }
 
         [Fact]
@@ -79,12 +79,7 @@ namespace ACI.Reservations.Test.Integration
             var response = await _apiClient.GetReservationsByStartDate(monday.AddDays(20));
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
-
-            reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(0);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -128,12 +123,7 @@ namespace ACI.Reservations.Test.Integration
             var response = await _apiClient.GetReservationsByEndDate(monday.AddDays(20));
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
-
-            reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(0);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -177,12 +167,7 @@ namespace ACI.Reservations.Test.Integration
             var response = await _apiClient.GetReservationsByProductId(productId);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
-
-            reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(0);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -258,6 +243,45 @@ namespace ACI.Reservations.Test.Integration
 
             // Act
             var response = await _apiClient.ExecuteReservationAction(reservationActionDTO);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async void Reserve_Product_Succes()
+        {
+            // Arrange
+            var newReservation = new ProductReservationDTO()
+            {
+                ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"),
+                RenterId = Guid.NewGuid(),
+                StartDate = GetNextMonday().AddDays(1),
+                EndDate = GetNextMonday().AddDays(2),
+            };
+
+            // Act
+            var response = await _apiClient.ReserveProduct(newReservation);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async void Reserve_Product_Fail_Overlapping()
+        {
+            // Arrange
+            var newReservation = new ProductReservationDTO()
+            {
+                ProductId = Guid.Parse("4b45aba7-bd89-4645-8dc1-6f842c5ab7af"),
+                RenterId = Guid.NewGuid(),
+                StartDate = GetNextMonday().AddDays(1),
+                EndDate = GetNextMonday().AddDays(2),
+            };
+            await _apiClient.ReserveProduct(newReservation);
+
+            // Act
+            var response = await _apiClient.ReserveProduct(newReservation);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

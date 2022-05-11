@@ -10,8 +10,8 @@ using ACI.Reservations.Models;
 using ACI.Shared;
 using GreenPipes;
 using MassTransit;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
@@ -41,7 +41,7 @@ void Run()
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Host.AddAciLogging();
-    
+
     // Add services to the container.
     builder.Services.AddControllers();
 
@@ -73,15 +73,14 @@ void Run()
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    
-    
+
     // Bind app settings to configurations
     builder.Services
         .AddOptions<AppConfig>()
         .Bind(builder.Configuration.GetSection(AppConfig.Key))
         .ValidateDataAnnotations()
         .ValidateOnStart();
-    
+
     builder.Services.AddMassTransit(x =>
     {
         x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
@@ -94,7 +93,7 @@ void Run()
             });
         }));
     });
-    
+
     builder.Services.AddMassTransitHostedService();
 
     var app = builder.Build();

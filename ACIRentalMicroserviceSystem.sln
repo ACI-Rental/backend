@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotAPIGateway", "OcelotA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Products", "ACI.Products\ACI.Products.csproj", "{4220F943-46E9-461D-A3E3-0C2816077EEE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService", "ProductService\ProductService.csproj", "{B7A4974C-85F7-4B96-8667-F77F8897711D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Shared", "ACI.Shared\ACI.Shared.csproj", "{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Products.Test.Integration", "ACI.Products.Test.Integration\ACI.Products.Test.Integration.csproj", "{636CD5E2-C10B-4ED2-921E-49C7A5BC5E3A}"
@@ -23,10 +21,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Reservations.Test.Unit", "ACI.Reservations.Test.Unit\ACI.Reservations.Test.Unit.csproj", "{C61F292D-BE70-483A-A9EC-490317F3B6F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Reservations.Test.Integration", "ACI.Reservations.Test.Integration\ACI.Reservations.Test.Integration.csproj", "{C5C06B11-48E9-4FDB-B3E3-EAD934745A30}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReservationService.Tests", "ReservationService.Tests\ReservationService.Tests.csproj", "{A98416B2-CA03-4DBC-B355-CE6252A54F23}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteService.Tests", "NoteService.Tests\NoteService.Tests.csproj", "{E062F40E-740B-49EF-9AFC-685E8C19C3BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACI.Images", "ACI.Images\ACI.Images.csproj", "{19B83DC5-5E41-4E8F-976C-B20C24943FDF}"
 EndProject
@@ -48,10 +42,6 @@ Global
 		{4220F943-46E9-461D-A3E3-0C2816077EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4220F943-46E9-461D-A3E3-0C2816077EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4220F943-46E9-461D-A3E3-0C2816077EEE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7A4974C-85F7-4B96-8667-F77F8897711D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7A4974C-85F7-4B96-8667-F77F8897711D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7A4974C-85F7-4B96-8667-F77F8897711D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7A4974C-85F7-4B96-8667-F77F8897711D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3CC8E68-2C05-44B1-8CB3-7359A9965DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -76,14 +66,6 @@ Global
 		{C5C06B11-48E9-4FDB-B3E3-EAD934745A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5C06B11-48E9-4FDB-B3E3-EAD934745A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5C06B11-48E9-4FDB-B3E3-EAD934745A30}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A98416B2-CA03-4DBC-B355-CE6252A54F23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A98416B2-CA03-4DBC-B355-CE6252A54F23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A98416B2-CA03-4DBC-B355-CE6252A54F23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A98416B2-CA03-4DBC-B355-CE6252A54F23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E062F40E-740B-49EF-9AFC-685E8C19C3BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E062F40E-740B-49EF-9AFC-685E8C19C3BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E062F40E-740B-49EF-9AFC-685E8C19C3BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E062F40E-740B-49EF-9AFC-685E8C19C3BE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{19B83DC5-5E41-4E8F-976C-B20C24943FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{19B83DC5-5E41-4E8F-976C-B20C24943FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19B83DC5-5E41-4E8F-976C-B20C24943FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -44,43 +44,11 @@ public class ProductService : IProductService
                 CategoryId = productResponse.CategoryId,
                 RequiresApproval = productResponse.RequiresApproval,
             };
-            
+
             await _productMessaging.SendProductResponse(productCreatedMessage);
         }
 
         return result;
-    }
-
-    public async Task<Either<IError, Unit>> DeleteProduct(Guid productId)
-    {
-        var optProduct = await _repository.GetProductById(productId);
-
-        if (optProduct.IsNone)
-        {
-            _logger.LogInformation("Deleting product {ProductId} failed with error {Error}", productId, AppErrors.ProductNotFoundError);
-            return AppErrors.ProductNotFoundError;
-        }
-
-        var product = optProduct.ValueUnsafe();
-
-        if (product.IsDeleted)
-        {
-            _logger.LogInformation("Product {ProductId} is already deleted", productId);
-            return AppErrors.ProductAlreadyDeletedError;
-        }
-
-        await _repository.DeleteProduct(product);
-
-
-
-        var productDeletedMessage = new ProductDeletedMessage()
-        {
-            Id = product.Id,
-        };
-
-        await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
-        
-        return Unit.Default;
     }
 
     public async Task<Option<ProductResponse>> GetProductById(Guid productId)
@@ -102,5 +70,31 @@ public class ProductService : IProductService
         var result = await _repository.GetAllProducts();
 
         return result.Select(ProductResponse.MapFromModel).ToList();
+    }
+
+    public async Task<Either<IError, ProductResponse>> EditProduct(ProductUpdateRequest request)
+    {
+        var result = await _repository.EditProduct(request);
+
+        return result.Map(ProductResponse.MapFromModel);
+    }
+
+    public async Task<Either<IError, ProductResponse>> ArchiveProduct(ProductArchiveRequest request)
+    {
+        var result = await _repository.ArchiveProduct(request);
+
+        if (result.IsLeft)
+        {
+            return AppErrors.ProductNotFoundError;
+        }
+
+        var productDeletedMessage = new ProductDeletedMessage()
+        {
+            Id = result.ValueUnsafe().Id,
+        };
+
+        await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
+
+        return result.Map(ProductResponse.MapFromModel);
     }
 }

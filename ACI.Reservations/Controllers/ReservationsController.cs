@@ -18,19 +18,21 @@ namespace ACI.Reservations.Controllers
     {
         private readonly IReservationService _reservationService;
         private readonly ILogger<ReservationsController> _logger;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReservationController"/> class.
+        /// Initializes a new instance of the <see cref="ReservationsController"/> class.
         /// Constructor is used to define Interfaces.
         /// </summary>
         /// <param name="reservationService">Interface for the ReservationService.</param>
         /// <param name="logger">This is the logger that logs application actions.</param>
         /// <param name="bus">This is the messaging bus.</param>
+        /// <param name="createdConsumer">This is the consumer.</param>
         public ReservationsController(IReservationService reservationService, ILogger<ReservationsController> logger, IBus bus, ProductCreatedConsumer createdConsumer)
         {
             _reservationService = reservationService;
             _logger = logger;
         }
-        
+
         /// <summary>
         /// Get all the Reservations from the database.
         /// </summary>

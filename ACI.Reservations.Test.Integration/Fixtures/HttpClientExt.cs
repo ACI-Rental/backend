@@ -1,5 +1,4 @@
-﻿using ACI.Reservations.Models.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using ACI.Reservations.Models.DTO;
 
 namespace ACI.Reservations.Test.Integration.Fixtures
 {
@@ -26,6 +26,7 @@ namespace ACI.Reservations.Test.Integration.Fixtures
         {
             return await client.GetAsync($"Reservations/byenddate/{dateTime.ToString("yyyy-MM-dd")}");
         }
+
         public static async Task<HttpResponseMessage> GetReservationsByProductId(this HttpClient client, Guid productId)
         {
             return await client.GetAsync($"Reservations/{productId}");
