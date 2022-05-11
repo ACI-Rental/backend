@@ -48,7 +48,7 @@ namespace ACI.Reservations.Test.Integration
             var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
 
             reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(100);
+            reservations.Count.Should().Be(101);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace ACI.Reservations.Test.Integration
             var monday = GetNextMonday();
 
             // Act
-            var response = await _apiClient.GetReservationsByStartDate(monday);
+            var response = await _apiClient.GetReservationsByStartDate(monday.AddDays(7));
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -66,7 +66,7 @@ namespace ACI.Reservations.Test.Integration
             var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
 
             reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(100);
+            reservations.Count.Should().Be(98);
         }
 
         [Fact]
@@ -273,7 +273,7 @@ namespace ACI.Reservations.Test.Integration
             // Arrange
             var newReservation = new ProductReservationDTO()
             {
-                ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"),
+                ProductId = Guid.Parse("4b45aba7-bd89-4645-8dc1-6f842c5ab7af"),
                 RenterId = Guid.NewGuid(),
                 StartDate = GetNextMonday().AddDays(1),
                 EndDate = GetNextMonday().AddDays(2),
