@@ -64,9 +64,15 @@ public class ProductRepository : IProductRepository
             return AppErrors.ProductNotFoundError;
         }
 
+        bool categoryExists = await _ctx.Categories.AnyAsync(x => x.Id == request.CategoryId);
+
         retrievedProduct.Name = request.Name;
         retrievedProduct.Description = request.Description;
         retrievedProduct.RequiresApproval = request.RequiresApproval;
+        if (categoryExists)
+        {
+            retrievedProduct.CategoryId = request.CategoryId;
+        }
 
         await _ctx.SaveChangesAsync();
         return retrievedProduct;
