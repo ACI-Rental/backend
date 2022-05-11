@@ -51,7 +51,8 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetAllProducts()
     {
-        return await _ctx.Products.ToListAsync();
+        return await _ctx.Products.Include(p => p.Category).Where(x => !x.IsDeleted).ToListAsync();
+
     }
 
     public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
@@ -74,7 +75,6 @@ public class ProductRepository : IProductRepository
 
     public async Task<Either<IError, Product>> ArchiveProduct(ProductArchiveRequest request)
     {
-<<<<<<< Updated upstream
         Product retrievedProduct = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (retrievedProduct == null)
@@ -87,8 +87,5 @@ public class ProductRepository : IProductRepository
 
         await _ctx.SaveChangesAsync();
         return retrievedProduct;
-=======
-        return await _ctx.Products.Include(p => p.Category).Where(x => !x.IsDeleted).ToListAsync();
->>>>>>> Stashed changes
     }
 }

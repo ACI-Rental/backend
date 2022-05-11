@@ -30,11 +30,6 @@ public class ProductResponse
             model.Description,
             model.RequiresApproval,
             model.IsDeleted,
-<<<<<<< Updated upstream
-            model.CategoryId);
-}
-=======
             model.CategoryId,
             model.Category?.Name);
 }
->>>>>>> Stashed changes
