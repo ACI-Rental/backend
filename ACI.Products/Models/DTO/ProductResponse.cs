@@ -10,8 +10,9 @@ public class ProductResponse
     public bool RequiresApproval { get; }
     public bool IsDeleted { get; }
     public int CategoryId { get; }
+    public string CategoryName { get; }
 
-    public ProductResponse(Guid id, string name, string description, bool requiresApproval, bool isDeleted, int categoryId)
+    public ProductResponse(Guid id, string name, string description, bool requiresApproval, bool isDeleted, int categoryId, string categoryName)
     {
         Id = id;
         Name = name;
@@ -19,6 +20,7 @@ public class ProductResponse
         RequiresApproval = requiresApproval;
         IsDeleted = isDeleted;
         CategoryId = categoryId;
+        CategoryName = categoryName;
     }
 
     public static ProductResponse MapFromModel(Product model)
@@ -28,5 +30,11 @@ public class ProductResponse
             model.Description,
             model.RequiresApproval,
             model.IsDeleted,
+<<<<<<< Updated upstream
             model.CategoryId);
 }
+=======
+            model.CategoryId,
+            model.Category?.Name);
+}
+>>>>>>> Stashed changes
