@@ -4,6 +4,7 @@ using ACI.Products.Models;
 using ACI.Products.Models.DTO;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
+
 #pragma warning disable CS8600
 
 namespace ACI.Products.Data.Repositories;
@@ -51,8 +52,9 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetAllProducts()
     {
-        return await _ctx.Products.Include(p => p.Category).Where(x => !x.IsDeleted).ToListAsync();
-
+        return await _ctx.Products
+            .Include(p => p.Category)
+            .Where(x => !x.IsDeleted).ToListAsync();
     }
 
     public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)

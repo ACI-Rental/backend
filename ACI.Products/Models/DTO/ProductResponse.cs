@@ -1,5 +1,3 @@
-using System;
-
 namespace ACI.Products.Models.DTO;
 
 public class ProductResponse
@@ -31,5 +29,5 @@ public class ProductResponse
             model.RequiresApproval,
             model.IsDeleted,
             model.CategoryId,
-            model.Category?.Name);
+            model.Category.Name);
 }
