@@ -19,7 +19,7 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
         {
-            var result = await _dbContext.Reservations.ToListAsync();
+            var result = await _dbContext.Reservations.Include(r => r.Product).ToListAsync();
 
             if (result.Count <= 0)
             {

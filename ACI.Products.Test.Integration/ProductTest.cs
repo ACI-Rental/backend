@@ -71,7 +71,6 @@ public class ProductTest : IClassFixture<ProductAppFactory>
             CategoryId = 6,
             Description = "Some Description",
             Name = "Macbook Pro",
-            Archived = false,
             RequiresApproval = false,
         };
 
