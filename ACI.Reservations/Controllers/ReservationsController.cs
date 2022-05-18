@@ -93,7 +93,7 @@ namespace ACI.Reservations.Controllers
         /// <param name="productReservation">This parameter contains the ProductId, RenterId, StartDate, and EndDate of the new reservation.</param>
         /// <returns>A status 200 if the reservation is created succesfully of a Status 400 if an error occured while creating the new reservation.</returns>
         [HttpPost("reserveproduct")]
-        public async Task<IActionResult> ReserveProduct([FromBody] ProductReservationDTO productReservation)
+        public async Task<IActionResult> ReserveProduct([FromBody] ReservationDTO productReservation)
         {
             if (!ModelState.IsValid)
             {

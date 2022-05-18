@@ -15,6 +15,6 @@ namespace ACI.Reservations.Services.Interfaces
         public Task<Either<IError, List<ReservationDTO>>> GetReservationsByEndDate(DateTime endDate);
         public Task<Either<IError, List<ReservationDTO>>> GetReservationsByProductId(Guid productId);
         public Task<Either<IError, ReservationDTO>> ExecuteReservationAction(Guid reservationId, ReservationAction action);
-        public Task<Either<IError, ReservationDTO>> ReserveProduct(ProductReservationDTO productReservationDTO);
+        public Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO ReservationDTO);
     }
 }

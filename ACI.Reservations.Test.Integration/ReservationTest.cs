@@ -252,7 +252,7 @@ namespace ACI.Reservations.Test.Integration
         public async void Reserve_Product_Succes()
         {
             // Arrange
-            var newReservation = new ProductReservationDTO()
+            var newReservation = new ReservationDTO()
             {
                 ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"),
                 RenterId = Guid.NewGuid(),
@@ -271,7 +271,7 @@ namespace ACI.Reservations.Test.Integration
         public async void Reserve_Product_Fail_Overlapping()
         {
             // Arrange
-            var newReservation = new ProductReservationDTO()
+            var newReservation = new ReservationDTO()
             {
                 ProductId = Guid.Parse("4b45aba7-bd89-4645-8dc1-6f842c5ab7af"),
                 RenterId = Guid.NewGuid(),

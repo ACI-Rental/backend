@@ -32,9 +32,9 @@ namespace ACI.Reservations.Test.Integration.Fixtures
             return await client.GetAsync($"Reservations/{productId}");
         }
 
-        public static async Task<HttpResponseMessage> ReserveProduct(this HttpClient client, ProductReservationDTO productReservationDTO)
+        public static async Task<HttpResponseMessage> ReserveProduct(this HttpClient client, ReservationDTO ReservationDTO)
         {
-            return await client.PostAsJsonAsync("Reservations/reserveproduct", productReservationDTO);
+            return await client.PostAsJsonAsync("Reservations/reserveproduct", ReservationDTO);
         }
 
         public static async Task<HttpResponseMessage> ExecuteReservationAction(this HttpClient client, ReservationActionDTO reservationActionDTO)
