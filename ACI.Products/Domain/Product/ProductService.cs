@@ -44,7 +44,6 @@ public class ProductService : IProductService
                 Archived = productResponse.Archived,
                 CategoryId = productResponse.CategoryId,
                 RequiresApproval = productResponse.RequiresApproval,
-                CatalogPosition = productResponse.CatalogPosition,
             };
 
             await _productMessaging.SendProductResponse(productCreatedMessage);

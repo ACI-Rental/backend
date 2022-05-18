@@ -52,6 +52,10 @@ public class ProductRepository : IProductRepository
             return AppErrors.ProductInvalidCategoryError;
         }
 
+        var count = await _ctx.Products.CountAsync();
+
+        product.CatalogPosition = count;
+
         var result = await _ctx.Products.AddAsync(product);
         await _ctx.SaveChangesAsync();
         var entity = await GetProductById(result.Entity.Id);
@@ -67,6 +71,8 @@ public class ProductRepository : IProductRepository
     {
         return await _ctx.Products.Include(p => p.Category).Where(x => !x.Archived).ToListAsync();
     }
+
+
 
     public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
     {
