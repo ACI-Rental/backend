@@ -70,6 +70,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         {
             CategoryId = 6,
             Description = "Some Description",
+            Location = "Some Location",
             Name = "Macbook Pro",
             RequiresApproval = false,
         };
@@ -176,6 +177,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
             Id = searchProduct.Id,
             Name = "ChangedName",
             Description = "ChangedDescription",
+            Location = "Changedlocation",
             RequiresApproval = true,
             CategoryId = 1,
         };
@@ -202,6 +204,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
             Id = Guid.Empty, // product does not exist.
             Name = "ChangedName",
             Description = "ChangedDescription",
+            Location = "ChangedLocation",
             RequiresApproval = true,
         };
 
