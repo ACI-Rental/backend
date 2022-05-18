@@ -1,3 +1,5 @@
+using System;
+
 namespace ACI.Products.Models.DTO;
 
 public class AppUser
