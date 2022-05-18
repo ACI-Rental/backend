@@ -71,7 +71,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
             CategoryId = 6,
             Description = "Some Description",
             Name = "Macbook Pro",
-            IsDeleted = false,
+            Archived = false,
             RequiresApproval = false,
         };
 
@@ -86,7 +86,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         product.Should().NotBeNull();
         product!.Id.Should().NotBeEmpty();
         product.RequiresApproval.Should().Be(request.RequiresApproval);
-        product.IsDeleted.Should().BeFalse();
+        product.Archived.Should().BeFalse();
         product.Name.Should().Be(request.Name);
         product.Description.Should().Be(request.Description);
         product.CategoryId.Should().Be(request.CategoryId);
@@ -124,7 +124,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         ProductArchiveRequest productArchiveRequest = new()
         {
             Id = searchProduct.Id,
-            IsDeleted = true,
+            Archived = true,
         };
 
         // Act
@@ -133,7 +133,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
 
         // Assert
         delResult.StatusCode.Should().Be(HttpStatusCode.OK);
-        archivedProduct.IsDeleted.Should().BeTrue();
+        archivedProduct.Archived.Should().BeTrue();
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
         ProductArchiveRequest productArchiveRequest = new()
         {
             Id = Guid.Empty, // product does not exist.
-            IsDeleted = true,
+            Archived = true,
         };
 
         // Act

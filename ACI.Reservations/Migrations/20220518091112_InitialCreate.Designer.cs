@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACI.Reservations.Migrations
 {
     [DbContext(typeof(ReservationDBContext))]
-    [Migration("20220518090256_InitialCreate")]
+    [Migration("20220518091112_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,9 @@ namespace ACI.Reservations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Archived")
+                        .HasColumnType("bit");
+
                     b.Property<int>("CatalogPosition")
                         .HasColumnType("int");
 
@@ -40,9 +43,6 @@ namespace ACI.Reservations.Migrations
                         .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
                         .IsRequired()

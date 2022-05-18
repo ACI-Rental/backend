@@ -22,7 +22,7 @@ public class ProductRepository : IProductRepository
     public async Task<Option<Product>> GetProductById(Guid id)
     {
         return await _ctx.Products
-            .Where(x => !x.IsDeleted)
+            .Where(x => !x.Archived)
             .FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
     }
 
@@ -30,7 +30,7 @@ public class ProductRepository : IProductRepository
     {
         return await _ctx.Products
             .Where(x => x.CategoryId == categoryId)
-            .Where(x => !x.IsDeleted)
+            .Where(x => !x.Archived)
             .ToListAsync();
     }
 
@@ -51,7 +51,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetAllProducts()
     {
-        return await _ctx.Products.Include(p => p.Category).Where(x => !x.IsDeleted).ToListAsync();
+        return await _ctx.Products.Include(p => p.Category).Where(x => !x.Archived).ToListAsync();
 
     }
 
@@ -90,7 +90,7 @@ public class ProductRepository : IProductRepository
             return AppErrors.ProductNotFoundError;
         }
 
-        retrievedProduct.IsDeleted = request.IsDeleted;
+        retrievedProduct.Archived = request.Archived;
 
         await _ctx.SaveChangesAsync();
         return retrievedProduct;

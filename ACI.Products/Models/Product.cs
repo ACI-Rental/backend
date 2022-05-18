@@ -22,7 +22,7 @@ public class Product
     public string Location { get; set; }
 
     [Required]
-    public bool IsDeleted { get; set; }
+    public bool Archived { get; set; }
 
     [Required]
     public bool RequiresApproval { get; set; }

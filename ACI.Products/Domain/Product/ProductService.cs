@@ -41,7 +41,7 @@ public class ProductService : IProductService
                 Name = productResponse.Name,
                 Description = productResponse.Description,
                 Location = productResponse.Location,
-                IsDeleted = productResponse.IsDeleted,
+                Archived = productResponse.Archived,
                 CategoryId = productResponse.CategoryId,
                 RequiresApproval = productResponse.RequiresApproval,
                 CatalogPosition = productResponse.CatalogPosition,

@@ -9,7 +9,7 @@ public class ProductResponse
     public string Description { get; }
     public string Location { get; }
     public bool RequiresApproval { get; }
-    public bool IsDeleted { get; }
+    public bool Archived { get; }
     public int CategoryId { get; }
     public string CategoryName { get; }
     public int CatalogPosition { get; }
@@ -21,7 +21,7 @@ public class ProductResponse
         Description = description;
         Location = location;
         RequiresApproval = requiresApproval;
-        IsDeleted = isDeleted;
+        Archived = isDeleted;
         CategoryId = categoryId;
         CategoryName = categoryName;
         CatalogPosition = catalogPosition;
@@ -34,7 +34,7 @@ public class ProductResponse
             model.Description,
             model.Location,
             model.RequiresApproval,
-            model.IsDeleted,
+            model.Archived,
             model.CategoryId,
             model.Category?.Name,
             model.CatalogPosition);

@@ -31,7 +31,7 @@ namespace ACI.Reservations.Test.Unit
             Name = "tv",
             Description = "tv",
             RequiresApproval = false,
-            IsDeleted = false,
+            Archived = false,
             CategoryId = 1,
         };
 
@@ -316,7 +316,7 @@ namespace ACI.Reservations.Test.Unit
                 Id = product.Id,
                 CategoryId = product.CategoryId,
                 Description = product.Description,
-                IsDeleted = false,
+                Archived = false,
                 Name = product.Name,
                 RequiresApproval = product.RequiresApproval,
             };
