@@ -35,7 +35,7 @@ namespace ACI.Images.Data.Repositories
             }
 
             string fileExtension = Path.GetExtension(image.FileName);
-            string blobName = $"{Guid.NewGuid()}{fileExtension}";
+            string blobName = $"{productId.ToString()}{fileExtension}";
 
             var productImageBlob = new ProductImageBlob()
             {
