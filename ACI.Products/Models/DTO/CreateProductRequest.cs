@@ -14,16 +14,13 @@ public class CreateProductRequest
 
     [Required(AllowEmptyStrings = false)]
     [MaxLength(1024)]
-    public string Location { get; set; } = null;
+    public string Location { get; set; } = null!;
 
     [Required]
     public bool RequiresApproval { get; set; }
 
     [Required]
     public int CategoryId { get; set; }
-
-    [Required]
-    public int CatalogPosition { get; set; }
 
     public Product MapToModel()
     {
@@ -35,7 +32,6 @@ public class CreateProductRequest
             Archived = false,
             RequiresApproval = RequiresApproval,
             CategoryId = CategoryId,
-            CatalogPosition = CatalogPosition,
         };
     }
 }
