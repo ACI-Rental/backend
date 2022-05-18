@@ -41,5 +41,19 @@ namespace ACI.Reservations.Repositories
 
             return Unit.Default;
         }
+
+        public async Task<Option<Unit>> UpdateProduct(Product product)
+        {
+            var retrieved = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
+
+            retrieved.Name = product.Name;
+            retrieved.Description = product.Description;
+            retrieved.RequiresApproval = product.RequiresApproval;
+            retrieved.CategoryId = product.CategoryId;
+
+            await _dbContext.SaveChangesAsync();
+
+            return Unit.Default;
+        }
     }
 }

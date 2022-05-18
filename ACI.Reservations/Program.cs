@@ -55,6 +55,7 @@ void Run()
     {
         x.AddConsumer<ProductCreatedConsumer>();
         x.AddConsumer<ProductDeletedConsumer>();
+        x.AddConsumer<ProductUpdatedConsumer>();
 
         x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
         {
@@ -75,8 +76,13 @@ void Run()
             {
                 ep.PrefetchCount = 16;
                 ep.UseMessageRetry(r => r.Interval(2, 100));
-                ep.ConfigureConsumer<ProductCreatedConsumer>(provider);
                 ep.ConfigureConsumer<ProductDeletedConsumer>(provider);
+            });
+            config.ReceiveEndpoint("productUpdatedQueue", ep =>
+            {
+                ep.PrefetchCount = 16;
+                ep.UseMessageRetry(r => r.Interval(2, 100));
+                ep.ConfigureConsumer<ProductUpdatedConsumer>(provider);
             });
         }));
     });

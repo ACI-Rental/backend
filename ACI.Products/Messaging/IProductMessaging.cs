@@ -9,5 +9,6 @@ namespace ACI.Products.Messaging
     {
         Task SendProductResponse(ProductCreatedMessage productCreatedMessage);
         Task SendProductDeletedMessage(ProductDeletedMessage productDeletedMessage);
+        Task SendProductUpdatedMessage(ProductUpdatedMessage productUpdatedMessage);
     }
 }
