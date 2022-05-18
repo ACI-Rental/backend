@@ -22,6 +22,7 @@ public class ProductRepository : IProductRepository
     public async Task<Option<Product>> GetProductById(Guid id)
     {
         return await _ctx.Products
+            .Include(p => p.Category)
             .Where(x => !x.IsDeleted)
             .FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
     }
@@ -52,7 +53,6 @@ public class ProductRepository : IProductRepository
     public async Task<List<Product>> GetAllProducts()
     {
         return await _ctx.Products.Include(p => p.Category).Where(x => !x.IsDeleted).ToListAsync();
-
     }
 
     public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
