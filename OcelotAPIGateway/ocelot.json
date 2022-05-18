@@ -65,6 +65,28 @@
         }
       ],
       "UpstreamPathTemplate": "/api/reservations/"
+    },
+    {
+      "DownstreamPathTemplate": "/Image/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5050
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Image/{all}"
+    },
+    {
+      "DownstreamPathTemplate": "/Image/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5050
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Image/"
     }
   ],
   "GlobalConfiguration": {
