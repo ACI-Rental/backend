@@ -14,6 +14,10 @@ public class ProductResponse
     public string CategoryName { get; }
     public int CatalogPosition { get; }
 
+    public ProductResponse()
+    {
+    }
+
     public ProductResponse(Guid id, string name, string description, string location, bool requiresApproval, bool isDeleted, int categoryId, string categoryName, int catalogPosition)
     {
         Id = id;
