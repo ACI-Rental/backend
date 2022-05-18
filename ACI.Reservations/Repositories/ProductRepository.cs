@@ -35,6 +35,11 @@ namespace ACI.Reservations.Repositories
         public async Task<Option<Unit>> DeleteProductById(Guid id)
         {
             var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
+            if (product == null)
+            {
+                return Unit.Default;
+            }
+
             product.IsDeleted = true;
 
             await _dbContext.SaveChangesAsync();

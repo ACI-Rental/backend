@@ -17,6 +17,8 @@ public class NoteRepository : INoteRepository
     public async Task<List<ProductNote>> GetNotes(Guid productId)
     {
         return await _ctx.Notes
+            .Include(x => x.Product)
+            .ThenInclude(x => x.Category)
             .Where(n => n.ProductId == productId)
             .ToListAsync();
     }
@@ -24,6 +26,8 @@ public class NoteRepository : INoteRepository
     public async Task<Option<ProductNote>> GetNote(Guid noteId)
     {
         var note = await _ctx.Notes
+            .Include(x => x.Product)
+            .ThenInclude(x => x.Category)
             .FirstOrDefaultAsync(n => n.Id == noteId);
 
         return note ?? Option<ProductNote>.None;
