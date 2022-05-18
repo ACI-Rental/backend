@@ -63,7 +63,8 @@ namespace ACI.Reservations.Models
         [Required]
         public Guid ProductId { get; set; }
 
-        public Product Product { get; set; }
+        [Required]
+        public virtual Product Product { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether used to know if a reservation is cancelled.

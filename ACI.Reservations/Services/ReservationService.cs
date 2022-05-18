@@ -28,27 +28,27 @@ namespace ACI.Reservations.Services
             _productRepository = productRepository;
         }
 
-        public async Task<Either<IError, List<Reservation>>> GetReservations()
+        public async Task<Either<IError, List<ReservationDTO>>> GetReservations()
         {
             return await _reservationRepository.GetReservations();
         }
 
-        public async Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate)
+        public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByStartDate(DateTime startDate)
         {
             return await _reservationRepository.GetReservationsByStartDate(startDate);
         }
 
-        public async Task<Either<IError, List<Reservation>>> GetReservationsByEndDate(DateTime endDate)
+        public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByEndDate(DateTime endDate)
         {
             return await _reservationRepository.GetReservationsByEndDate(endDate);
         }
 
-        public async Task<Either<IError, List<Reservation>>> GetReservationsByProductId(Guid productId)
+        public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByProductId(Guid productId)
         {
             return await _reservationRepository.GetReservationsByProductId(productId);
         }
 
-        public async Task<Either<IError, Reservation>> ExecuteReservationAction(Guid reservationId, ReservationAction action)
+        public async Task<Either<IError, ReservationDTO>> ExecuteReservationAction(Guid reservationId, ReservationAction action)
         {
             var reservation = await _reservationRepository.GetReservationByReservationId(reservationId);
 
@@ -77,7 +77,7 @@ namespace ACI.Reservations.Services
             return await _reservationRepository.UpdateReservation(reservationToChange);
         }
 
-        public async Task<Either<IError, Reservation>> ReserveProduct(ProductReservationDTO productReservationDTO)
+        public async Task<Either<IError, ReservationDTO>> ReserveProduct(ProductReservationDTO productReservationDTO)
         {
             var result = await ValidateReservationData(productReservationDTO);
             if (result.IsSome)

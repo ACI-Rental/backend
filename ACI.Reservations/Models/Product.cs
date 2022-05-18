@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,7 +21,7 @@ namespace ACI.Reservations.Models
 
         [Required(AllowEmptyStrings = false)]
         [MaxLength(128)]
-        public string Location { get; set; } = null;
+        public string Location { get; set; } = null!;
 
         [Required]
         public bool Archived { get; set; }
@@ -33,5 +34,8 @@ namespace ACI.Reservations.Models
 
         [Required]
         public int CatalogPosition { get; set; }
+
+        [Required]
+        public virtual List<Reservation> Reservations { get; set; }
     }
 }
