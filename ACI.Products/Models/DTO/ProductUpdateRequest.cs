@@ -16,10 +16,17 @@ namespace ACI.Products.Models.DTO
         [MaxLength(1024)]
         public string Description { get; set; } = null!;
 
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(1024)]
+        public string Location { get; set; } = null!;
+
         [Required]
         public bool RequiresApproval { get; set; }
 
         [Required]
         public int CategoryId { get; set; } = -1;
+
+        [Required]
+        public int CatalogPosition { get; set; } = -1;
     }
 }

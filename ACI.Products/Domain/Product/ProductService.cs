@@ -40,9 +40,11 @@ public class ProductService : IProductService
                 Id = productResponse.Id,
                 Name = productResponse.Name,
                 Description = productResponse.Description,
+                Location = productResponse.Location,
                 IsDeleted = productResponse.IsDeleted,
                 CategoryId = productResponse.CategoryId,
                 RequiresApproval = productResponse.RequiresApproval,
+                CatalogPosition = productResponse.CatalogPosition,
             };
 
             await _productMessaging.SendProductResponse(productCreatedMessage);

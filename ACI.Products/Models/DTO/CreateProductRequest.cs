@@ -12,8 +12,9 @@ public class CreateProductRequest
     [MaxLength(1024)]
     public string Description { get; set; } = null!;
 
-    [Required]
-    public bool IsDeleted { get; set; }
+    [Required(AllowEmptyStrings = false)]
+    [MaxLength(1024)]
+    public string Location { get; set; } = null;
 
     [Required]
     public bool RequiresApproval { get; set; }
@@ -21,15 +22,20 @@ public class CreateProductRequest
     [Required]
     public int CategoryId { get; set; }
 
+    [Required]
+    public int CatalogPosition { get; set; }
+
     public Product MapToModel()
     {
         return new Product
         {
             Name = Name,
             Description = Description,
-            IsDeleted = IsDeleted,
+            Location = Location,
+            IsDeleted = false,
             RequiresApproval = RequiresApproval,
             CategoryId = CategoryId,
+            CatalogPosition = CatalogPosition,
         };
     }
 }

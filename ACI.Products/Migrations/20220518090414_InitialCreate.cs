@@ -10,37 +10,39 @@ namespace ACI.Products.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ProductCategory",
+                name: "ProductCategories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductCategory", x => x.Id);
+                    table.PrimaryKey("PK_ProductCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RequiresApproval = table.Column<bool>(type: "bit", nullable: false),
                     CreatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CatalogPosition = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_ProductCategory_CategoryId",
+                        name: "FK_Products_ProductCategories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "ProductCategory",
+                        principalTable: "ProductCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -54,15 +56,15 @@ namespace ACI.Products.Migrations
                     AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TextContent = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
                     CreatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notes_Product_ProductId",
+                        name: "FK_Notes_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -73,8 +75,8 @@ namespace ACI.Products.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_CategoryId",
-                table: "Product",
+                name: "IX_Products_CategoryId",
+                table: "Products",
                 column: "CategoryId");
         }
 
@@ -84,10 +86,10 @@ namespace ACI.Products.Migrations
                 name: "Notes");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "ProductCategory");
+                name: "ProductCategories");
         }
     }
 }
