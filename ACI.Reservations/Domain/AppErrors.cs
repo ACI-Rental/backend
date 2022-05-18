@@ -17,5 +17,7 @@
         public static readonly IError FailedToFindReservation = new IError(207, "The application failed to find a(ny) reservation");
         public static readonly IError FailedToSaveReservation = new IError(208, "The application failed to save the reservation");
         public static readonly IError InvalidReservationAction = new IError(209, "The action that was executed was invalid");
+        public static readonly IError InvalidPickupDate = new IError(210, "The pickup date is either before or after the reservation");
+        public static readonly IError InvalidReturnDate = new IError(211, "The return date is either before or after the reservation");
     }
 }
