@@ -14,18 +14,14 @@ public class ProductResponse
     public string CategoryName { get; }
     public int CatalogPosition { get; }
 
-    public ProductResponse()
-    {
-    }
-
-    public ProductResponse(Guid id, string name, string description, string location, bool requiresApproval, bool isDeleted, int categoryId, string categoryName, int catalogPosition)
+    public ProductResponse(Guid id, string name, string description, string location, bool requiresApproval, bool archived, int categoryId, string categoryName, int catalogPosition)
     {
         Id = id;
         Name = name;
         Description = description;
         Location = location;
         RequiresApproval = requiresApproval;
-        Archived = isDeleted;
+        Archived = archived;
         CategoryId = categoryId;
         CategoryName = categoryName;
         CatalogPosition = catalogPosition;
