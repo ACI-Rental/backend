@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Domain;
 using ACI.Products.Models;
@@ -5,6 +9,8 @@ using ACI.Products.Models.DTO;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
 #pragma warning disable CS8600
 
 namespace ACI.Products.Data.Repositories;

@@ -8,11 +8,13 @@ using ACI.Products.Domain.Product;
 using ACI.Products.Messaging;
 using ACI.Reservations.Models;
 using ACI.Shared;
-using GreenPipes;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
 
