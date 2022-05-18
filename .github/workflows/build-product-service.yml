@@ -87,7 +87,7 @@ jobs:
       run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -clp:NoSummary
 
     - name: 'Run unit tests'
-      run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --no-build --verbosity normal
+      run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
 
     - name: 'Run integration tests'
       run: dotnet test ${{ env.INTEGRATION_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
