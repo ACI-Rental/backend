@@ -1,13 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Messaging;
 using ACI.Products.Models.DTO;
 using ACI.Shared.Messaging;
-using GreenPipes.Internals.Mapping;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace ACI.Products.Domain.Product;

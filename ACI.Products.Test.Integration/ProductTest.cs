@@ -177,6 +177,7 @@ public class ProductTest : IClassFixture<ProductAppFactory>
             Name = "ChangedName",
             Description = "ChangedDescription",
             RequiresApproval = true,
+            CategoryId = 1,
         };
 
         // Act

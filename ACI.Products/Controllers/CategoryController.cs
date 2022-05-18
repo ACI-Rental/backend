@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
 using ACI.Products.Domain.Category;
 using ACI.Products.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ACI.Products.Controllers;
 

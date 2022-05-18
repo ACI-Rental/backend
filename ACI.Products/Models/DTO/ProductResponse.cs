@@ -36,6 +36,6 @@ public class ProductResponse
             model.RequiresApproval,
             model.Archived,
             model.CategoryId,
-            model.Category?.Name,
+            model.Category.Name,
             model.CatalogPosition);
 }
