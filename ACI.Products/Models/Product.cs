@@ -17,6 +17,10 @@ public class Product
     [MaxLength(1024)]
     public string Description { get; set; } = null!;
 
+    [Required(AllowEmptyStrings = false)]
+    [MaxLength(1024)]
+    public string Location { get; set; }
+
     [Required]
     public bool IsDeleted { get; set; }
 
@@ -31,4 +35,7 @@ public class Product
 
     [Required]
     public virtual ProductCategory Category { get; set; } = null!;
+
+    [Required]
+    public int CatalogPosition { get; set; }
 }

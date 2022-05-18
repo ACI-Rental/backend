@@ -18,6 +18,10 @@ namespace ACI.Reservations.Models
         [MaxLength(1024)]
         public string Description { get; set; } = null!;
 
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(128)]
+        public string Location { get; set; } = null;
+
         [Required]
         public bool IsDeleted { get; set; }
 
@@ -26,5 +30,8 @@ namespace ACI.Reservations.Models
 
         [Required]
         public int CategoryId { get; set; }
+
+        [Required]
+        public int CatalogPosition { get; set; }
     }
 }

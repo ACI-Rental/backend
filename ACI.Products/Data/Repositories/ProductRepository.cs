@@ -69,6 +69,7 @@ public class ProductRepository : IProductRepository
 
         retrievedProduct.Name = request.Name;
         retrievedProduct.Description = request.Description;
+        retrievedProduct.Location = request.Location;
         retrievedProduct.RequiresApproval = request.RequiresApproval;
         if (categoryExists)
         {
