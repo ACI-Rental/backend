@@ -8,9 +8,9 @@ namespace ACI.Reservations.Messaging.Consumers;
 public class ProductUpdatedConsumer : IConsumer<ProductUpdatedMessage>
 {
     private readonly IProductRepository _productRepository;
-    private readonly ILogger<ProductCreatedConsumer> _logger;
+    private readonly ILogger<ProductUpdatedConsumer> _logger;
 
-    public ProductUpdatedConsumer(IProductRepository productRepository, ILogger<ProductCreatedConsumer> logger)
+    public ProductUpdatedConsumer(IProductRepository productRepository, ILogger<ProductUpdatedConsumer> logger)
     {
         _productRepository = productRepository;
         _logger = logger;
