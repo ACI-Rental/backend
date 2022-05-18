@@ -30,7 +30,7 @@ namespace ACI.Reservations.Messaging.Consumers
                 Description = context.Message.Description,
                 Location = context.Message.Location,
                 RequiresApproval = context.Message.RequiresApproval,
-                IsDeleted = context.Message.IsDeleted,
+                Archived = context.Message.Archived,
                 CategoryId = context.Message.CategoryId,
                 CatalogPosition = context.Message.CatalogPosition,
             };

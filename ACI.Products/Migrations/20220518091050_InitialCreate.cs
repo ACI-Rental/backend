@@ -30,7 +30,7 @@ namespace ACI.Products.Migrations
                     Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
                     Location = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Archived = table.Column<bool>(type: "bit", nullable: false),
                     RequiresApproval = table.Column<bool>(type: "bit", nullable: false),
                     CreatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),

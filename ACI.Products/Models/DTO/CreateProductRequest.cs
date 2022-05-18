@@ -32,7 +32,7 @@ public class CreateProductRequest
             Name = Name,
             Description = Description,
             Location = Location,
-            IsDeleted = false,
+            Archived = false,
             RequiresApproval = RequiresApproval,
             CategoryId = CategoryId,
             CatalogPosition = CatalogPosition,

@@ -23,7 +23,7 @@ namespace ACI.Reservations.Models
         public string Location { get; set; } = null;
 
         [Required]
-        public bool IsDeleted { get; set; }
+        public bool Archived { get; set; }
 
         [Required]
         public bool RequiresApproval { get; set; }

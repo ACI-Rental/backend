@@ -128,7 +128,6 @@ public class NoteTest : IClassFixture<ProductAppFactory>
             CategoryId = category,
             Description = description,
             Name = name,
-            IsDeleted = false,
             RequiresApproval = false,
         };
 

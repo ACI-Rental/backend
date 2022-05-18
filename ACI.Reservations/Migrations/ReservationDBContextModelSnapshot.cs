@@ -28,6 +28,9 @@ namespace ACI.Reservations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Archived")
+                        .HasColumnType("bit");
+
                     b.Property<int>("CatalogPosition")
                         .HasColumnType("int");
 
@@ -38,9 +41,6 @@ namespace ACI.Reservations.Migrations
                         .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
                         .IsRequired()

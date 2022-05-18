@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACI.Products.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20220518090414_InitialCreate")]
+    [Migration("20220518091050_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,9 @@ namespace ACI.Products.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Archived")
+                        .HasColumnType("bit");
+
                     b.Property<int>("CatalogPosition")
                         .HasColumnType("int");
 
@@ -43,9 +46,6 @@ namespace ACI.Products.Migrations
                         .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
                         .IsRequired()
