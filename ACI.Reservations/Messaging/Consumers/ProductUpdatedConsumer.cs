@@ -1,7 +1,9 @@
-﻿using ACI.Reservations.Models;
+﻿using System.Threading.Tasks;
+using ACI.Reservations.Models;
 using ACI.Reservations.Repositories.Interfaces;
 using ACI.Shared.Messaging;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
 namespace ACI.Reservations.Messaging.Consumers;
 

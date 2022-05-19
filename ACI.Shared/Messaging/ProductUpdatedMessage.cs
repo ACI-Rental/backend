@@ -1,4 +1,5 @@
-﻿namespace ACI.Shared.Messaging;
+﻿using System;
+namespace ACI.Shared.Messaging;
 
 public class ProductUpdatedMessage
 {
