@@ -69,10 +69,8 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetAllProducts()
     {
-        return await _ctx.Products.Include(p => p.Category).Where(x => !x.Archived).ToListAsync();
+        return await _ctx.Products.OrderBy(x => x.CatalogPosition).Include(p => p.Category).Where(x => !x.Archived).ToListAsync();
     }
-
-
 
     public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
     {
@@ -97,12 +95,57 @@ public class ProductRepository : IProductRepository
         retrievedProduct.RequiresApproval = request.RequiresApproval;
         retrievedProduct.CategoryId = request.CategoryId;
 
+        if (retrievedProduct.CatalogPosition != request.CatalogPosition)
+        {
+
+            var productsToUpdate = new List<Product>();
+
+            if (request.CatalogPosition < retrievedProduct.CatalogPosition)
+            {
+                productsToUpdate = await _ctx.Products.Where(x => x.CatalogPosition >= request.CatalogPosition && x.CatalogPosition < retrievedProduct.CatalogPosition).ToListAsync();
+            }
+
+            if (request.CatalogPosition > retrievedProduct.CatalogPosition)
+            {
+                productsToUpdate = await _ctx.Products.Where(x => x.CatalogPosition <= request.CatalogPosition && x.CatalogPosition > retrievedProduct.CatalogPosition).ToListAsync();
+            }
+
+            productsToUpdate.ForEach(x =>
+            {
+                if (retrievedProduct.CatalogPosition > request.CatalogPosition)
+                {
+                    x.CatalogPosition++;
+                }
+                else
+                {
+                    x.CatalogPosition--;
+                }
+            });
+
+            retrievedProduct.CatalogPosition = request.CatalogPosition;
+        }
+
         await _ctx.SaveChangesAsync();
         var result = await _ctx.Products
             .Include(x => x.Category)
             .SingleAsync(x => x.Id == request.Id);
 
         return result;
+    }
+
+    public bool GetEditProductCatalogPosFilter(int oldPos, int newPos, int currentPos)
+    {
+        if (newPos < oldPos && currentPos >= newPos && currentPos < oldPos)
+        {
+            return true;
+        }
+
+        if (newPos > oldPos && currentPos <= newPos && currentPos > oldPos)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public async Task<Either<IError, Product>> ArchiveProduct(ProductArchiveRequest request)
