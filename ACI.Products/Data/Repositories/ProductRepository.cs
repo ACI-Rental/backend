@@ -1,9 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ACI.Products.Data.Repositories.Interfaces;
 using ACI.Products.Domain;
 using ACI.Products.Models;
 using ACI.Products.Models.DTO;
 using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
 #pragma warning disable CS8600
 
 namespace ACI.Products.Data.Repositories;
@@ -22,6 +29,7 @@ public class ProductRepository : IProductRepository
     public async Task<Option<Product>> GetProductById(Guid id)
     {
         return await _ctx.Products
+            .Include(p => p.Category)
             .Where(x => !x.IsDeleted)
             .FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
     }
@@ -46,18 +54,23 @@ public class ProductRepository : IProductRepository
 
         var result = await _ctx.Products.AddAsync(product);
         await _ctx.SaveChangesAsync();
-        return result.Entity;
+        var entity = await GetProductById(result.Entity.Id);
+        if (entity.IsNone)
+        {
+            return AppErrors.ProductNotFoundError;
+        }
+
+        return entity.ValueUnsafe();
     }
 
     public async Task<List<Product>> GetAllProducts()
     {
         return await _ctx.Products.Include(p => p.Category).Where(x => !x.IsDeleted).ToListAsync();
-
     }
 
     public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
     {
-        Product retrievedProduct = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == request.Id);
+        Product retrievedProduct = await _ctx.Products.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (retrievedProduct == null)
         {
@@ -67,21 +80,27 @@ public class ProductRepository : IProductRepository
 
         bool categoryExists = await _ctx.Categories.AnyAsync(x => x.Id == request.CategoryId);
 
+        if (!categoryExists)
+        {
+            return AppErrors.ProductInvalidCategoryError;
+        }
+
         retrievedProduct.Name = request.Name;
         retrievedProduct.Description = request.Description;
         retrievedProduct.RequiresApproval = request.RequiresApproval;
-        if (categoryExists)
-        {
-            retrievedProduct.CategoryId = request.CategoryId;
-        }
+        retrievedProduct.CategoryId = request.CategoryId;
 
         await _ctx.SaveChangesAsync();
-        return retrievedProduct;
+        var result = await _ctx.Products
+            .Include(x => x.Category)
+            .SingleAsync(x => x.Id == request.Id);
+
+        return result;
     }
 
     public async Task<Either<IError, Product>> ArchiveProduct(ProductArchiveRequest request)
     {
-        Product retrievedProduct = await _ctx.Products.FirstOrDefaultAsync(x => x.Id == request.Id);
+        Product retrievedProduct = await _ctx.Products.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (retrievedProduct == null)
         {

@@ -1,4 +1,6 @@
-﻿namespace ACI.Reservations.Domain
+﻿using System;
+
+namespace ACI.Reservations.Domain
 {
     public class TimeProvider : ITimeProvider
     {
