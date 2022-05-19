@@ -166,7 +166,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(3),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -174,7 +174,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(3),
             };
 
-            var changedReservation = new ReservationDTO()
+            var changedReservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -214,7 +214,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(3),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -222,7 +222,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(3),
             };
 
-            var changedReservation = new ReservationDTO()
+            var changedReservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -262,7 +262,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(3),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -270,7 +270,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(3),
             };
 
-            var changedReservation = new ReservationDTO()
+            var changedReservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -321,7 +321,7 @@ namespace ACI.Reservations.Test.Unit
                 RequiresApproval = product.RequiresApproval,
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -364,7 +364,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(2),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = Guid.Empty,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -403,7 +403,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(2),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -446,7 +446,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday,
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -489,7 +489,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(1),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -528,7 +528,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(9),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -567,7 +567,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(6),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -606,7 +606,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(9),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -645,7 +645,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(3),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
@@ -684,7 +684,7 @@ namespace ACI.Reservations.Test.Unit
                 EndDate = nextMonday.AddDays(3),
             };
 
-            var reservation = new ReservationDTO()
+            var reservation = new Reservation()
             {
                 ProductId = product.Id,
                 RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),

@@ -21,7 +21,7 @@ namespace ACI.Reservations.Repositories
             _dbContext = reservationDBContext;
         }
 
-        public async Task<Either<IError, List<ReservationDTO>>> GetReservations()
+        public async Task<Either<IError, List<Reservation>>> GetReservations()
         {
             var result = await _dbContext.Reservations.ToListAsync();
 
@@ -30,17 +30,10 @@ namespace ACI.Reservations.Repositories
                 return AppErrors.FailedToFindReservation;
             }
 
-            List<ReservationDTO> reservations = new List<ReservationDTO>();
-
-            foreach (Reservation reservation in result)
-            {
-                reservations.Add(ReservationDTO.MapFromModel(reservation));
-            }
-
-            return reservations;
+            return result;
         }
 
-        public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByStartDate(DateTime startDate)
+        public async Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate)
         {
             var result = await _dbContext.Reservations.Where(x => x.StartDate.Date == startDate.Date).ToListAsync();
 
@@ -49,17 +42,10 @@ namespace ACI.Reservations.Repositories
                 return AppErrors.FailedToFindReservation;
             }
 
-            List<ReservationDTO> reservations = new List<ReservationDTO>();
-
-            foreach (Reservation reservation in result)
-            {
-                reservations.Add(ReservationDTO.MapFromModel(reservation));
-            }
-
-            return reservations;
+            return result;
         }
 
-        public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByEndDate(DateTime endDate)
+        public async Task<Either<IError, List<Reservation>>> GetReservationsByEndDate(DateTime endDate)
         {
             var result = await _dbContext.Reservations.Where(x => x.EndDate.Date == endDate.Date).ToListAsync();
 
@@ -68,18 +54,10 @@ namespace ACI.Reservations.Repositories
                 return AppErrors.FailedToFindReservation;
             }
 
-            List<ReservationDTO> reservations = new List<ReservationDTO>();
-
-            foreach (Reservation reservation in result)
-            {
-                reservations.Add(ReservationDTO.MapFromModel(reservation));
-            }
-
-
-            return reservations;
+            return result;
         }
 
-        public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByProductId(Guid productId)
+        public async Task<Either<IError, List<Reservation>>> GetReservationsByProductId(Guid productId)
         {
             var result = await _dbContext.Reservations.Where(x => x.ProductId == productId).ToListAsync();
 
@@ -88,17 +66,10 @@ namespace ACI.Reservations.Repositories
                 return AppErrors.FailedToFindReservation;
             }
 
-            List<ReservationDTO> reservations = new List<ReservationDTO>();
-
-            foreach (Reservation reservation in result)
-            {
-                reservations.Add(ReservationDTO.MapFromModel(reservation));
-            }
-
-            return reservations;
+            return result;
         }
 
-        public async Task<Either<IError, ReservationDTO>> GetReservationByReservationId(Guid reservationId)
+        public async Task<Either<IError, Reservation>> GetReservationByReservationId(Guid reservationId)
         {
             var result = await _dbContext.Reservations.Where(x => x.Id == reservationId).FirstOrDefaultAsync();
 
@@ -107,12 +78,10 @@ namespace ACI.Reservations.Repositories
                 return AppErrors.FailedToFindReservation;
             }
 
-            ReservationDTO reservation = ReservationDTO.MapFromModel(result);
-
-            return reservation;
+            return result;
         }
 
-        public async Task<Either<IError, ReservationDTO>> GetOverlappingReservation(Guid productId, DateTime startDate, DateTime endDate)
+        public async Task<Either<IError, Reservation>> GetOverlappingReservation(Guid productId, DateTime startDate, DateTime endDate)
         {
             var result = await _dbContext.Reservations.Where(x => x.ProductId == productId && x.StartDate <= endDate && startDate < x.EndDate).FirstOrDefaultAsync();
 
@@ -121,12 +90,10 @@ namespace ACI.Reservations.Repositories
                 return AppErrors.FailedToFindReservation;
             }
 
-            ReservationDTO reservation = ReservationDTO.MapFromModel(result);
-
-            return reservation;
+            return result;
         }
 
-        public async Task<Either<IError, ReservationDTO>> UpdateReservation(ReservationDTO reservation)
+        public async Task<Either<IError, Reservation>> UpdateReservation(Reservation reservation)
         {
             var reservationToUpdate = await _dbContext.Reservations.Where(x => x.Id == reservation.Id).FirstOrDefaultAsync();
 
@@ -135,29 +102,22 @@ namespace ACI.Reservations.Repositories
                 return AppErrors.FailedToFindReservation;
             }
 
-            reservationToUpdate.StartDate = reservation.StartDate;
-            reservationToUpdate.EndDate = reservation.EndDate;
-            reservationToUpdate.PickedUpDate = reservation.PickedUpDate;
-            reservationToUpdate.ReturnDate = reservation.ReturnDate;
-            reservationToUpdate.ProductId = reservation.ProductId;
-            reservationToUpdate.ReviewerId = reservation.ReviewerId;
-            reservationToUpdate.IsApproved = reservation.IsApproved;
-            reservationToUpdate.Cancelled = reservation.Cancelled;
+            reservationToUpdate = reservation;
 
             if (await _dbContext.SaveChangesAsync() > 0)
             {
-                return ReservationDTO.MapFromModel(reservationToUpdate);
+                return reservationToUpdate;
             }
 
             return AppErrors.FailedToSaveReservation;
         }
 
-        public async Task<Either<IError, ReservationDTO>> CreateReservation(Reservation reservation)
+        public async Task<Either<IError, Reservation>> CreateReservation(Reservation reservation)
         {
             await _dbContext.Reservations.AddAsync(reservation);
             if (await _dbContext.SaveChangesAsync() > 0)
             {
-                return ReservationDTO.MapFromModel(reservation);
+                return reservation;
             }
 
             return AppErrors.FailedToSaveReservation;

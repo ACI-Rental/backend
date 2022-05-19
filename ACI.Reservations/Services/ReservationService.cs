@@ -30,22 +30,30 @@ namespace ACI.Reservations.Services
 
         public async Task<Either<IError, List<ReservationDTO>>> GetReservations()
         {
-            return await _reservationRepository.GetReservations();
+            var result = await _reservationRepository.GetReservations();
+
+            return result.Map(ReservationDTO.MapFromList);
         }
 
         public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByStartDate(DateTime startDate)
         {
-            return await _reservationRepository.GetReservationsByStartDate(startDate);
+            var result = await _reservationRepository.GetReservationsByStartDate(startDate);
+
+            return result.Map(ReservationDTO.MapFromList);
         }
 
         public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByEndDate(DateTime endDate)
         {
-            return await _reservationRepository.GetReservationsByEndDate(endDate);
+            var result = await _reservationRepository.GetReservationsByEndDate(endDate);
+
+            return result.Map(ReservationDTO.MapFromList);
         }
 
         public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByProductId(Guid productId)
         {
-            return await _reservationRepository.GetReservationsByProductId(productId);
+            var result = await _reservationRepository.GetReservationsByProductId(productId);
+
+            return result.Map(ReservationDTO.MapFromList);
         }
 
         public async Task<Either<IError, ReservationDTO>> ExecuteReservationAction(Guid reservationId, ReservationAction action)
@@ -54,7 +62,7 @@ namespace ACI.Reservations.Services
 
             if (reservation.GetType() == typeof(IError))
             {
-                return reservation;
+                return reservation.Map(ReservationDTO.MapFromModel);
             }
 
             var reservationToChange = reservation.ValueUnsafe();
@@ -74,7 +82,9 @@ namespace ACI.Reservations.Services
                     return AppErrors.InvalidReservationAction;
             }
 
-            return await _reservationRepository.UpdateReservation(reservationToChange);
+            var result = await _reservationRepository.UpdateReservation(reservationToChange);
+
+            return result.Map(ReservationDTO.MapFromModel);
         }
 
         public async Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO ReservationDTO)
@@ -105,7 +115,9 @@ namespace ACI.Reservations.Services
                 reservation.IsApproved = false;
             }
 
-            return await _reservationRepository.CreateReservation(reservation);
+            var createResult = await _reservationRepository.CreateReservation(reservation);
+
+            return createResult.Map(ReservationDTO.MapFromModel);
         }
 
         private async Task<Option<IError>> ValidateReservationData(ReservationDTO ReservationDTO)

@@ -10,13 +10,13 @@ namespace ACI.Reservations.Repositories.Interfaces
 {
     public interface IReservationRepository
     {
-        public Task<Either<IError, List<ReservationDTO>>> GetReservations();
-        public Task<Either<IError, List<ReservationDTO>>> GetReservationsByStartDate(DateTime startDate);
-        public Task<Either<IError, List<ReservationDTO>>> GetReservationsByEndDate(DateTime endDate);
-        public Task<Either<IError, List<ReservationDTO>>> GetReservationsByProductId(Guid productId);
-        public Task<Either<IError, ReservationDTO>> GetReservationByReservationId(Guid reservationId);
-        public Task<Either<IError, ReservationDTO>> GetOverlappingReservation(Guid productId, DateTime startDate, DateTime endDate);
-        public Task<Either<IError, ReservationDTO>> UpdateReservation(ReservationDTO reservation);
-        public Task<Either<IError, ReservationDTO>> CreateReservation(Reservation reservation);
+        public Task<Either<IError, List<Reservation>>> GetReservations();
+        public Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate);
+        public Task<Either<IError, List<Reservation>>> GetReservationsByEndDate(DateTime endDate);
+        public Task<Either<IError, List<Reservation>>> GetReservationsByProductId(Guid productId);
+        public Task<Either<IError, Reservation>> GetReservationByReservationId(Guid reservationId);
+        public Task<Either<IError, Reservation>> GetOverlappingReservation(Guid productId, DateTime startDate, DateTime endDate);
+        public Task<Either<IError, Reservation>> UpdateReservation(Reservation reservation);
+        public Task<Either<IError, Reservation>> CreateReservation(Reservation reservation);
     }
 }

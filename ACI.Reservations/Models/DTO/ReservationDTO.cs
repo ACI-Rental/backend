@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ACI.Reservations.Models.DTO
 {
@@ -49,5 +50,8 @@ namespace ACI.Reservations.Models.DTO
                 model.ProductId,
                 model.Product,
                 model.Cancelled);
+
+        public static List<ReservationDTO> MapFromList(List<Reservation> list)
+            => list.ConvertAll(x => MapFromModel(x));
     }
 }
