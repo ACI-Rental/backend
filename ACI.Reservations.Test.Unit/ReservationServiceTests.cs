@@ -29,10 +29,9 @@ namespace ACI.Reservations.Test.Unit
         {
             Id = Guid.Parse("66d56f3d-f285-4f11-c9fe-08da17ab56b2"),
             Name = "tv",
-            Description = "tv",
             RequiresApproval = false,
             Archived = false,
-            CategoryId = 1,
+            CategoryName = "beeldscherm",
         };
 
         private readonly Mock<IReservationRepository> _mockReservationRepository;
@@ -314,11 +313,10 @@ namespace ACI.Reservations.Test.Unit
             var returnProduct = new Product()
             {
                 Id = product.Id,
-                CategoryId = product.CategoryId,
-                Description = product.Description,
                 Archived = false,
                 Name = product.Name,
                 RequiresApproval = product.RequiresApproval,
+                CategoryName = product.CategoryName,
             };
 
             var reservation = new Reservation()

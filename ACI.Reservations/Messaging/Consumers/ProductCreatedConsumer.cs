@@ -27,6 +27,7 @@ namespace ACI.Reservations.Messaging.Consumers
             {
                 Id = context.Message.Id,
                 Name = context.Message.Name,
+                RequiresApproval = context.Message.RequiresApproval,
                 Archived = context.Message.Archived,
                 CategoryName = context.Message.CategoryName,
             };

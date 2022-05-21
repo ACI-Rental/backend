@@ -48,15 +48,12 @@ namespace ACI.Reservations.Test.Integration.Fixtures
         {
             var list = new Faker<Product>()
                 .RuleFor(r => r.Name, f => f.Random.Word())
-                .RuleFor(r => r.Description, f => f.Random.Word())
-                .RuleFor(p => p.Location, f => f.Address.BuildingNumber())
                 .RuleFor(r => r.Archived, false)
                 .RuleFor(r => r.RequiresApproval, false)
-                .RuleFor(r => r.CategoryId, f => f.Random.Int())
-                .RuleFor(p => p.CatalogPosition, f => f.IndexFaker)
+                .RuleFor(r => r.CategoryName, f => f.Random.Word())
                 .Generate(amount);
 
-            list.Add(new Product() { Id = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"), Name = "tv", Description = "mooie tv", Location = "plank 3", Archived = false, RequiresApproval = false, CategoryId = 1, CatalogPosition = amount + 1 });
+            list.Add(new Product() { Id = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"), Name = "tv", Archived = false, RequiresApproval = false, CategoryName = "beeldscherm" });
             return list;
         }
 

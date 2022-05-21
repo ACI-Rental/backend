@@ -39,6 +39,7 @@ public class ProductService : IProductService
             {
                 Id = productResponse.Id,
                 Name = productResponse.Name,
+                RequiresApproval = productResponse.RequiresApproval,
                 Archived = productResponse.Archived,
                 CategoryName = productResponse.CategoryName,
             };
@@ -84,7 +85,7 @@ public class ProductService : IProductService
             {
                 Id = productResponse.Id,
                 Name = productResponse.Name,
-                Archived = productResponse.Archived,
+                RequiresApproval = productResponse.RequiresApproval,
                 CategoryName = productResponse.CategoryName,
             };
 
@@ -96,30 +97,20 @@ public class ProductService : IProductService
 
     public async Task<Either<IError, ProductResponse>> ArchiveProduct(ProductArchiveRequest request)
     {
-        var productOrError = await _repository.ArchiveProduct(request);
-
-        var result = productOrError.Map(ProductResponse.MapFromModel);
+        var result = await _repository.ArchiveProduct(request);
 
         if (result.IsLeft)
         {
             return AppErrors.ProductNotFoundError;
         }
 
-        if (result.IsRight)
+        var productDeletedMessage = new ProductDeletedMessage()
         {
-            var productResponse = result.ValueUnsafe();
+            Id = result.ValueUnsafe().Id,
+        };
 
-            var productCreatedMessage = new ProductUpdatedMessage()
-            {
-                Id = productResponse.Id,
-                Name = productResponse.Name,
-                Archived = productResponse.Archived,
-                CategoryName = productResponse.CategoryName,
-            };
+        await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
 
-            await _productMessaging.SendProductUpdatedMessage(productCreatedMessage);
-        }
-
-        return result;
+        return result.Map(ProductResponse.MapFromModel);
     }
 }

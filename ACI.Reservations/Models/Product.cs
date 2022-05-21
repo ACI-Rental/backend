@@ -16,6 +16,9 @@ namespace ACI.Reservations.Models
         public string Name { get; set; } = null!;
 
         [Required]
+        public bool RequiresApproval { get; set; }
+
+        [Required]
         public bool Archived { get; set; }
 
         [Required]

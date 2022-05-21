@@ -26,7 +26,7 @@ public class ProductUpdatedConsumer : IConsumer<ProductUpdatedMessage>
         {
             Id = context.Message.Id,
             Name = context.Message.Name,
-            Archived = context.Message.Archived,
+            RequiresApproval = context.Message.RequiresApproval,
             CategoryName = context.Message.CategoryName,
         };
 
