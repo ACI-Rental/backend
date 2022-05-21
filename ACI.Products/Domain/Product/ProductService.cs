@@ -39,12 +39,8 @@ public class ProductService : IProductService
             {
                 Id = productResponse.Id,
                 Name = productResponse.Name,
-                Description = productResponse.Description,
-                Location = productResponse.Location,
                 Archived = productResponse.Archived,
-                CategoryId = productResponse.CategoryId,
-                RequiresApproval = productResponse.RequiresApproval,
-                CatalogPosition = productResponse.CatalogPosition,
+                CategoryName = productResponse.CategoryName,
             };
 
             await _productMessaging.SendProductResponse(productCreatedMessage);
@@ -76,27 +72,54 @@ public class ProductService : IProductService
 
     public async Task<Either<IError, ProductResponse>> EditProduct(ProductUpdateRequest request)
     {
-        var result = await _repository.EditProduct(request);
+        var productOrError = await _repository.EditProduct(request);
 
-        return result.Map(ProductResponse.MapFromModel);
+        var result = productOrError.Map(ProductResponse.MapFromModel);
+
+        if (result.IsRight)
+        {
+            var productResponse = result.ValueUnsafe();
+
+            var productCreatedMessage = new ProductUpdatedMessage()
+            {
+                Id = productResponse.Id,
+                Name = productResponse.Name,
+                Archived = productResponse.Archived,
+                CategoryName = productResponse.CategoryName,
+            };
+
+            await _productMessaging.SendProductUpdatedMessage(productCreatedMessage);
+        }
+
+        return result;
     }
 
     public async Task<Either<IError, ProductResponse>> ArchiveProduct(ProductArchiveRequest request)
     {
-        var result = await _repository.ArchiveProduct(request);
+        var productOrError = await _repository.ArchiveProduct(request);
+
+        var result = productOrError.Map(ProductResponse.MapFromModel);
 
         if (result.IsLeft)
         {
             return AppErrors.ProductNotFoundError;
         }
 
-        var productDeletedMessage = new ProductDeletedMessage()
+        if (result.IsRight)
         {
-            Id = result.ValueUnsafe().Id,
-        };
+            var productResponse = result.ValueUnsafe();
 
-        await _productMessaging.SendProductDeletedMessage(productDeletedMessage);
+            var productCreatedMessage = new ProductUpdatedMessage()
+            {
+                Id = productResponse.Id,
+                Name = productResponse.Name,
+                Archived = productResponse.Archived,
+                CategoryName = productResponse.CategoryName,
+            };
 
-        return result.Map(ProductResponse.MapFromModel);
+            await _productMessaging.SendProductUpdatedMessage(productCreatedMessage);
+        }
+
+        return result;
     }
 }

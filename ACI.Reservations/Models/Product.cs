@@ -15,25 +15,11 @@ namespace ACI.Reservations.Models
         [MaxLength(128)]
         public string Name { get; set; } = null!;
 
-        [Required(AllowEmptyStrings = false)]
-        [MaxLength(1024)]
-        public string Description { get; set; } = null!;
-
-        [Required(AllowEmptyStrings = false)]
-        [MaxLength(128)]
-        public string Location { get; set; } = null!;
-
         [Required]
         public bool Archived { get; set; }
 
         [Required]
-        public bool RequiresApproval { get; set; }
-
-        [Required]
-        public int CategoryId { get; set; }
-
-        [Required]
-        public int CatalogPosition { get; set; }
+        public string CategoryName { get; set; }
 
         [Required]
         public virtual List<Reservation> Reservations { get; set; }
