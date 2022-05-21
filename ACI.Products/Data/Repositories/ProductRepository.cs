@@ -30,7 +30,6 @@ public class ProductRepository : IProductRepository
     {
         return await _ctx.Products
             .Include(p => p.Category)
-            .Where(x => !x.Archived)
             .FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
     }
 

@@ -27,12 +27,8 @@ namespace ACI.Reservations.Messaging.Consumers
             {
                 Id = context.Message.Id,
                 Name = context.Message.Name,
-                Description = context.Message.Description,
-                Location = context.Message.Location,
-                RequiresApproval = context.Message.RequiresApproval,
                 Archived = context.Message.Archived,
-                CategoryId = context.Message.CategoryId,
-                CatalogPosition = context.Message.CatalogPosition,
+                CategoryName = context.Message.CategoryName,
             };
 
             await _productRepository.AddProduct(product);
