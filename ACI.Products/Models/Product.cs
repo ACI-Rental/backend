@@ -32,4 +32,5 @@ public class Product
 
     [Required]
     public virtual ProductCategory Category { get; set; } = null!;
+
 }
