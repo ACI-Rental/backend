@@ -71,6 +71,13 @@ public class ProductService : IProductService
         return result.Select(ProductResponse.MapFromModel).ToList();
     }
 
+    public async Task<List<ProductResponse>> GetInventory()
+    {
+        var result = await _repository.GetInventory();
+
+        return result.Select(ProductResponse.MapFromModel).ToList();
+    }
+
     public async Task<Either<IError, ProductResponse>> EditProduct(ProductUpdateRequest request)
     {
         var productOrError = await _repository.EditProduct(request);

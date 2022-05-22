@@ -71,6 +71,11 @@ public class ProductRepository : IProductRepository
         return await _ctx.Products.OrderBy(x => x.CatalogPosition).Include(p => p.Category).Where(x => !x.Archived).ToListAsync();
     }
 
+    public async Task<List<Product>> GetInventory()
+    {
+        return await _ctx.Products.OrderBy(x => x.CatalogPosition).Include(p => p.Category).ToListAsync();
+    }
+
     public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
     {
         Product retrievedProduct = await _ctx.Products.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == request.Id);
@@ -88,43 +93,40 @@ public class ProductRepository : IProductRepository
             return AppErrors.ProductInvalidCategoryError;
         }
 
+        if (retrievedProduct.CatalogPosition != request.CatalogPosition)
+        {
+            if (request.CatalogPosition < retrievedProduct.CatalogPosition)
+            {
+                var productsToUpdate = await _ctx.Products.Where(x => x.CatalogPosition >= request.CatalogPosition && x.CatalogPosition < retrievedProduct.CatalogPosition).ToListAsync();
+
+                productsToUpdate.ForEach(x =>
+                {
+                    x.CatalogPosition++;
+                });
+            }
+
+            if (request.CatalogPosition > retrievedProduct.CatalogPosition)
+            {
+                var productsToUpdate = await _ctx.Products.Where(x => x.CatalogPosition <= request.CatalogPosition && x.CatalogPosition > retrievedProduct.CatalogPosition).ToListAsync();
+
+                productsToUpdate.ForEach(x =>
+                {
+                    x.CatalogPosition--;
+                });
+            }
+
+            await _ctx.SaveChangesAsync();
+        }
+
         retrievedProduct.Name = request.Name;
         retrievedProduct.Description = request.Description;
         retrievedProduct.Location = request.Location;
         retrievedProduct.RequiresApproval = request.RequiresApproval;
         retrievedProduct.CategoryId = request.CategoryId;
-
-        if (retrievedProduct.CatalogPosition != request.CatalogPosition)
-        {
-
-            var productsToUpdate = new List<Product>();
-
-            if (request.CatalogPosition < retrievedProduct.CatalogPosition)
-            {
-                productsToUpdate = await _ctx.Products.Where(x => x.CatalogPosition >= request.CatalogPosition && x.CatalogPosition < retrievedProduct.CatalogPosition).ToListAsync();
-            }
-
-            if (request.CatalogPosition > retrievedProduct.CatalogPosition)
-            {
-                productsToUpdate = await _ctx.Products.Where(x => x.CatalogPosition <= request.CatalogPosition && x.CatalogPosition > retrievedProduct.CatalogPosition).ToListAsync();
-            }
-
-            productsToUpdate.ForEach(x =>
-            {
-                if (retrievedProduct.CatalogPosition > request.CatalogPosition)
-                {
-                    x.CatalogPosition++;
-                }
-                else
-                {
-                    x.CatalogPosition--;
-                }
-            });
-
-            retrievedProduct.CatalogPosition = request.CatalogPosition;
-        }
+        retrievedProduct.CatalogPosition = request.CatalogPosition;
 
         await _ctx.SaveChangesAsync();
+
         var result = await _ctx.Products
             .Include(x => x.Category)
             .SingleAsync(x => x.Id == request.Id);

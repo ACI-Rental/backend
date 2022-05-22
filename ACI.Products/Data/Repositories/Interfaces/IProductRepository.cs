@@ -18,6 +18,8 @@ public interface IProductRepository
 
     public Task<List<Product>> GetAllProducts();
 
+    public Task<List<Product>> GetInventory();
+
     public Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request);
     public Task<Either<IError, Product>> ArchiveProduct(ProductArchiveRequest request);
 }

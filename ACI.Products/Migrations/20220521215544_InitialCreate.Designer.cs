@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACI.Products.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20220518091050_InitialCreate")]
+    [Migration("20220521215544_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,7 +82,7 @@ namespace ACI.Products.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ACI.Products.Models.ProductNote", b =>

@@ -14,8 +14,8 @@ public class ProductContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Product>().HasIndex(p => p.CatalogPosition).IsUnique();
-        modelBuilder.Entity<ProductCategory>().ToTable("ProductCategories");
+        modelBuilder.Entity<Product>();
+        modelBuilder.Entity<ProductCategory>();
     }
 
     public DbSet<Product> Products { get; set; }

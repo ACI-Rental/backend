@@ -16,6 +16,8 @@ public interface IProductService
 
     public Task<List<ProductResponse>> GetAllProducts();
 
+    public Task<List<ProductResponse>> GetInventory();
+
     public Task<Either<IError, ProductResponse>> EditProduct(ProductUpdateRequest request);
     public Task<Either<IError, ProductResponse>> ArchiveProduct(ProductArchiveRequest request);
 }

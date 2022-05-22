@@ -60,9 +60,6 @@ namespace ACI.Products.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CatalogPosition")
-                        .IsUnique();
-
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
@@ -83,7 +80,7 @@ namespace ACI.Products.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ACI.Products.Models.ProductNote", b =>
