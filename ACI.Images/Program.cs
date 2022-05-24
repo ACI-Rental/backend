@@ -2,6 +2,7 @@ using ACI.Images.Data;
 using ACI.Images.Data.Repositories;
 using ACI.Images.Data.Repositories.Interfaces;
 using ACI.Images.Domain.Image;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,17 @@ builder.Services.AddDbContext<ImageContext>(options =>
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
+// Auth
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.Authority = builder.Configuration["Jwt:Authority"];
+    options.Audience = builder.Configuration["Jwt:Audience"];
+    options.RequireHttpsMetadata = builder.Environment.IsProduction();
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -37,8 +49,15 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true) // allow any origin
+    .AllowCredentials()); // allow credentials
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
