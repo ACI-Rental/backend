@@ -14,7 +14,7 @@ namespace ACI.Reservations.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ReservationsController : ControllerBase
+    public class ReservationsController : BaseController
     {
         private readonly IReservationService _reservationService;
         private readonly ILogger<ReservationsController> _logger;
@@ -100,6 +100,9 @@ namespace ACI.Reservations.Controllers
                 return BadRequest();
             }
 
+            var user = GetUser();
+
+            productReservation.RenterId = user.Id;
             _logger.LogInformation("Creating new Reservation {productReservation}", productReservation);
 
             var result = await _reservationService.ReserveProduct(productReservation);

@@ -44,12 +44,12 @@ namespace ACI.Reservations.Models
         /// Id of the person that mode the reservation.
         /// </summary>
         [Required]
-        public Guid RenterId { get; set; }
+        public string RenterId { get; set; }
 
         /// <summary>
         /// Gets or sets id of the person that made the review of the reservation.
         /// </summary>
-        public Guid? ReviewerId { get; set; }
+        public string? ReviewerId { get; set; }
 
         /// <summary>
         /// Gets or sets used to know if the reservation is approved or not.

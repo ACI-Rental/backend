@@ -255,7 +255,6 @@ namespace ACI.Reservations.Test.Integration
             var newReservation = new ReservationDTO()
             {
                 ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"),
-                RenterId = Guid.NewGuid(),
                 StartDate = GetNextMonday().AddDays(1),
                 EndDate = GetNextMonday().AddDays(2),
             };
@@ -274,7 +273,6 @@ namespace ACI.Reservations.Test.Integration
             var newReservation = new ReservationDTO()
             {
                 ProductId = Guid.Parse("4b45aba7-bd89-4645-8dc1-6f842c5ab7af"),
-                RenterId = Guid.NewGuid(),
                 StartDate = GetNextMonday().AddDays(1),
                 EndDate = GetNextMonday().AddDays(2),
             };

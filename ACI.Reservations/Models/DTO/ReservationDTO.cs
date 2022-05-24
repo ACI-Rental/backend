@@ -10,8 +10,8 @@ namespace ACI.Reservations.Models.DTO
         public DateTime EndDate { get; set; }
         public DateTime? PickedUpDate { get; set; }
         public DateTime? ReturnDate { get; set; }
-        public Guid RenterId { get; set; }
-        public Guid? ReviewerId { get; set; }
+        public string? RenterId { get; set; }
+        public string? ReviewerId { get; set; }
         public bool? IsApproved { get; set; }
         public Guid ProductId { get; set; }
         public ProductDTO? Product { get; set; }
@@ -22,7 +22,7 @@ namespace ACI.Reservations.Models.DTO
 
         }
 
-        public ReservationDTO(Guid id, DateTime startDate, DateTime endDate, DateTime? pickedUpDate, DateTime? returnDate, Guid renterId, Guid? reviewerId, bool? isApproved, Guid productId, Product product, bool cancelled)
+        public ReservationDTO(Guid id, DateTime startDate, DateTime endDate, DateTime? pickedUpDate, DateTime? returnDate, string renterId, string? reviewerId, bool? isApproved, Guid productId, Product product, bool cancelled)
         {
             Id = id;
             StartDate = startDate;

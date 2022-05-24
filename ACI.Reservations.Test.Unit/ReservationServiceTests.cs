@@ -160,7 +160,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -168,7 +168,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -176,7 +176,7 @@ namespace ACI.Reservations.Test.Unit
             var changedReservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
                 Cancelled = true,
@@ -208,7 +208,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -216,7 +216,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -224,7 +224,7 @@ namespace ACI.Reservations.Test.Unit
             var changedReservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
                 PickedUpDate = nextMonday.AddDays(1),
@@ -256,7 +256,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -264,7 +264,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -272,7 +272,7 @@ namespace ACI.Reservations.Test.Unit
             var changedReservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
                 PickedUpDate = nextMonday.AddDays(1),
@@ -305,7 +305,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(2),
             };
@@ -322,7 +322,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(2),
             };
@@ -357,7 +357,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = Guid.Empty,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(2),
             };
@@ -365,7 +365,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = Guid.Empty,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(2),
             };
@@ -396,7 +396,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(-1),
                 EndDate = nextMonday.AddDays(2),
             };
@@ -404,7 +404,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(-1),
                 EndDate = nextMonday.AddDays(2),
             };
@@ -439,7 +439,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(2),
                 EndDate = nextMonday,
             };
@@ -447,7 +447,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(2),
                 EndDate = nextMonday,
             };
@@ -482,7 +482,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(2),
                 EndDate = nextMonday.AddDays(1),
             };
@@ -490,7 +490,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(2),
                 EndDate = nextMonday.AddDays(1),
             };
@@ -521,7 +521,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(6),
                 EndDate = nextMonday.AddDays(9),
             };
@@ -529,7 +529,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(6),
                 EndDate = nextMonday.AddDays(9),
             };
@@ -560,7 +560,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(6),
             };
@@ -568,7 +568,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(6),
             };
@@ -599,7 +599,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(9),
             };
@@ -607,7 +607,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(9),
             };
@@ -638,7 +638,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -646,7 +646,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -677,7 +677,7 @@ namespace ACI.Reservations.Test.Unit
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -685,7 +685,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
