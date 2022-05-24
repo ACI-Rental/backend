@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace OcelotAPIGateway
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -15,7 +15,8 @@ namespace OcelotAPIGateway
             Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((host, config) =>
             {
-                config.AddJsonFile($"ocelot.json", false, true);
+                var ocelotJson = host.HostingEnvironment.IsProduction() ? "ocelot.json" : "ocelot.Development.json";
+                config.AddJsonFile(ocelotJson, false, true);
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
