@@ -122,7 +122,7 @@ void Run()
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-    var app = builder.Build();s
+    var app = builder.Build();
 
     app.UseSerilogRequestLogging();
 
