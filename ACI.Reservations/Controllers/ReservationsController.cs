@@ -151,5 +151,25 @@ namespace ACI.Reservations.Controllers
                 .Right<IActionResult>(Ok)
                 .Left(err => BadRequest(err));
         }
+
+        [HttpPut("edit")]
+        public async Task<IActionResult> EditReservation([FromBody] ReservationEditDTO reservationEditDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            if (reservationEditDTO.OldReservationId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            var result = await _reservationService.EditReservation(reservationEditDTO);
+
+            return result
+                .Right<IActionResult>(Ok)
+                .Left(err => BadRequest(err));
+        }
     }
 }

@@ -82,7 +82,7 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, Reservation>> GetOverlappingReservation(Guid productId, DateTime startDate, DateTime endDate)
         {
-            var result = await _dbContext.Reservations.Where(x => x.ProductId == productId && x.StartDate <= endDate && startDate < x.EndDate).FirstOrDefaultAsync();
+            var result = await _dbContext.Reservations.Where(x => x.ProductId == productId && x.StartDate <= endDate && startDate < x.EndDate && x.Cancelled == false).FirstOrDefaultAsync();
 
             if (result == null)
             {

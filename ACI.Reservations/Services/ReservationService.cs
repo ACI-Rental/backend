@@ -108,6 +108,30 @@ namespace ACI.Reservations.Services
             return await _reservationRepository.CreateReservation(reservation);
         }
 
+        public async Task<Either<IError, Reservation>> EditReservation(ReservationEditDTO reservationEditDTO)
+        {
+            var oldreservation = await _reservationRepository.GetReservationByReservationId(reservationEditDTO.OldReservationId);
+            if (oldreservation.IsNull())
+            {
+                return AppErrors.FailedToFindReservation;
+            }
+
+            ProductReservationDTO reservationDTO = new()
+            {
+                ProductId = reservationEditDTO.ProductId,
+                RenterId = reservationEditDTO.RenterId,
+                StartDate = reservationEditDTO.StartDate,
+                EndDate = reservationEditDTO.EndDate,
+            };
+            var result = await ReserveProduct(reservationDTO);
+            if (result.IsRight)
+            {
+                await ExecuteReservationAction(reservationEditDTO.OldReservationId, ReservationAction.CANCEL);
+            }
+
+            return result;
+        }
+
         private async Task<Option<IError>> ValidateReservationData(ProductReservationDTO productReservationDTO)
         {
             var now = _timeProvider.GetDateTimeNow();
