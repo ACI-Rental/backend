@@ -106,7 +106,8 @@ void Run()
     builder.Services.AddScoped<IConsumer, ProductCreatedConsumer>();
     builder.Services.AddScoped<IReservationService, ReservationService>();
     builder.Services.AddScoped<ITimeProvider, TimeProvider>();
-    //Auth
+
+    // Add authentication
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
