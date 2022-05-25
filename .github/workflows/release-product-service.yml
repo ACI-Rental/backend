@@ -20,7 +20,7 @@ jobs:
 
     - name: Assign release version from version file to env variable
       run: |
-          cat ACI.Products/version >> $RELEASE_VERSION
+          cat ACI.Products/version > $RELEASE_VERSION
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
