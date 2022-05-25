@@ -39,7 +39,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ACI.Products
-        build-context: .
+        build-contexts: .
         push: true
         build-args: RELEASE_VERSION=${{ env.VERSION }}
         tags: | 
