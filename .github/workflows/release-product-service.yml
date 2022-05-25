@@ -1,32 +1,26 @@
-name: Release new ProductService to Docker hub
+name: Release ACI.Products to Dockerhub
 
 on:
   push:
     branches:
       - main
+      - dev
+      - S6_S2022_dev
+      - feature/k8s
     paths:
-      - "ProductService/**"
+      - "ACI.Products/**"
       - ".github/workflows/release-product-service.yml"
 env:
-  PROJECT_PATH: 'ProductService/ProductService.csproj'
+  PROJECT_PATH: '"ACI.Products/ACI.Products.csproj'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: 'Checkout'
-      uses: actions/checkout@v2
 
-    - name: 'Install dotnet'
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.x'
-
-    - name: 'Restore packages'
-      run: dotnet restore ${{ env.PROJECT_PATH }}
-
-    - name: 'Build project'
-      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
+    - name: Assign release version from version file to env variable
+      run: |
+          cat ACI.Products/version >> $RELEASE_VERSION
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -36,10 +30,12 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    
+
     - name: Build and push
       uses: docker/build-push-action@v2
       with:
-        context: ProductService
+        context: .
+        dockerfile: ACI.Products/Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/aci-product-service:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/products:${{ env.RELEASE_VERSION }}
+        build-args: RELEASE_VERSION=${{ env.RELEASE_VERSION }}
