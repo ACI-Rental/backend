@@ -15,6 +15,7 @@ namespace ACI.Reservations.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
                     RequiresApproval = table.Column<bool>(type: "bit", nullable: false),
                     Archived = table.Column<bool>(type: "bit", nullable: false),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -33,8 +34,10 @@ namespace ACI.Reservations.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PickedUpDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    RenterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReviewerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RenterId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RenterName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RenterEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReviewerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsApproved = table.Column<bool>(type: "bit", nullable: true),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Cancelled = table.Column<bool>(type: "bit", nullable: false)
