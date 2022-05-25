@@ -16,7 +16,7 @@ namespace ACI.Reservations.Controllers
     [Route("[controller]")]
     [ApiController]
     [Authorize]
-    public class ReservationsController : ControllerBase
+    public class ReservationsController : BaseController
     {
         private readonly IReservationService _reservationService;
         private readonly ILogger<ReservationsController> _logger;
