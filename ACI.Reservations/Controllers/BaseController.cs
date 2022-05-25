@@ -19,7 +19,7 @@ namespace ACI.Reservations.Controllers
                 throw new AuthenticationException("Unable to fetch AppUser: IsAuthenticated = false");
             }
 
-            return new AppUser(User.Identity!.Name!, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return new AppUser(User.Identity!.Name!, User.FindFirstValue(ClaimTypes.NameIdentifier), User.FindFirstValue(ClaimTypes.Email));
         }
     }
 }

@@ -87,7 +87,7 @@ namespace ACI.Reservations.Services
             return result.Map(ReservationDTO.MapFromModel);
         }
 
-        public async Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO ReservationDTO)
+        public async Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO ReservationDTO, AppUser user)
         {
             var result = await ValidateReservationData(ReservationDTO);
             if (result.IsSome)
@@ -104,7 +104,9 @@ namespace ACI.Reservations.Services
             var reservation = new Reservation()
             {
                 ProductId = ReservationDTO.ProductId,
-                RenterId = ReservationDTO.RenterId,
+                RenterId = user.Id,
+                RenterName = user.Name,
+                RenterEmail = user.Email,
                 StartDate = ReservationDTO.StartDate,
                 EndDate = ReservationDTO.EndDate,
             };

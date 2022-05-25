@@ -302,10 +302,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(2),
             };
@@ -340,7 +342,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeRight(r =>
@@ -354,10 +356,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = Guid.Empty,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(2),
             };
@@ -379,7 +383,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -393,10 +397,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(-1),
                 EndDate = nextMonday.AddDays(2),
             };
@@ -422,7 +428,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -436,10 +442,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(2),
                 EndDate = nextMonday,
             };
@@ -465,7 +473,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -479,10 +487,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(2),
                 EndDate = nextMonday.AddDays(1),
             };
@@ -504,7 +514,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -518,10 +528,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday.AddDays(6),
                 EndDate = nextMonday.AddDays(9),
             };
@@ -543,7 +555,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -557,10 +569,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(6),
             };
@@ -582,7 +596,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -596,10 +610,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(9),
             };
@@ -621,7 +637,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -635,10 +651,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -660,7 +678,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -674,10 +692,12 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
+
+            var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
+
             var ReservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
-                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -703,7 +723,7 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO);
+            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>

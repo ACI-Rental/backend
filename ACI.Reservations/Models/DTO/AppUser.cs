@@ -4,17 +4,19 @@ namespace ACI.Reservations.Models.DTO;
 
 public class AppUser
 {
-    public AppUser(string name, string id)
+    public AppUser(string name, string id, string email)
     {
         if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(id))
         {
-            throw new ArgumentException("AppUser must have a non-empty name and id");
+            throw new ArgumentException("AppUser must have a non-empty name, email, and id");
         }
 
-        Name = name;
         Id = id;
+        Name = name;
+        Email = email;
     }
 
-    public string Name { get; }
     public string Id { get; }
+    public string Name { get; }
+    public string Email { get; }
 }

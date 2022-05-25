@@ -103,11 +103,9 @@ namespace ACI.Reservations.Controllers
             }
 
             var user = GetUser();
-
-            productReservation.RenterId = user.Id;
             _logger.LogInformation("Creating new Reservation {productReservation}", productReservation);
 
-            var result = await _reservationService.ReserveProduct(productReservation);
+            var result = await _reservationService.ReserveProduct(productReservation, user);
 
             return result
                 .Right<IActionResult>(Ok)
