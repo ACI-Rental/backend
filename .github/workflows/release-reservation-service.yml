@@ -38,10 +38,10 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          file: ACI.Products/Dockerfile
+          file: ACI.Reservations/Dockerfile
           context: .
           push: true
           build-args: RELEASE_VERSION=${{ env.VERSION }}
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/products:${{ env.VERSION }}
-            ${{ secrets.DOCKER_USERNAME }}/products:latest
+            ${{ secrets.DOCKER_USERNAME }}/reservations:${{ env.VERSION }}
+            ${{ secrets.DOCKER_USERNAME }}/reservations:latest
