@@ -160,7 +160,7 @@ namespace ACI.Reservations.Controllers
                 return BadRequest();
             }
 
-            if (reservationEditDTO.OldReservationId == Guid.Empty)
+            if (reservationEditDTO.ReservationId == Guid.Empty)
             {
                 return BadRequest();
             }

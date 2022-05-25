@@ -110,8 +110,8 @@ namespace ACI.Reservations.Services
 
         public async Task<Either<IError, Reservation>> EditReservation(ReservationEditDTO reservationEditDTO)
         {
-            var oldreservation = await _reservationRepository.GetReservationByReservationId(reservationEditDTO.OldReservationId);
-            if (oldreservation.IsNull())
+            var reservation = await _reservationRepository.GetReservationByReservationId(reservationEditDTO.ReservationId);
+            if (reservation.IsNull())
             {
                 return AppErrors.FailedToFindReservation;
             }
@@ -123,13 +123,23 @@ namespace ACI.Reservations.Services
                 StartDate = reservationEditDTO.StartDate,
                 EndDate = reservationEditDTO.EndDate,
             };
-            var result = await ReserveProduct(reservationDTO);
-            if (result.IsRight)
+
+            var result = await ValidateReservationData(reservationDTO);
+            if (result.IsSome)
             {
-                await ExecuteReservationAction(reservationEditDTO.OldReservationId, ReservationAction.CANCEL);
+                return result.ValueUnsafe();
             }
 
-            return result;
+            var editedReservation = new Reservation()
+            {
+                Id = reservationEditDTO.ReservationId,
+                ProductId = reservationEditDTO.ProductId,
+                RenterId = reservationEditDTO.RenterId,
+                StartDate = reservationEditDTO.StartDate,
+                EndDate = reservationEditDTO.EndDate,
+            };
+
+            return await _reservationRepository.EditReservation(editedReservation);
         }
 
         private async Task<Option<IError>> ValidateReservationData(ProductReservationDTO productReservationDTO)

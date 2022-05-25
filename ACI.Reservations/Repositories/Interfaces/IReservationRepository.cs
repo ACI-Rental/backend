@@ -17,5 +17,6 @@ namespace ACI.Reservations.Repositories.Interfaces
         public Task<Either<IError, Reservation>> GetOverlappingReservation(Guid productId, DateTime startDate, DateTime endDate);
         public Task<Either<IError, Reservation>> UpdateReservation(Reservation reservation);
         public Task<Either<IError, Reservation>> CreateReservation(Reservation reservation);
+        public Task<Either<IError, Reservation>> EditReservation(Reservation reservation);
     }
 }

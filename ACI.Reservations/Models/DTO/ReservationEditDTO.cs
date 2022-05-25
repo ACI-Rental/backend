@@ -6,7 +6,7 @@ namespace ACI.Reservations.Models.DTO
     public class ReservationEditDTO
     {
         [Required]
-        public Guid OldReservationId { get; set; }
+        public Guid ReservationId { get; set; }
 
         [Required]
         public Guid ProductId { get; set; }

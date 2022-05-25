@@ -121,5 +121,25 @@ namespace ACI.Reservations.Repositories
 
             return AppErrors.FailedToSaveReservation;
         }
+
+        public async Task<Either<IError, Reservation>> EditReservation(Reservation reservation)
+        {
+            var retrievedreservation = await _dbContext.Reservations.Where(x => x.Id == reservation.Id).FirstOrDefaultAsync();
+
+            if (retrievedreservation == null)
+            {
+                return AppErrors.FailedToFindReservation;
+            }
+
+            retrievedreservation.StartDate = reservation.StartDate;
+            retrievedreservation.EndDate = reservation.EndDate;
+
+            if (await _dbContext.SaveChangesAsync() > 0)
+            {
+                return retrievedreservation;
+            }
+
+            return AppErrors.FailedToSaveReservation;
+        }
     }
 }
