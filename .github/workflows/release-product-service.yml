@@ -18,9 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Assign release version from version file to env variable
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: Save current app version
       run: |
-          cat ACI.Products/version > $RELEASE_VERSION
+        VER=$(cat ACI.Products/VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -37,5 +41,7 @@ jobs:
         context: .
         dockerfile: ACI.Products/Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/products:${{ env.RELEASE_VERSION }}
-        build-args: RELEASE_VERSION=${{ env.RELEASE_VERSION }}
+        build-args: RELEASE_VERSION=${{ env.VERSION }}
+        tags: | 
+          ${{ secrets.DOCKER_USERNAME }}/products:${{ env.VERSION }}
+          ${{ secrets.DOCKER_USERNAME }}/products:latest
