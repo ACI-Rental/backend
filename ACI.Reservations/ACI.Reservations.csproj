@@ -5,7 +5,9 @@
     <Nullable>enable</Nullable>
     <UserSecretsId>4654890d-806c-4a66-a40a-c604c5c53a5a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-	<Version>0.0.1</Version>
+    <Version Condition="'$(RELEASE_VERSION)' != ''">$(RELEASE_VERSION)</Version>
+    <VersionPrefix Condition="'$(RELEASE_VERSION)' == ''">0.0.1</VersionPrefix>
+    <VersionSuffix Condition="'$(RELEASE_VERSION)' == ''">$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup>
