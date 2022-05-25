@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aci-gateway
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: aci-gateway
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aci-gateway
+spec:
+  selector:
+    matchLabels:
+      app: aci-gateway
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: aci-gateway
+    spec:
+      containers:
+      - name: aci-gateway
+        image: acirentalservice/gateway:1.1
+        ports:
+        - containerPort: 80

@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aci-products
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: aci-products
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aci-products
+spec:
+  selector:
+    matchLabels:
+      app: aci-products
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: aci-products
+    spec:
+      containers:
+      - name: aci-products
+        image: acirentalservice/products:1.0
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: secrets
+          mountPath: app/appsettings.json
+          subPath: appsettings.json
+      volumes:
+      - name: secrets
+        secret:
+          secretName: products-appsettings
+          optional: false 
