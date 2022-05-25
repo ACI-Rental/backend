@@ -11,6 +11,7 @@ using ACI.Reservations.Services.Interfaces;
 using ACI.Shared;
 using GreenPipes;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -106,6 +107,18 @@ void Run()
     builder.Services.AddScoped<IReservationService, ReservationService>();
     builder.Services.AddScoped<ITimeProvider, TimeProvider>();
 
+    // Add authentication
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["Jwt:Authority"];
+        options.Audience = builder.Configuration["Jwt:Audience"];
+        options.RequireHttpsMetadata = builder.Environment.IsProduction();
+    });
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -129,6 +142,7 @@ void Run()
 
     app.UseHttpsRedirection();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

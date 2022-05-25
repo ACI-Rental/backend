@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ACI.Reservations.Test.Integration.Fixtures.Auth;
+using ACI.Products.Test.Integration.Fixtures.Auth;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +21,7 @@ namespace ACI.Reservations.Test.Integration.Fixtures
             builder.ConfigureServices(serviceCollection =>
             {
                 serviceCollection.UseTestDatabase();
-
+                
                 serviceCollection.Configure<TestAuthHandlerOptions>(options => options.DefaultUserId = DefaultUserId);
 
                 serviceCollection.AddAuthentication(options =>

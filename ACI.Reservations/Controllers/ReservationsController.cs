@@ -7,6 +7,7 @@ using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Services.Interfaces;
 using ACI.Shared.Messaging;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -14,7 +15,8 @@ namespace ACI.Reservations.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ReservationsController : BaseController
+    [Authorize]
+    public class ReservationsController : ControllerBase
     {
         private readonly IReservationService _reservationService;
         private readonly ILogger<ReservationsController> _logger;
