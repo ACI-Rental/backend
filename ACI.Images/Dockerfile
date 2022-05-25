@@ -5,15 +5,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["ACI.Images.csproj", "ACI.Images/"]
-WORKDIR /src/ACI.Images
-
-RUN dotnet restore
+COPY ["ACI.Images/ACI.Images.csproj", "ACI.Images/"]
+RUN dotnet restore "ACI.Images/ACI.Images.csproj"
 COPY . .
-RUN dotnet build -c Release -o /app/build
+WORKDIR "/src/ACI.Images"
+RUN dotnet build "ACI.Images.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish "ACI.Images.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
