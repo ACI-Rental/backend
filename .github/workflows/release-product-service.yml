@@ -14,7 +14,7 @@ env:
   PROJECT_PATH: '"ACI.Products/ACI.Products.csproj'
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
 
