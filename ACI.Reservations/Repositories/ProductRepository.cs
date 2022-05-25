@@ -53,6 +53,7 @@ namespace ACI.Reservations.Repositories
             var retrieved = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
 
             retrieved.Name = product.Name;
+            retrieved.Location = product.Location;
             retrieved.RequiresApproval = product.RequiresApproval;
             retrieved.CategoryName = product.CategoryName;
 

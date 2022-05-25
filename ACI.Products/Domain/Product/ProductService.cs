@@ -39,6 +39,7 @@ public class ProductService : IProductService
             {
                 Id = productResponse.Id,
                 Name = productResponse.Name,
+                Location = productResponse.Location,
                 RequiresApproval = productResponse.RequiresApproval,
                 Archived = productResponse.Archived,
                 CategoryName = productResponse.CategoryName,
@@ -92,6 +93,7 @@ public class ProductService : IProductService
             {
                 Id = productResponse.Id,
                 Name = productResponse.Name,
+                Location = productResponse.Location,
                 RequiresApproval = productResponse.RequiresApproval,
                 CategoryName = productResponse.CategoryName,
             };

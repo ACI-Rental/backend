@@ -15,6 +15,10 @@ namespace ACI.Reservations.Models
         [MaxLength(128)]
         public string Name { get; set; } = null!;
 
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(1024)]
+        public string Location { get; set; }
+
         [Required]
         public bool RequiresApproval { get; set; }
 
