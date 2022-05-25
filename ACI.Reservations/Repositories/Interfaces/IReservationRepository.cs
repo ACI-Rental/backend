@@ -11,6 +11,7 @@ namespace ACI.Reservations.Repositories.Interfaces
     public interface IReservationRepository
     {
         public Task<Either<IError, List<Reservation>>> GetReservations();
+        public Task<Either<IError, List<Reservation>>> GetUserReservations(string userId);
         public Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate);
         public Task<Either<IError, List<Reservation>>> GetReservationsByEndDate(DateTime endDate);
         public Task<Either<IError, List<Reservation>>> GetReservationsByProductId(Guid productId);

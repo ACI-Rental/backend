@@ -35,6 +35,13 @@ namespace ACI.Reservations.Services
             return result.Map(ReservationDTO.MapFromList);
         }
 
+        public async Task<Either<IError, List<ReservationDTO>>> GetUserReservations(string userId)
+        {
+            var result = await _reservationRepository.GetUserReservations(userId);
+
+            return result.Map(ReservationDTO.MapFromList);
+        }
+
         public async Task<Either<IError, List<ReservationDTO>>> GetReservationsByStartDate(DateTime startDate)
         {
             var result = await _reservationRepository.GetReservationsByStartDate(startDate);

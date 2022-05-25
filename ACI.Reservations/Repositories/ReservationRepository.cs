@@ -33,6 +33,18 @@ namespace ACI.Reservations.Repositories
             return result;
         }
 
+        public async Task<Either<IError, List<Reservation>>> GetUserReservations(string userId)
+        {
+            var result = await _dbContext.Reservations.Where(x => x.RenterId == userId).ToListAsync();
+
+            if (result.Count <= 0)
+            {
+                return AppErrors.FailedToFindReservation;
+            }
+
+            return result;
+        }
+
         public async Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate)
         {
             var result = await _dbContext.Reservations.Where(x => x.StartDate.Date == startDate.Date).ToListAsync();

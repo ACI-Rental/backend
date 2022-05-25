@@ -49,6 +49,30 @@ namespace ACI.Reservations.Controllers
                 .Left(err => BadRequest(err));
         }
 
+        [HttpGet]
+        [Route("history")]
+        public async Task<IActionResult> GetPersonalReservationHistory()
+        {
+            var user = GetUser();
+
+            var result = await _reservationService.GetUserReservations(user.Id);
+
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => BadRequest(err));
+        }
+
+        [HttpGet]
+        [Route("history/{userId}")]
+        public async Task<IActionResult> GetUserReservationHistory(string userId)
+        {
+            var result = await _reservationService.GetUserReservations(userId);
+
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => BadRequest(err));
+        }
+
         /// <summary>
         /// Get all reservations with the same StartDate as specified in the parameter.
         /// </summary>
