@@ -1,0 +1,13 @@
+{{- range $index, $microservice := .Values.microservices}}
+# ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aci-{{ $microservice.name }}
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: aci-{{ $microservice.name }}
+{{- end }}
