@@ -1,4 +1,5 @@
 using System;
+using ACI.Products;
 using ACI.Products.Data;
 using ACI.Products.Data.Repositories;
 using ACI.Products.Data.Repositories.Interfaces;
@@ -6,7 +7,6 @@ using ACI.Products.Domain.Category;
 using ACI.Products.Domain.Note;
 using ACI.Products.Domain.Product;
 using ACI.Products.Messaging;
-using ACI.Reservations.Models;
 using ACI.Shared;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,7 +22,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-Log.Information("Starting ACI.Products Microservice");
+Log.Information("Starting ACI.Products (version {Version})", AppUtils.GetVersion());
 
 try
 {
