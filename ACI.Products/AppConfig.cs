@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ACI.Reservations.Models
+namespace ACI.Products
 {
     public class AppConfig
     {

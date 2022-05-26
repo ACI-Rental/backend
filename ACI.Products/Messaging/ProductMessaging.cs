@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ACI.Products.Domain.Product;
-using ACI.Products.Models.DTO;
-using ACI.Reservations.Models;
 using ACI.Shared.Messaging;
-using LanguageExt.UnsafeValueAccess;
 using MassTransit;
 using Microsoft.Extensions.Options;
 
