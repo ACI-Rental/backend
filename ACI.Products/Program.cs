@@ -41,6 +41,8 @@ finally
 void Run()
 {
     var builder = WebApplication.CreateBuilder(args);
+    builder.Configuration
+        .AddEnvironmentVariables("ACI_");
 
     builder.Host.AddAciLogging();
 
