@@ -1,4 +1,4 @@
-name: Build, test and analyze the ReservationService
+name: Build/Test/Analyze ACI.Reservations
 
 on:
   push:
@@ -77,7 +77,7 @@ jobs:
 
     - name: 'Run unit tests'
       run: dotnet test ${{ env.UNIT_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
-    
+
     - name: 'Run integration tests'
       run: dotnet test ${{ env.INTEGRATION_TEST_PATH }} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --verbosity normal
 

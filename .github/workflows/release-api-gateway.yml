@@ -1,4 +1,4 @@
-name: Release OcelotAPIGateway to Dockerhub
+name: Release ACI.Gateway to Dockerhub
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
       - S6_S2022_dev
       - feature/k8s
     paths:
-      - "OcelotAPIGateway/**"
+      - "ACI.Gateway/**"
       - ".github/workflows/release-api-gateway.yml"
 env:
-  PROJECT_PATH: '"OcelotAPIGateway/OcelotAPIGateway.csproj'
+  PROJECT_PATH: '"ACI.Gateway/ACI.Gateway.csproj'
 
 jobs:
   build-and-push:
@@ -23,7 +23,7 @@ jobs:
 
       - name: Save current app version
         run: |
-          VER=$(cat OcelotAPIGateway/VERSION)
+          VER=$(cat ACI.Gateway/VERSION)
           echo "VERSION=$VER" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
@@ -38,7 +38,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: OcelotAPIGateway
+          file: ACI.Gateway/Dockerfile
+          context: .
           push: true
           build-args: RELEASE_VERSION=${{ env.VERSION }}
           tags: |
