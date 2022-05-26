@@ -1,7 +1,11 @@
-﻿using ACI.Images.Data.Repositories.Interfaces;
+﻿using System;
+using System.Threading.Tasks;
+using ACI.Images.Data.Repositories.Interfaces;
 using ACI.Images.Models.DTO;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ACI.Images.Domain.Image
 {
@@ -24,9 +28,9 @@ namespace ACI.Images.Domain.Image
 
             return result.Map(blobResponse =>
             {
-                return new ImageResponse() { 
-                    Id = blobResponse.Id, 
-                    ProductId = blobResponse.ProductId, 
+                return new ImageResponse() {
+                    Id = blobResponse.Id,
+                    ProductId = blobResponse.ProductId,
                     BlobUrl = $"{_urlPrefix}/{blobResponse.BlobId}" };
             });
         }
@@ -72,7 +76,7 @@ namespace ACI.Images.Domain.Image
 
             var blob = productImageBlob.ValueUnsafe();
 
-            if (blob.IsNull()) 
+            if (blob.IsNull())
             {
                 _logger.LogInformation("Productimageblob {ProductId} is already deleted", productId);
                 return AppErrors.ImageAlreadyDeletedError;

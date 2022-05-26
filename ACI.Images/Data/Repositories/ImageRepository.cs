@@ -1,10 +1,17 @@
-﻿using ACI.Images.Data.Repositories.Interfaces;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using ACI.Images.Data.Repositories.Interfaces;
 using ACI.Images.Domain;
 using ACI.Images.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using LanguageExt;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ACI.Images.Data.Repositories
 {
@@ -14,7 +21,7 @@ namespace ACI.Images.Data.Repositories
         private readonly BlobContainerClient _blobContainerClient;
         private readonly ILogger<ImageRepository> _logger;
         private readonly ImageContext _context;
-        
+
         public ImageRepository(IConfiguration configuration, ILogger<ImageRepository> logger, ImageContext context)
         {
             _blobContainerClient = new BlobContainerClient(configuration["ConnectionStrings:Azurite"], configuration["AzureBlobStorage:Containers:ProductImages"]);
@@ -23,7 +30,7 @@ namespace ACI.Images.Data.Repositories
             _logger = logger;
             _context = context;
         }
-        
+
         public async Task<Either<IError, ProductImageBlob>> AddProductImageBlob(Guid productId, IFormFile image)
         {
             var productIdExists = await _context.Images.AnyAsync(x => x.ProductId.Equals(productId));
@@ -45,7 +52,7 @@ namespace ACI.Images.Data.Repositories
 
             BlobClient blob = _blobContainerClient.GetBlobClient(productImageBlob.BlobId);
             await blob.UploadAsync(image.OpenReadStream());
-            
+
             await _context.Images.AddAsync(productImageBlob);
             await _context.SaveChangesAsync();
 
@@ -63,7 +70,7 @@ namespace ACI.Images.Data.Repositories
 
             return image;
         }
-        
+
         public Option<string> GetBlobUrlFromBlobId(string blobId)
         {
             BlobClient blob = _blobContainerClient.GetBlobClient(blobId);
