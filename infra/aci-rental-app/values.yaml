@@ -16,6 +16,9 @@ frontend:
   image: acirentalservice/frontend:1.4
 
 microservices:
+  - name: gateway
+    image: acirentalservice/gateway:0.0.2
+
   - name: products
     image: acirentalservice/products:0.0.2
 
@@ -25,5 +28,3 @@ microservices:
   - name: images
     image: acirentalservice/images:0.0.2
 
-  - name: gateway
-    image: acirentalservice/gateway:0.0.2
