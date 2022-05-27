@@ -33,7 +33,7 @@ namespace ACI.Reservations.Models.DTO
             ReviewerId = reviewerId;
             IsApproved = isApproved;
             ProductId = productId;
-            Product = Product == null ? null : ProductDTO.MapFromModel(product);
+            Product = product == null ? null : ProductDTO.MapFromModel(product);
             Cancelled = cancelled;
         }
 

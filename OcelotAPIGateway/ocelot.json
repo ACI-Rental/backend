@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/images/",
+      "DownstreamPathTemplate": "/images/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -12,7 +12,7 @@
       "UpstreamPathTemplate": "/api/images/{all}"
     },
     {
-      "DownstreamPathTemplate": "/images/{all}",
+      "DownstreamPathTemplate": "/images/",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -20,7 +20,7 @@
           "Port": 5010
         }
       ],
-      "UpstreamPathTemplate": "/api/images/{all}"
+      "UpstreamPathTemplate": "/api/images/"
     },
     {
       "DownstreamPathTemplate": "/products/{all}",

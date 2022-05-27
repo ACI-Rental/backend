@@ -23,7 +23,7 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
         {
-            var result = await _dbContext.Reservations.ToListAsync();
+            var result = await _dbContext.Reservations.Include(x => x.Product).ToListAsync();
 
             if (result.Count <= 0)
             {
@@ -35,7 +35,7 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, List<Reservation>>> GetUserReservations(string userId)
         {
-            var result = await _dbContext.Reservations.Where(x => x.RenterId == userId).ToListAsync();
+            var result = await _dbContext.Reservations.Include(x => x.Product).Where(x => x.RenterId == userId).ToListAsync();
 
             if (result.Count <= 0)
             {
@@ -47,7 +47,7 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate)
         {
-            var result = await _dbContext.Reservations.Where(x => x.StartDate.Date == startDate.Date).ToListAsync();
+            var result = await _dbContext.Reservations.Include(x => x.Product).Where(x => x.StartDate.Date == startDate.Date).ToListAsync();
 
             if (result.Count <= 0)
             {
