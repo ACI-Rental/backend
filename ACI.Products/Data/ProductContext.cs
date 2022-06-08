@@ -14,8 +14,8 @@ public class ProductContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Product>().ToTable("Product");
-        modelBuilder.Entity<ProductCategory>().ToTable("ProductCategory");
+        modelBuilder.Entity<Product>();
+        modelBuilder.Entity<ProductCategory>();
     }
 
     public DbSet<Product> Products { get; set; }

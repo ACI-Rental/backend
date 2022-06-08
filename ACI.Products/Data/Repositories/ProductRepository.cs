@@ -30,7 +30,6 @@ public class ProductRepository : IProductRepository
     {
         return await _ctx.Products
             .Include(p => p.Category)
-            .Where(x => !x.IsDeleted)
             .FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
     }
 
@@ -38,7 +37,7 @@ public class ProductRepository : IProductRepository
     {
         return await _ctx.Products
             .Where(x => x.CategoryId == categoryId)
-            .Where(x => !x.IsDeleted)
+            .Where(x => !x.Archived)
             .ToListAsync();
     }
 
@@ -51,6 +50,10 @@ public class ProductRepository : IProductRepository
             _logger.LogInformation("Adding product {Product} failed with error {Error}", product.CategoryId, AppErrors.ProductInvalidCategoryError);
             return AppErrors.ProductInvalidCategoryError;
         }
+
+        var count = await _ctx.Products.CountAsync();
+
+        product.CatalogPosition = count;
 
         var result = await _ctx.Products.AddAsync(product);
         await _ctx.SaveChangesAsync();
@@ -65,7 +68,12 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetAllProducts()
     {
-        return await _ctx.Products.Include(p => p.Category).Where(x => !x.IsDeleted).ToListAsync();
+        return await _ctx.Products.OrderBy(x => x.CatalogPosition).Include(p => p.Category).Where(x => !x.Archived).ToListAsync();
+    }
+
+    public async Task<List<Product>> GetInventory()
+    {
+        return await _ctx.Products.OrderBy(x => x.CatalogPosition).Include(p => p.Category).ToListAsync();
     }
 
     public async Task<Either<IError, Product>> EditProduct(ProductUpdateRequest request)
@@ -85,17 +93,60 @@ public class ProductRepository : IProductRepository
             return AppErrors.ProductInvalidCategoryError;
         }
 
+        if (retrievedProduct.CatalogPosition != request.CatalogPosition)
+        {
+            if (request.CatalogPosition < retrievedProduct.CatalogPosition)
+            {
+                var productsToUpdate = await _ctx.Products.Where(x => x.CatalogPosition >= request.CatalogPosition && x.CatalogPosition < retrievedProduct.CatalogPosition).ToListAsync();
+
+                productsToUpdate.ForEach(x =>
+                {
+                    x.CatalogPosition++;
+                });
+            }
+
+            if (request.CatalogPosition > retrievedProduct.CatalogPosition)
+            {
+                var productsToUpdate = await _ctx.Products.Where(x => x.CatalogPosition <= request.CatalogPosition && x.CatalogPosition > retrievedProduct.CatalogPosition).ToListAsync();
+
+                productsToUpdate.ForEach(x =>
+                {
+                    x.CatalogPosition--;
+                });
+            }
+
+            await _ctx.SaveChangesAsync();
+        }
+
         retrievedProduct.Name = request.Name;
         retrievedProduct.Description = request.Description;
+        retrievedProduct.Location = request.Location;
         retrievedProduct.RequiresApproval = request.RequiresApproval;
         retrievedProduct.CategoryId = request.CategoryId;
+        retrievedProduct.CatalogPosition = request.CatalogPosition;
 
         await _ctx.SaveChangesAsync();
+
         var result = await _ctx.Products
             .Include(x => x.Category)
             .SingleAsync(x => x.Id == request.Id);
 
         return result;
+    }
+
+    public bool GetEditProductCatalogPosFilter(int oldPos, int newPos, int currentPos)
+    {
+        if (newPos < oldPos && currentPos >= newPos && currentPos < oldPos)
+        {
+            return true;
+        }
+
+        if (newPos > oldPos && currentPos <= newPos && currentPos > oldPos)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public async Task<Either<IError, Product>> ArchiveProduct(ProductArchiveRequest request)
@@ -108,7 +159,7 @@ public class ProductRepository : IProductRepository
             return AppErrors.ProductNotFoundError;
         }
 
-        retrievedProduct.IsDeleted = request.IsDeleted;
+        retrievedProduct.Archived = request.Archived;
 
         await _ctx.SaveChangesAsync();
         return retrievedProduct;

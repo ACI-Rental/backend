@@ -16,7 +16,7 @@ namespace ACI.Reservations.Controllers
     [Route("[controller]")]
     [ApiController]
     [Authorize]
-    public class ReservationsController : ControllerBase
+    public class ReservationsController : BaseController
     {
         private readonly IReservationService _reservationService;
         private readonly ILogger<ReservationsController> _logger;
@@ -43,6 +43,30 @@ namespace ACI.Reservations.Controllers
         public async Task<IActionResult> GetReservations()
         {
             var result = await _reservationService.GetReservations();
+
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => BadRequest(err));
+        }
+
+        [HttpGet]
+        [Route("history")]
+        public async Task<IActionResult> GetPersonalReservationHistory()
+        {
+            var user = GetUser();
+
+            var result = await _reservationService.GetUserReservations(user.Id);
+
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => BadRequest(err));
+        }
+
+        [HttpGet]
+        [Route("history/{userId}")]
+        public async Task<IActionResult> GetUserReservationHistory(string userId)
+        {
+            var result = await _reservationService.GetUserReservations(userId);
 
             return result
                 .Right<IActionResult>(value => Ok(value))
@@ -95,16 +119,17 @@ namespace ACI.Reservations.Controllers
         /// <param name="productReservation">This parameter contains the ProductId, RenterId, StartDate, and EndDate of the new reservation.</param>
         /// <returns>A status 200 if the reservation is created succesfully of a Status 400 if an error occured while creating the new reservation.</returns>
         [HttpPost("reserveproduct")]
-        public async Task<IActionResult> ReserveProduct([FromBody] ProductReservationDTO productReservation)
+        public async Task<IActionResult> ReserveProduct([FromBody] ReservationDTO productReservation)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
+            var user = GetUser();
             _logger.LogInformation("Creating new Reservation {productReservation}", productReservation);
 
-            var result = await _reservationService.ReserveProduct(productReservation);
+            var result = await _reservationService.ReserveProduct(productReservation, user);
 
             return result
                 .Right<IActionResult>(Ok)

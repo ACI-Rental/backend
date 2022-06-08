@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACI.Products.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20220413090024_InitialCreate")]
+    [Migration("20220521215544_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,12 @@ namespace ACI.Products.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Archived")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CatalogPosition")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -41,8 +47,10 @@ namespace ACI.Products.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -56,7 +64,7 @@ namespace ACI.Products.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("ACI.Products.Models.ProductCategory", b =>
@@ -74,7 +82,7 @@ namespace ACI.Products.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategory", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ACI.Products.Models.ProductNote", b =>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,15 +17,18 @@ namespace ACI.Reservations.Models
 
         [Required(AllowEmptyStrings = false)]
         [MaxLength(1024)]
-        public string Description { get; set; } = null!;
-
-        [Required]
-        public bool IsDeleted { get; set; }
+        public string Location { get; set; }
 
         [Required]
         public bool RequiresApproval { get; set; }
 
         [Required]
-        public int CategoryId { get; set; }
+        public bool Archived { get; set; }
+
+        [Required]
+        public string CategoryName { get; set; }
+
+        [Required]
+        public virtual List<Reservation> Reservations { get; set; }
     }
 }

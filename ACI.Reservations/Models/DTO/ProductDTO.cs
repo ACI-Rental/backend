@@ -7,9 +7,30 @@ namespace ACI.Reservations.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
         public bool RequiresApproval { get; set; }
-        public bool IsDeleted { get; set; }
-        public int CategoryId { get; set; }
+        public bool Archived { get; set; }
+        public string CategoryName { get; set; }
+
+        public ProductDTO()
+        {
+
+        }
+
+        public ProductDTO(Guid id, string name,bool requiresApproved, bool archived, string categoryName)
+        {
+            Id = id;
+            Name = name;
+            RequiresApproval = requiresApproved;
+            Archived = archived;
+            CategoryName = categoryName;
+        }
+
+        public static ProductDTO MapFromModel(Product model)
+            => new(
+                model.Id,
+                model.Name,
+                model.RequiresApproval,
+                model.Archived,
+                model.CategoryName);
     }
 }

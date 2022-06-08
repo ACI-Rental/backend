@@ -55,7 +55,9 @@ public class DbSetup
             .RuleFor(p => p.Name, f => $"{f.Commerce.ProductAdjective()} {f.Commerce.ProductName()}")
             .RuleFor(p => p.Description, f => f.Commerce.ProductDescription())
             .RuleFor(p => p.CategoryId, categoryId)
-            .RuleFor(p => p.IsDeleted, false)
+            .RuleFor(p => p.Archived, false)
+            .RuleFor(p => p.CatalogPosition, f => f.IndexFaker)
+            .RuleFor(p => p.Location, f => f.Address.BuildingNumber())
             .RuleFor(p => p.RequiresApproval, false)
             .Generate(amount);
     }

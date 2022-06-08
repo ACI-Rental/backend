@@ -34,12 +34,14 @@ namespace ACI.Reservations.Test.Integration.Fixtures
             var list = new Faker<Reservation>()
                 .RuleFor(r => r.StartDate, GetNextMonday().AddDays(7))
                 .RuleFor(r => r.EndDate, f => GetNextMonday().AddDays(f.Random.Int(8, 11)))
-                .RuleFor(r => r.RenterId, f => f.Random.Guid())
+                .RuleFor(r => r.RenterId, f => f.Random.Word())
+                .RuleFor(r => r.RenterName, f => f.Random.Word())
+                .RuleFor(r => r.RenterEmail, f => f.Random.Word())
                 .RuleFor(r => r.ProductId, f => f.Random.Guid())
                 .Generate(amount);
 
-            list.Add(new Reservation() { StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2), RenterId = Guid.NewGuid(), ProductId = Guid.Parse("70661e4b-a4f5-47e8-8c80-5b2c7ab959ff") });
-            list.Add(new Reservation() { Id = Guid.Parse("03b0a851-93b7-4397-a64e-e3d7e6f8f891"), StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2), RenterId = Guid.NewGuid(), ProductId = Guid.Parse("70661e4b-a4f5-47e8-8c80-5b2c7ab959ff") });
+            list.Add(new Reservation() { StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2), RenterId = "userId", RenterName = "userName", RenterEmail = "userEmail", ProductId = Guid.Parse("70661e4b-a4f5-47e8-8c80-5b2c7ab959ff") });
+            list.Add(new Reservation() { Id = Guid.Parse("03b0a851-93b7-4397-a64e-e3d7e6f8f891"), StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2), RenterId = "userId2", RenterName = "userName", RenterEmail = "userEmail", ProductId = Guid.Parse("70661e4b-a4f5-47e8-8c80-5b2c7ab959ff") });
 
             return list;
         }
@@ -48,13 +50,13 @@ namespace ACI.Reservations.Test.Integration.Fixtures
         {
             var list = new Faker<Product>()
                 .RuleFor(r => r.Name, f => f.Random.Word())
-                .RuleFor(r => r.Description, f => f.Random.Word())
-                .RuleFor(r => r.IsDeleted, false)
+                .RuleFor(r => r.Location, f => f.Random.Word())
+                .RuleFor(r => r.Archived, false)
                 .RuleFor(r => r.RequiresApproval, false)
-                .RuleFor(r => r.CategoryId, f => f.Random.Int())
+                .RuleFor(r => r.CategoryName, f => f.Random.Word())
                 .Generate(amount);
 
-            list.Add(new Product() { Id = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"), Name = "tv", Description = "mooie tv", IsDeleted = false, RequiresApproval = false, CategoryId = 1 });
+            list.Add(new Product() { Id = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"), Name = "tv", Location = "plank 3", Archived = false, RequiresApproval = false, CategoryName = "beeldscherm" });
             return list;
         }
 

@@ -121,14 +121,15 @@ public class NoteTest : IClassFixture<ProductAppFactory>
     private async Task<ProductResponse> InsertProduct(
         string name = "TestProduct",
         string description = "TestDescription",
+        string location = "TestLocation",
         int category = 1)
     {
         var request = new CreateProductRequest
         {
             CategoryId = category,
             Description = description,
+            Location = location,
             Name = name,
-            IsDeleted = false,
             RequiresApproval = false,
         };
 

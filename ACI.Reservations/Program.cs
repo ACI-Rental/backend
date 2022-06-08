@@ -134,14 +134,6 @@ void Run()
         app.UseSwaggerUI();
     }
 
-    using (var scope = app.Services.CreateScope())
-    {
-        var services = scope.ServiceProvider;
-
-        var context = services.GetRequiredService<ReservationDBContext>();
-        context.Database.EnsureCreated();
-    }
-
     app.UseCors(x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()
