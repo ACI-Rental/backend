@@ -198,12 +198,12 @@ namespace ACI.Reservations.Services
             return result.IsRight;
         }
 
-        private bool ExceedsDayLimit(ReservationDTO ReservationDTO)
+        private bool ExceedsDayLimit(ReservationDTO reservationDTO)
         {
             // Weekend days don't count toward the limit
-            var weekendDays = AmountOfWeekendDays(ReservationDTO.StartDate, ReservationDTO.EndDate);
+            var weekendDays = AmountOfWeekendDays(reservationDTO.StartDate, reservationDTO.EndDate);
 
-            var totalDays = (ReservationDTO.EndDate - ReservationDTO.StartDate).TotalDays - weekendDays;
+            var totalDays = (reservationDTO.EndDate - reservationDTO.StartDate).TotalDays - weekendDays;
             return totalDays > MaxReservationDays;
         }
 
