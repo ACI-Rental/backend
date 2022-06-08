@@ -80,9 +80,9 @@ namespace ACI.Reservations.Repositories
             return result;
         }
 
-        public async Task<Either<IError, Reservation>> GetOverlappingReservation(Guid productId, DateTime startDate, DateTime endDate)
+        public async Task<Either<IError, Reservation>> GetOverlappingReservation(Guid reservationId, Guid productId, DateTime startDate, DateTime endDate)
         {
-            var result = await _dbContext.Reservations.Where(x => x.ProductId == productId && x.StartDate <= endDate && startDate < x.EndDate && x.Cancelled == false).FirstOrDefaultAsync();
+            var result = await _dbContext.Reservations.Where(x => x.ProductId == productId && x.StartDate <= endDate && startDate < x.EndDate && x.Cancelled == false && x.Id != reservationId).FirstOrDefaultAsync();
 
             if (result == null)
             {

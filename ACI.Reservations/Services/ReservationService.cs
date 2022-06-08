@@ -150,11 +150,6 @@ namespace ACI.Reservations.Services
                 return AppErrors.ProductNotFoundError;
             }
 
-            if (productReservationDTO.StartDate.Date < now)
-            {
-                return AppErrors.InvalidStartDate;
-            }
-
             if (productReservationDTO.EndDate.Date < now)
             {
                 return AppErrors.InvalidEndDate;

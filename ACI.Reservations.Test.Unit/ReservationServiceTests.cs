@@ -391,49 +391,6 @@ namespace ACI.Reservations.Test.Unit
         }
 
         [Fact]
-        public async Task Reserve_Product_Fail_StartDate_Before_CurrentDate()
-        {
-            // Arrange
-            var nextMonday = _testData.GetNextMonday();
-            var productReservationDTO = new ProductReservationDTO()
-            {
-                ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
-                StartDate = nextMonday.AddDays(-1),
-                EndDate = nextMonday.AddDays(2),
-            };
-
-            var reservation = new Reservation()
-            {
-                ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
-                StartDate = nextMonday.AddDays(-1),
-                EndDate = nextMonday.AddDays(2),
-            };
-
-            _mockTimeProvider
-                .Setup(s => s.GetDateTimeNow())
-                .Returns(nextMonday);
-
-            _mockReservationRepository
-                .Setup(s => s.CreateReservation(It.IsAny<Reservation>()))
-                .ReturnsAsync(reservation);
-
-            _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(productReservationDTO.ProductId, productReservationDTO.StartDate, productReservationDTO.EndDate))
-                .ReturnsAsync(AppErrors.FailedToFindReservation);
-
-            // Act
-            var result = await _reservationService.ReserveProduct(productReservationDTO);
-
-            // Assert
-            result.ShouldBeLeft(r =>
-            {
-                r.Should().Be(AppErrors.InvalidStartDate);
-            });
-        }
-
-        [Fact]
         public async Task Reserve_Product_Fail_EndDate_Before_CurrentDate()
         {
             // Arrange
