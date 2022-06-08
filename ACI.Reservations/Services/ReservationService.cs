@@ -95,15 +95,15 @@ namespace ACI.Reservations.Services
             return result.Map(ReservationDTO.MapFromModel);
         }
 
-        public async Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO ReservationDTO, AppUser user)
+        public async Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO reservationDTO, AppUser user)
         {
-            var result = await ValidateReservationData(ReservationDTO);
+            var result = await ValidateReservationData(reservationDTO);
             if (result.IsSome)
             {
                 return result.ValueUnsafe();
             }
 
-            var productResult = await _productRepository.GetProductById(ReservationDTO.ProductId);
+            var productResult = await _productRepository.GetProductById(reservationDTO.ProductId);
             if (productResult.IsNone)
             {
                 return AppErrors.ProductNotFoundError;
@@ -111,12 +111,12 @@ namespace ACI.Reservations.Services
 
             var reservation = new Reservation()
             {
-                ProductId = ReservationDTO.ProductId,
+                ProductId = reservationDTO.ProductId,
                 RenterId = user.Id,
                 RenterName = user.Name,
                 RenterEmail = user.Email,
-                StartDate = ReservationDTO.StartDate,
-                EndDate = ReservationDTO.EndDate,
+                StartDate = reservationDTO.StartDate,
+                EndDate = reservationDTO.EndDate,
             };
 
             var product = productResult.ValueUnsafe();
