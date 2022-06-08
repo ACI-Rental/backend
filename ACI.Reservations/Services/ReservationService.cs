@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ACI.Reservations.Domain;
@@ -127,6 +128,13 @@ namespace ACI.Reservations.Services
             var createResult = await _reservationRepository.CreateReservation(reservation);
 
             return createResult.Map(ReservationDTO.MapFromModel);
+        }
+
+        public async Task<List<PackingSlipResponse>> GetPackingSlip(PackingSlipRequest packingSlipRequest)
+        {
+            var result = await _reservationRepository.GetPackingSlip(packingSlipRequest.Date);
+            
+            return result.Select(PackingSlipResponse.MapFromModel).ToList();
         }
 
         private async Task<Option<IError>> ValidateReservationData(ReservationDTO ReservationDTO)

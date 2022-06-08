@@ -178,5 +178,17 @@ namespace ACI.Reservations.Controllers
                 .Right<IActionResult>(Ok)
                 .Left(err => BadRequest(err));
         }
+
+        public async Task<IActionResult> PackingSlip([FromBody] PackingSlipRequest packingSlipRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _reservationService.GetPackingSlip(packingSlipRequest);
+
+            return Ok(result);
+        }
     }
 }
