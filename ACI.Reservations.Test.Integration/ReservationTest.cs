@@ -48,7 +48,7 @@ namespace ACI.Reservations.Test.Integration
             var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
 
             reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(101);
+            reservations.Count.Should().Be(100);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace ACI.Reservations.Test.Integration
             var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
 
             reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(98);
+            reservations.Count.Should().Be(97);
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace ACI.Reservations.Test.Integration
         public async void Get_Reservations_By_ProductId()
         {
             // Arrange
-            var productId = Guid.Parse("70661e4b-a4f5-47e8-8c80-5b2c7ab959ff");
+            var productId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7ef");
 
             // Act
             var response = await _apiClient.GetReservationsByProductId(productId);
@@ -249,14 +249,14 @@ namespace ACI.Reservations.Test.Integration
         }
 
         [Fact]
-        public async void Reserve_Product_Succes()
+        public async void Reserve_Product_Success()
         {
             // Arrange
             var newReservation = new ReservationDTO()
             {
                 ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"),
-                StartDate = GetNextMonday().AddDays(1),
-                EndDate = GetNextMonday().AddDays(2),
+                StartDate = GetNextMonday().AddDays(3),
+                EndDate = GetNextMonday().AddDays(4),
             };
 
             // Act
