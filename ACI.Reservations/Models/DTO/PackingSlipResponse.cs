@@ -4,7 +4,6 @@ namespace ACI.Reservations.Models.DTO;
 
 public class PackingSlipResponse
 {
-
     public Guid Id { get; }
     public DateTime StartDate { get; }
     public DateTime EndDate { get; }
@@ -21,15 +20,7 @@ public class PackingSlipResponse
         ProductId = productId;
         ProductName = productName;
     }
-    
-    public static PackingSlipResponse MapFromModel(Reservation model)
-    => new(
-        model.Id,
-        model.StartDate,
-        model.EndDate,
-        model.RenterId,
-        model.ProductId,
-        model.RentedProduct.Name
-    );
 
+    public static PackingSlipResponse MapFromModel(Reservation model) =>
+        new(model.Id, model.StartDate, model.EndDate, model.RenterId, model.ProductId, model.RentedProduct.Name);
 }

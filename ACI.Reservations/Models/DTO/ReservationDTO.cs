@@ -19,7 +19,6 @@ namespace ACI.Reservations.Models.DTO
 
         public ReservationDTO()
         {
-
         }
 
         public ReservationDTO(Guid id, DateTime startDate, DateTime endDate, DateTime? pickedUpDate, DateTime? returnDate, string renterId, string? reviewerId, bool? isApproved, Guid productId, Product product, bool cancelled)

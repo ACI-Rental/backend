@@ -13,10 +13,9 @@ namespace ACI.Reservations.Models
 
         public ProductDTO()
         {
-
         }
 
-        public ProductDTO(Guid id, string name,bool requiresApproved, bool archived, string categoryName)
+        public ProductDTO(Guid id, string name, bool requiresApproved, bool archived, string categoryName)
         {
             Id = id;
             Name = name;

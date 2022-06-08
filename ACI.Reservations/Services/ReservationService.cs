@@ -133,54 +133,55 @@ namespace ACI.Reservations.Services
         public async Task<List<PackingSlipResponse>> GetPackingSlip(PackingSlipRequest packingSlipRequest)
         {
             var result = await _reservationRepository.GetPackingSlip(packingSlipRequest.Date);
-            
+
             return result.Select(PackingSlipResponse.MapFromModel).ToList();
         }
 
-        private async Task<Option<IError>> ValidateReservationData(ReservationDTO ReservationDTO)
+        private async Task<Option<IError>> ValidateReservationData(ReservationDTO reservationDTO)
         {
             var now = _timeProvider.GetDateTimeNow();
-            if (ReservationDTO.ProductId == Guid.Empty)
+
+            if (reservationDTO.ProductId == Guid.Empty)
             {
                 return AppErrors.ProductNotFoundError;
             }
 
-            if (ReservationDTO.StartDate.Date < now)
+            if (reservationDTO.StartDate.Date < now)
             {
                 return AppErrors.InvalidStartDate;
             }
 
-            if (ReservationDTO.EndDate.Date < now)
+            if (reservationDTO.EndDate.Date < now)
             {
                 return AppErrors.InvalidEndDate;
             }
 
-            if (ReservationDTO.EndDate < ReservationDTO.StartDate)
+            if (reservationDTO.EndDate < reservationDTO.StartDate)
             {
                 return AppErrors.EndDateBeforeStartDate;
             }
 
-            if (ReservationDTO.StartDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+            if (reservationDTO.StartDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 return AppErrors.StartDateInWeekend;
             }
 
-            if (ReservationDTO.EndDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+            if (reservationDTO.EndDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 return AppErrors.EndDateInWeekend;
             }
 
-            if (ExceedsDayLimit(ReservationDTO))
+            if (ExceedsDayLimit(reservationDTO))
             {
                 return AppErrors.ReservationIsTooLong;
             }
 
-            if (await HasOverlappingReservation(ReservationDTO))
+            if (await HasOverlappingReservation(reservationDTO))
             {
                 return AppErrors.ReservationIsOverlapping;
             }
 
-            var productResult = await _productRepository.GetProductById(ReservationDTO.ProductId);
+            var productResult = await _productRepository.GetProductById(reservationDTO.ProductId);
 
             if (productResult.IsNone)
             {
