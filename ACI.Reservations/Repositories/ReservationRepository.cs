@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ACI.Reservations.DBContext;
 using ACI.Reservations.Domain;
 using ACI.Reservations.Models;
-using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Repositories.Interfaces;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;

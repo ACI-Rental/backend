@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,7 +15,6 @@ using LanguageExt;
 using LanguageExt.UnitTesting;
 using Microsoft.Extensions.Options;
 using Moq;
-using Moq.Contrib.HttpClient;
 using Moq.Protected;
 using Newtonsoft.Json;
 using Xunit;
@@ -157,7 +155,7 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
                 RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
@@ -205,7 +203,7 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
                 RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
@@ -253,7 +251,7 @@ namespace ACI.Reservations.Test.Unit
         {
             // Arrange
             var nextMonday = _testData.GetNextMonday();
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationDTO()
             {
                 ProductId = product.Id,
                 RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
@@ -305,7 +303,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday,
@@ -330,7 +328,7 @@ namespace ACI.Reservations.Test.Unit
             };
 
             _mockProductRepository
-                .Setup(s => s.GetProductById(ReservationDTO.ProductId))
+                .Setup(s => s.GetProductById(reservationDTO.ProductId))
                 .ReturnsAsync(returnProduct);
 
             _mockReservationRepository
@@ -338,11 +336,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeRight(r =>
@@ -359,7 +357,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = Guid.Empty,
                 StartDate = nextMonday,
@@ -379,11 +377,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -400,7 +398,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday.AddDays(-1),
@@ -424,11 +422,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -445,7 +443,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday.AddDays(2),
@@ -469,11 +467,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -490,7 +488,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday.AddDays(2),
@@ -510,11 +508,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -531,7 +529,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday.AddDays(6),
@@ -551,11 +549,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -572,7 +570,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday,
@@ -592,11 +590,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -613,7 +611,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday,
@@ -633,11 +631,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -654,7 +652,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday,
@@ -674,11 +672,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(reservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>
@@ -695,7 +693,7 @@ namespace ACI.Reservations.Test.Unit
 
             var appUser = new AppUser("yes", "b57f1be4-30c9-45fd-9472-9abd9d82cad3", "yes");
 
-            var ReservationDTO = new ReservationDTO()
+            var reservationDTO = new ReservationCreateDTO()
             {
                 ProductId = product.Id,
                 StartDate = nextMonday,
@@ -711,7 +709,7 @@ namespace ACI.Reservations.Test.Unit
             };
 
             _mockProductRepository
-                .Setup(s => s.GetProductById(ReservationDTO.ProductId))
+                .Setup(s => s.GetProductById(reservationDTO.ProductId))
                 .ReturnsAsync(Option<Product>.None);
 
             _mockReservationRepository
@@ -719,11 +717,11 @@ namespace ACI.Reservations.Test.Unit
                 .ReturnsAsync(reservation);
 
             _mockReservationRepository
-                .Setup(s => s.GetOverlappingReservation(ReservationDTO.ProductId, ReservationDTO.StartDate, ReservationDTO.EndDate))
+                .Setup(s => s.GetOverlappingReservation(Guid.Empty, reservationDTO.ProductId, reservationDTO.StartDate, reservationDTO.EndDate))
                 .ReturnsAsync(AppErrors.FailedToFindReservation);
 
             // Act
-            var result = await _reservationService.ReserveProduct(ReservationDTO, appUser);
+            var result = await _reservationService.ReserveProduct(reservationDTO, appUser);
 
             // Assert
             result.ShouldBeLeft(r =>

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
+﻿using System.Security.Authentication;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using ACI.Reservations.Models.DTO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.Reservations.Controllers

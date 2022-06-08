@@ -5,7 +5,6 @@ using ACI.Reservations.Messaging.Consumers;
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Services.Interfaces;
-using ACI.Shared.Messaging;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -119,7 +118,7 @@ namespace ACI.Reservations.Controllers
         /// <param name="productReservation">This parameter contains the ProductId, RenterId, StartDate, and EndDate of the new reservation.</param>
         /// <returns>A status 200 if the reservation is created succesfully of a Status 400 if an error occured while creating the new reservation.</returns>
         [HttpPost("reserveproduct")]
-        public async Task<IActionResult> ReserveProduct([FromBody] ReservationDTO productReservation)
+        public async Task<IActionResult> ReserveProduct([FromBody] ReservationCreateDTO productReservation)
         {
             if (!ModelState.IsValid)
             {
@@ -192,7 +191,8 @@ namespace ACI.Reservations.Controllers
                 return BadRequest();
             }
 
-            var result = await _reservationService.EditReservation(reservationEditDTO);
+            var user = GetUser();
+            var result = await _reservationService.EditReservation(reservationEditDTO, user);
 
             return result
                 .Right<IActionResult>(Ok)

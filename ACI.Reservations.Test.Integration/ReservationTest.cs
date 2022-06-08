@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 using ACI.Reservations.Models;
 using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Test.Integration.Fixtures;
@@ -48,7 +45,7 @@ namespace ACI.Reservations.Test.Integration
             var reservations = await response.Content.ReadFromJsonAsync<List<Reservation>>();
 
             reservations.Should().NotBeNull();
-            reservations.Count.Should().Be(101);
+            reservations.Count.Should().Be(1);
         }
 
         [Fact]
