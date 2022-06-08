@@ -12,8 +12,9 @@ public class CreateProductRequest
     [MaxLength(1024)]
     public string Description { get; set; } = null!;
 
-    [Required]
-    public bool IsDeleted { get; set; }
+    [Required(AllowEmptyStrings = false)]
+    [MaxLength(1024)]
+    public string Location { get; set; } = null!;
 
     [Required]
     public bool RequiresApproval { get; set; }
@@ -27,7 +28,8 @@ public class CreateProductRequest
         {
             Name = Name,
             Description = Description,
-            IsDeleted = IsDeleted,
+            Location = Location,
+            Archived = false,
             RequiresApproval = RequiresApproval,
             CategoryId = CategoryId,
         };

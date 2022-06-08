@@ -39,10 +39,10 @@ public class ProductService : IProductService
             {
                 Id = productResponse.Id,
                 Name = productResponse.Name,
-                Description = productResponse.Description,
-                IsDeleted = productResponse.IsDeleted,
-                CategoryId = productResponse.CategoryId,
+                Location = productResponse.Location,
                 RequiresApproval = productResponse.RequiresApproval,
+                Archived = productResponse.Archived,
+                CategoryName = productResponse.CategoryName,
             };
 
             await _productMessaging.SendProductResponse(productCreatedMessage);
@@ -72,11 +72,36 @@ public class ProductService : IProductService
         return result.Select(ProductResponse.MapFromModel).ToList();
     }
 
+    public async Task<List<ProductResponse>> GetInventory()
+    {
+        var result = await _repository.GetInventory();
+
+        return result.Select(ProductResponse.MapFromModel).ToList();
+    }
+
     public async Task<Either<IError, ProductResponse>> EditProduct(ProductUpdateRequest request)
     {
-        var result = await _repository.EditProduct(request);
+        var productOrError = await _repository.EditProduct(request);
 
-        return result.Map(ProductResponse.MapFromModel);
+        var result = productOrError.Map(ProductResponse.MapFromModel);
+
+        if (result.IsRight)
+        {
+            var productResponse = result.ValueUnsafe();
+
+            var productCreatedMessage = new ProductUpdatedMessage()
+            {
+                Id = productResponse.Id,
+                Name = productResponse.Name,
+                Location = productResponse.Location,
+                RequiresApproval = productResponse.RequiresApproval,
+                CategoryName = productResponse.CategoryName,
+            };
+
+            await _productMessaging.SendProductUpdatedMessage(productCreatedMessage);
+        }
+
+        return result;
     }
 
     public async Task<Either<IError, ProductResponse>> ArchiveProduct(ProductArchiveRequest request)

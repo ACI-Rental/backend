@@ -58,6 +58,15 @@ public class ProductsController : BaseController
         return Ok(result);
     }
 
+    [HttpGet]
+    [Route("inventory")]
+    public async Task<IActionResult> GetInventory()
+    {
+        _logger.LogInformation("Getting product inventory");
+        var result = await _service.GetInventory();
+        return Ok(result);
+    }
+
     [HttpPut("Archive")]
     [Authorize(Roles = "employee")]
     public async Task<IActionResult> ArchiveProduct([FromBody] ProductArchiveRequest request)
@@ -77,7 +86,7 @@ public class ProductsController : BaseController
     }
 
     [HttpPut("Edit")]
-    [Authorize(Roles = "employee")]
+    //[Authorize(Roles = "employee")]
     public async Task<IActionResult> EditProduct([FromBody] ProductUpdateRequest request)
     {
         if (!ModelState.IsValid)

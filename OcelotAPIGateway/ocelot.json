@@ -1,12 +1,34 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/products/{all}",
+      "DownstreamPathTemplate": "/images/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 5010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/images/{all}"
+    },
+    {
+      "DownstreamPathTemplate": "/images/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5010
+        }
+      ],
+      "UpstreamPathTemplate": "/api/images/"
+    },
+    {
+      "DownstreamPathTemplate": "/products/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5030
         }
       ],
       "UpstreamPathTemplate": "/api/products/{all}"
@@ -17,7 +39,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5010
+          "Port": 5030
         }
       ],
       "UpstreamPathTemplate": "/api/products/"
@@ -28,7 +50,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5010
+          "Port": 5030
         }
       ],
       "UpstreamPathTemplate": "/api/Category/{all}"
@@ -39,7 +61,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5010
+          "Port": 5030
         }
       ],
       "UpstreamPathTemplate": "/api/Category/"
@@ -50,7 +72,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5030
+          "Port": 5050
         }
       ],
       "UpstreamPathTemplate": "/api/reservations/{all}"
@@ -61,7 +83,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5030
+          "Port": 5050
         }
       ],
       "UpstreamPathTemplate": "/api/reservations/"

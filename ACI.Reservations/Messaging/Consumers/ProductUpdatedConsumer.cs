@@ -26,9 +26,9 @@ public class ProductUpdatedConsumer : IConsumer<ProductUpdatedMessage>
         {
             Id = context.Message.Id,
             Name = context.Message.Name,
-            Description = context.Message.Description,
+            Location = context.Message.Location,
             RequiresApproval = context.Message.RequiresApproval,
-            CategoryId = context.Message.CategoryId,
+            CategoryName = context.Message.CategoryName,
         };
 
         await _productRepository.AddProduct(product);

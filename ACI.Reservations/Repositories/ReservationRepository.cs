@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ACI.Reservations.DBContext;
 using ACI.Reservations.Domain;
 using ACI.Reservations.Models;
+using ACI.Reservations.Models.DTO;
 using ACI.Reservations.Repositories.Interfaces;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,19 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
         {
-            var result = await _dbContext.Reservations.ToListAsync();
+            var result = await _dbContext.Reservations.Include(x => x.Product).ToListAsync();
+
+            if (result.Count <= 0)
+            {
+                return AppErrors.FailedToFindReservation;
+            }
+
+            return result;
+        }
+
+        public async Task<Either<IError, List<Reservation>>> GetUserReservations(string userId)
+        {
+            var result = await _dbContext.Reservations.Include(x => x.Product).Where(x => x.RenterId == userId).ToListAsync();
 
             if (result.Count <= 0)
             {
@@ -34,7 +47,7 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, List<Reservation>>> GetReservationsByStartDate(DateTime startDate)
         {
-            var result = await _dbContext.Reservations.Where(x => x.StartDate.Date == startDate.Date).ToListAsync();
+            var result = await _dbContext.Reservations.Include(x => x.Product).Where(x => x.StartDate.Date == startDate.Date).ToListAsync();
 
             if (result.Count <= 0)
             {

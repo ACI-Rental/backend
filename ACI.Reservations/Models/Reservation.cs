@@ -44,12 +44,20 @@ namespace ACI.Reservations.Models
         /// Id of the person that mode the reservation.
         /// </summary>
         [Required]
-        public Guid RenterId { get; set; }
+        public string RenterId { get; set; }
+
+
+        [Required(AllowEmptyStrings = false)]
+        public string RenterName { get; set; } = null!;
+
+
+        [Required(AllowEmptyStrings = false)]
+        public string RenterEmail { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets id of the person that made the review of the reservation.
         /// </summary>
-        public Guid? ReviewerId { get; set; }
+        public string? ReviewerId { get; set; }
 
         /// <summary>
         /// Gets or sets used to know if the reservation is approved or not.
@@ -62,6 +70,9 @@ namespace ACI.Reservations.Models
         /// </summary>
         [Required]
         public Guid ProductId { get; set; }
+
+        [Required]
+        public virtual Product Product { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether used to know if a reservation is cancelled.

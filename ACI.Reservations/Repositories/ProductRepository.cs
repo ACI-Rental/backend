@@ -29,7 +29,7 @@ namespace ACI.Reservations.Repositories
         public async Task<Option<Product>> GetProductById(Guid id)
         {
             return await _dbContext.Products
-                    .Where(x => !x.IsDeleted)
+                    .Where(x => !x.Archived)
                     .FirstOrDefaultAsync(x => x.Id == id) ?? Option<Product>.None;
         }
 
@@ -41,7 +41,7 @@ namespace ACI.Reservations.Repositories
                 return Unit.Default;
             }
 
-            product.IsDeleted = true;
+            product.Archived = true;
 
             await _dbContext.SaveChangesAsync();
 
@@ -53,9 +53,9 @@ namespace ACI.Reservations.Repositories
             var retrieved = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
 
             retrieved.Name = product.Name;
-            retrieved.Description = product.Description;
+            retrieved.Location = product.Location;
             retrieved.RequiresApproval = product.RequiresApproval;
-            retrieved.CategoryId = product.CategoryId;
+            retrieved.CategoryName = product.CategoryName;
 
             await _dbContext.SaveChangesAsync();
 

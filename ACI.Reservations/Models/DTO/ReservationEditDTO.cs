@@ -12,7 +12,7 @@ namespace ACI.Reservations.Models.DTO
         public Guid ProductId { get; set; }
 
         [Required]
-        public Guid RenterId { get; set; }
+        public string RenterId { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }

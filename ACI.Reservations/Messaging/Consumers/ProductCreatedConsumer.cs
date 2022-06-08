@@ -27,10 +27,10 @@ namespace ACI.Reservations.Messaging.Consumers
             {
                 Id = context.Message.Id,
                 Name = context.Message.Name,
-                Description = context.Message.Description,
+                Location = context.Message.Location,
                 RequiresApproval = context.Message.RequiresApproval,
-                IsDeleted = context.Message.IsDeleted,
-                CategoryId = context.Message.CategoryId,
+                Archived = context.Message.Archived,
+                CategoryName = context.Message.CategoryName,
             };
 
             await _productRepository.AddProduct(product);

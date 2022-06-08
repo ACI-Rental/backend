@@ -1,5 +1,6 @@
 ﻿using ACI.Images.Domain.Image;
 using ACI.Images.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ACI.Images.Controllers
@@ -28,6 +29,7 @@ namespace ACI.Images.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "employee")]
         public async Task<IActionResult> PostImage([FromForm] UploadImageRequest uploadImageRequest)
         {
             _logger.LogInformation("Uploading image blob {ProductImageBlob}", uploadImageRequest);
@@ -43,6 +45,7 @@ namespace ACI.Images.Controllers
         }
 
         [HttpDelete("{productId:guid}")]
+        [Authorize(Roles = "employee")]
         public async Task<IActionResult> DeleteImageById(Guid productId)
         {
             _logger.LogInformation("Deleting Image by id {ProductId}", productId);
