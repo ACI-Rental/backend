@@ -22,5 +22,5 @@ public class PackingSlipResponse
     }
 
     public static PackingSlipResponse MapFromModel(Reservation model) =>
-        new(model.Id, model.StartDate, model.EndDate, model.RenterId, model.ProductId, model.RentedProduct.Name);
+        new(model.Id, model.StartDate, model.EndDate, model.RenterId, model.ProductId, model.Product.Name);
 }

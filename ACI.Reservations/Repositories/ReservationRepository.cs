@@ -137,7 +137,7 @@ namespace ACI.Reservations.Repositories
 
         public async Task<List<Reservation>> GetPackingSlip(DateTime date)
         {
-            var reservations = await _dbContext.Reservations.Include(b => b.RentedProduct).Where(x => x.StartDate == date).ToListAsync();
+            var reservations = await _dbContext.Reservations.Include(b => b.Product).Where(x => x.StartDate == date).ToListAsync();
 
             return reservations;
         }

@@ -76,7 +76,5 @@ namespace ACI.Reservations.Models
         /// Gets or sets a value indicating whether used to know if a reservation is cancelled.
         /// </summary>
         public bool Cancelled { get; set; } = false;
-
-        public Product RentedProduct { get; set; }
     }
 }
