@@ -23,7 +23,19 @@ namespace ACI.Reservations.Repositories
 
         public async Task<Either<IError, List<Reservation>>> GetReservations()
         {
-            var result = await _dbContext.Reservations.Include(x => x.Product).ToListAsync();
+            var result = await _dbContext.Reservations.Where(x => x.IsApproved == true || x.IsApproved == null).Include(x => x.Product).ToListAsync();
+
+            if (result.Count <= 0)
+            {
+                return AppErrors.FailedToFindReservation;
+            }
+
+            return result;
+        }
+
+        public async Task<Either<IError, List<Reservation>>> GetReservationRequests()
+        {
+            var result = await _dbContext.Reservations.Where(x => x.IsApproved == false).Include(x => x.Product).ToListAsync();
 
             if (result.Count <= 0)
             {

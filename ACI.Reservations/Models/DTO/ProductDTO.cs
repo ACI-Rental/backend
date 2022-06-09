@@ -7,6 +7,7 @@ namespace ACI.Reservations.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Location { get; set; }
         public bool RequiresApproval { get; set; }
         public bool Archived { get; set; }
         public string CategoryName { get; set; }
@@ -15,10 +16,11 @@ namespace ACI.Reservations.Models
         {
         }
 
-        public ProductDTO(Guid id, string name, bool requiresApproved, bool archived, string categoryName)
+        public ProductDTO(Guid id, string name, string location, bool requiresApproved, bool archived, string categoryName)
         {
             Id = id;
             Name = name;
+            Location = location;
             RequiresApproval = requiresApproved;
             Archived = archived;
             CategoryName = categoryName;
@@ -28,6 +30,7 @@ namespace ACI.Reservations.Models
             => new(
                 model.Id,
                 model.Name,
+                model.Location,
                 model.RequiresApproval,
                 model.Archived,
                 model.CategoryName);

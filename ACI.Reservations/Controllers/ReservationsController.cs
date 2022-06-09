@@ -50,6 +50,17 @@ namespace ACI.Reservations.Controllers
         }
 
         [HttpGet]
+        [Route("requests")]
+        public async Task<IActionResult> GetReservationRequests()
+        {
+            var result = await _reservationService.GetReservationRequests();
+
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => BadRequest(err));
+        }
+
+        [HttpGet]
         [Route("history")]
         public async Task<IActionResult> GetPersonalReservationHistory()
         {

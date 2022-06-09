@@ -36,6 +36,13 @@ namespace ACI.Reservations.Services
             return result.Map(ReservationDTO.MapFromList);
         }
 
+        public async Task<Either<IError, List<ReservationDTO>>> GetReservationRequests()
+        {
+            var result = await _reservationRepository.GetReservationRequests();
+
+            return result.Map(ReservationDTO.MapFromList);
+        }
+
         public async Task<Either<IError, List<ReservationDTO>>> GetUserReservations(string userId)
         {
             var result = await _reservationRepository.GetUserReservations(userId);
@@ -78,12 +85,14 @@ namespace ACI.Reservations.Services
             switch (action)
             {
                 case ReservationAction.CANCEL:
-                    reservationToChange.Cancelled = true;
+                    reservationToChange.Status = ReservationStatus.CANCELLED;
                     break;
                 case ReservationAction.PICKUP:
+                    reservationToChange.Status = ReservationStatus.ACTIVE;
                     reservationToChange.PickedUpDate = DateTime.Now;
                     break;
                 case ReservationAction.RETURN:
+                    reservationToChange.Status = ReservationStatus.RETURNED;
                     reservationToChange.ReturnDate = DateTime.Now;
                     break;
                 default:
@@ -117,6 +126,7 @@ namespace ACI.Reservations.Services
                 RenterEmail = user.Email,
                 StartDate = reservationDTO.StartDate,
                 EndDate = reservationDTO.EndDate,
+                Status = ReservationStatus.RESERVED,
             };
 
             var product = productResult.ValueUnsafe();

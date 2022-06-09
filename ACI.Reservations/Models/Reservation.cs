@@ -73,8 +73,8 @@ namespace ACI.Reservations.Models
         public virtual Product Product { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether used to know if a reservation is cancelled.
+        /// Gets or sets a value indicating the reservation status.
         /// </summary>
-        public bool Cancelled { get; set; } = false;
+        public ReservationStatus Status { get; set; } = ReservationStatus.RETURNED;
     }
 }
