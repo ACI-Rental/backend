@@ -46,10 +46,8 @@ namespace ACI.Reservations.Models
         [Required]
         public string RenterId { get; set; }
 
-
         [Required(AllowEmptyStrings = false)]
         public string RenterName { get; set; } = null!;
-
 
         [Required(AllowEmptyStrings = false)]
         public string RenterEmail { get; set; } = null!;

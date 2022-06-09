@@ -18,7 +18,7 @@ namespace ACI.Reservations.Migrations
                     Location = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
                     RequiresApproval = table.Column<bool>(type: "bit", nullable: false),
                     Archived = table.Column<bool>(type: "bit", nullable: false),
-                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -40,7 +40,7 @@ namespace ACI.Reservations.Migrations
                     ReviewerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsApproved = table.Column<bool>(type: "bit", nullable: true),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Cancelled = table.Column<bool>(type: "bit", nullable: false)
+                    Cancelled = table.Column<bool>(type: "bit", nullable: false),
                 },
                 constraints: table =>
                 {

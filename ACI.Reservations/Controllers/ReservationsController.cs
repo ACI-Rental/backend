@@ -178,5 +178,19 @@ namespace ACI.Reservations.Controllers
                 .Right<IActionResult>(Ok)
                 .Left(err => BadRequest(err));
         }
+
+        [HttpGet("getPackagingSlip")]
+        [Authorize(Roles = "employee")]
+        public async Task<IActionResult> PackingSlip([FromQuery] PackingSlipRequest packingSlipRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _reservationService.GetPackingSlip(packingSlipRequest);
+
+            return Ok(result);
+        }
     }
 }

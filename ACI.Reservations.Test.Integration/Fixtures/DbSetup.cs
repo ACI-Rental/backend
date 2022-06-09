@@ -9,7 +9,7 @@ namespace ACI.Reservations.Test.Integration.Fixtures
 {
     public class DbSetup
     {
-        public const int ReservationsTotal = 98;
+        public const int ReservationsTotal = 97;
         public const int ProductsTotal = 49;
         private static readonly Random Random = new Random();
 
@@ -37,11 +37,11 @@ namespace ACI.Reservations.Test.Integration.Fixtures
                 .RuleFor(r => r.RenterId, f => f.Random.Word())
                 .RuleFor(r => r.RenterName, f => f.Random.Word())
                 .RuleFor(r => r.RenterEmail, f => f.Random.Word())
-                .RuleFor(r => r.ProductId, f => f.Random.Guid())
+                .RuleFor(r => r.ProductId, Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7ef"))
                 .Generate(amount);
 
-            list.Add(new Reservation() { StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2), RenterId = "userId", RenterName = "userName", RenterEmail = "userEmail", ProductId = Guid.Parse("70661e4b-a4f5-47e8-8c80-5b2c7ab959ff") });
-            list.Add(new Reservation() { Id = Guid.Parse("03b0a851-93b7-4397-a64e-e3d7e6f8f891"), StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2), RenterId = "userId2", RenterName = "userName", RenterEmail = "userEmail", ProductId = Guid.Parse("70661e4b-a4f5-47e8-8c80-5b2c7ab959ff") });
+            list.Add(new Reservation() { StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2), RenterId = "userId", RenterName = "userName", RenterEmail = "userEmail", ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7ef") });
+            list.Add(new Reservation() { Id = Guid.Parse("03b0a851-93b7-4397-a64e-e3d7e6f8f891"), StartDate = GetNextMonday(), EndDate = GetNextMonday().AddDays(2), RenterId = "userId2", RenterName = "userName", RenterEmail = "userEmail", ProductId = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af") });
 
             return list;
         }
@@ -49,12 +49,13 @@ namespace ACI.Reservations.Test.Integration.Fixtures
         public static List<Product> GetProducts(int amount = ProductsTotal)
         {
             var list = new Faker<Product>()
+                .RuleFor(r => r.Id, Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7ef"))
                 .RuleFor(r => r.Name, f => f.Random.Word())
                 .RuleFor(r => r.Location, f => f.Random.Word())
                 .RuleFor(r => r.Archived, false)
                 .RuleFor(r => r.RequiresApproval, false)
                 .RuleFor(r => r.CategoryName, f => f.Random.Word())
-                .Generate(amount);
+                .Generate(1);
 
             list.Add(new Product() { Id = Guid.Parse("4b45abe7-bd89-4645-8dc1-6f842c5ab7af"), Name = "tv", Location = "plank 3", Archived = false, RequiresApproval = false, CategoryName = "beeldscherm" });
             return list;

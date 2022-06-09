@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ACI.Reservations.Domain;
@@ -94,15 +95,15 @@ namespace ACI.Reservations.Services
             return result.Map(ReservationDTO.MapFromModel);
         }
 
-        public async Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO ReservationDTO, AppUser user)
+        public async Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO reservationDTO, AppUser user)
         {
-            var result = await ValidateReservationData(ReservationDTO);
+            var result = await ValidateReservationData(reservationDTO);
             if (result.IsSome)
             {
                 return result.ValueUnsafe();
             }
 
-            var productResult = await _productRepository.GetProductById(ReservationDTO.ProductId);
+            var productResult = await _productRepository.GetProductById(reservationDTO.ProductId);
             if (productResult.IsNone)
             {
                 return AppErrors.ProductNotFoundError;
@@ -110,12 +111,12 @@ namespace ACI.Reservations.Services
 
             var reservation = new Reservation()
             {
-                ProductId = ReservationDTO.ProductId,
+                ProductId = reservationDTO.ProductId,
                 RenterId = user.Id,
                 RenterName = user.Name,
                 RenterEmail = user.Email,
-                StartDate = ReservationDTO.StartDate,
-                EndDate = ReservationDTO.EndDate,
+                StartDate = reservationDTO.StartDate,
+                EndDate = reservationDTO.EndDate,
             };
 
             var product = productResult.ValueUnsafe();
@@ -129,50 +130,58 @@ namespace ACI.Reservations.Services
             return createResult.Map(ReservationDTO.MapFromModel);
         }
 
-        private async Task<Option<IError>> ValidateReservationData(ReservationDTO ReservationDTO)
+        public async Task<List<PackingSlipResponse>> GetPackingSlip(PackingSlipRequest packingSlipRequest)
+        {
+            var result = await _reservationRepository.GetPackingSlip(packingSlipRequest.Date);
+
+            return result.Select(PackingSlipResponse.MapFromModel).ToList();
+        }
+
+        private async Task<Option<IError>> ValidateReservationData(ReservationDTO reservationDTO)
         {
             var now = _timeProvider.GetDateTimeNow();
-            if (ReservationDTO.ProductId == Guid.Empty)
+
+            if (reservationDTO.ProductId == Guid.Empty)
             {
                 return AppErrors.ProductNotFoundError;
             }
 
-            if (ReservationDTO.StartDate.Date < now)
+            if (reservationDTO.StartDate.Date < now)
             {
                 return AppErrors.InvalidStartDate;
             }
 
-            if (ReservationDTO.EndDate.Date < now)
+            if (reservationDTO.EndDate.Date < now)
             {
                 return AppErrors.InvalidEndDate;
             }
 
-            if (ReservationDTO.EndDate < ReservationDTO.StartDate)
+            if (reservationDTO.EndDate < reservationDTO.StartDate)
             {
                 return AppErrors.EndDateBeforeStartDate;
             }
 
-            if (ReservationDTO.StartDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+            if (reservationDTO.StartDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 return AppErrors.StartDateInWeekend;
             }
 
-            if (ReservationDTO.EndDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+            if (reservationDTO.EndDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 return AppErrors.EndDateInWeekend;
             }
 
-            if (ExceedsDayLimit(ReservationDTO))
+            if (ExceedsDayLimit(reservationDTO))
             {
                 return AppErrors.ReservationIsTooLong;
             }
 
-            if (await HasOverlappingReservation(ReservationDTO))
+            if (await HasOverlappingReservation(reservationDTO))
             {
                 return AppErrors.ReservationIsOverlapping;
             }
 
-            var productResult = await _productRepository.GetProductById(ReservationDTO.ProductId);
+            var productResult = await _productRepository.GetProductById(reservationDTO.ProductId);
 
             if (productResult.IsNone)
             {
@@ -189,12 +198,12 @@ namespace ACI.Reservations.Services
             return result.IsRight;
         }
 
-        private bool ExceedsDayLimit(ReservationDTO ReservationDTO)
+        private bool ExceedsDayLimit(ReservationDTO reservationDTO)
         {
             // Weekend days don't count toward the limit
-            var weekendDays = AmountOfWeekendDays(ReservationDTO.StartDate, ReservationDTO.EndDate);
+            var weekendDays = AmountOfWeekendDays(reservationDTO.StartDate, reservationDTO.EndDate);
 
-            var totalDays = (ReservationDTO.EndDate - ReservationDTO.StartDate).TotalDays - weekendDays;
+            var totalDays = (reservationDTO.EndDate - reservationDTO.StartDate).TotalDays - weekendDays;
             return totalDays > MaxReservationDays;
         }
 
