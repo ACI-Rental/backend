@@ -10,14 +10,14 @@ metadata:
 
 spec:
   tls:
-    - secretName: aci-rach-id-tls
+    - secretName: test-aci-rach-id-tls
       hosts:
-        - aci.rach.id
-    - secretName: aci-backend-rach-id-tls
+        - test.aci.rach.id
+    - secretName: test-aci-backend-rach-id-tls
       hosts:
-        - aci-backend.rach.id
+        - test.aci-backend.rach.id
   rules:
-  - host: aci.rach.id
+  - host: test.aci.rach.id
     http:
       paths:
       - path: /
@@ -27,7 +27,7 @@ spec:
             name: aci-frontend
             port:
               number: 80
-  - host: aci-backend.rach.id
+  - host: test.aci-backend.rach.id
     http:
       paths:
       - path: /
