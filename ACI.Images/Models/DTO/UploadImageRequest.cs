@@ -9,7 +9,7 @@ namespace ACI.Images.Models.DTO
         public Guid ProductId { get; set; }
 
         [Required]
-        [AllowedExtensions(".jpg,.gif,.jpeg,.png")]
+        [AllowedExtensions(".png")]
         public IFormFile Image { get; set; }
     }
 }
