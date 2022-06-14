@@ -68,7 +68,7 @@ namespace ACI.Reservations.Services
         {
             var reservation = await _reservationRepository.GetReservationByReservationId(reservationId);
 
-            if (reservation.GetType() == typeof(IError))
+            if (reservation.IsLeft)
             {
                 return reservation.Map(ReservationDTO.MapFromModel);
             }
@@ -128,6 +128,52 @@ namespace ACI.Reservations.Services
             var createResult = await _reservationRepository.CreateReservation(reservation);
 
             return createResult.Map(ReservationDTO.MapFromModel);
+        }
+
+        public async Task<Either<IError, Reservation>> PickupReservation(Guid reservationId)
+        {
+            var reservationResult = await _reservationRepository.GetReservationByReservationId(reservationId);
+
+            if (reservationResult.IsLeft)
+            {
+                return reservationResult;
+            }
+
+            var reservationToChange = reservationResult.ValueUnsafe();
+
+            reservationToChange.PickedUpDate = DateTime.UtcNow;
+
+            var updatedResult = await _reservationRepository.UpdateReservation(reservationToChange);
+
+            if (updatedResult.IsLeft)
+            {
+                return updatedResult;
+            }
+
+            return updatedResult.ValueUnsafe();
+        }
+
+        public async Task<Either<IError, Reservation>> ReturnReservation(Guid reservationId)
+        {
+            var reservationResult = await _reservationRepository.GetReservationByReservationId(reservationId);
+
+            if (reservationResult.IsLeft)
+            {
+                return reservationResult;
+            }
+
+            var reservationToChange = reservationResult.ValueUnsafe();
+
+            reservationToChange.ReturnDate = DateTime.UtcNow;
+
+            var updatedResult = await _reservationRepository.UpdateReservation(reservationToChange);
+
+            if (updatedResult.IsLeft)
+            {
+                return updatedResult;
+            }
+
+            return updatedResult.ValueUnsafe();
         }
 
         public async Task<List<PackingSlipResponse>> GetPackingSlip(PackingSlipRequest packingSlipRequest)
