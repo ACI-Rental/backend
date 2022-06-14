@@ -18,5 +18,7 @@ namespace ACI.Reservations.Services.Interfaces
         public Task<Either<IError, ReservationDTO>> ExecuteReservationAction(Guid reservationId, ReservationAction action);
         public Task<Either<IError, ReservationDTO>> ReserveProduct(ReservationDTO reservationDTO, AppUser user);
         public Task<List<PackingSlipResponse>> GetPackingSlip(PackingSlipRequest packingSlipRequest);
+        public Task<Either<IError, ReservationDTO>> PickupReservation(Guid reservationId);
+        public Task<Either<IError, ReservationDTO>> ReturnReservation(Guid reservationId);
     }
 }

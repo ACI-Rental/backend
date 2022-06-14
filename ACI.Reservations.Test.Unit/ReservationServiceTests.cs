@@ -731,5 +731,198 @@ namespace ACI.Reservations.Test.Unit
                 r.Should().Be(AppErrors.ProductDoesNotExist);
             });
         }
+
+        [Fact]
+        public async Task Pickup_Reservation_Succes()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            Guid reservationId = Guid.Parse("6246f9ad-f300-45d5-a58f-7da3a94530fc");
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservationId))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(new Reservation() {ProductId = reservation.ProductId, RenterId = reservation.RenterId, StartDate = reservation.StartDate, EndDate = reservation.EndDate, PickedUpDate = nextMonday.AddDays(1) });
+
+            // Act
+            var result = await _reservationService.PickupReservation(reservationId);
+
+            // Assert
+            result.ShouldBeRight(r =>
+            {
+                r.PickedUpDate.Should().Be(nextMonday.AddDays(1));
+            });
+        }
+
+        [Fact]
+        public async Task Pickup_Reservation_Fail_No_Reservation()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            Guid reservationId = Guid.Parse("6246f9ad-f300-45d5-a58f-7da3a94530fc");
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservationId))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(new Reservation() { ProductId = reservation.ProductId, RenterId = reservation.RenterId, StartDate = reservation.StartDate, EndDate = reservation.EndDate, PickedUpDate = nextMonday.AddDays(1) });
+
+            // Act
+            var result = await _reservationService.PickupReservation(reservationId);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.FailedToFindReservation);
+            });
+        }
+
+        [Fact]
+        public async Task Pickup_Reservation_Fail_Update_Failed()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            Guid reservationId = Guid.Parse("6246f9ad-f300-45d5-a58f-7da3a94530fc");
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservationId))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(AppErrors.FailedToSaveReservation);
+
+            // Act
+            var result = await _reservationService.PickupReservation(reservationId);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.FailedToSaveReservation);
+            });
+        }
+
+        [Fact]
+        public async Task Return_Reservation_Succes()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            Guid reservationId = Guid.Parse("6246f9ad-f300-45d5-a58f-7da3a94530fc");
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservationId))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(new Reservation() { ProductId = reservation.ProductId, RenterId = reservation.RenterId, StartDate = reservation.StartDate, EndDate = reservation.EndDate, PickedUpDate = nextMonday.AddDays(1), ReturnDate = nextMonday.AddDays(2) });
+
+            // Act
+            var result = await _reservationService.PickupReservation(reservationId);
+
+            // Assert
+            result.ShouldBeRight(r =>
+            {
+                r.PickedUpDate.Should().Be(nextMonday.AddDays(1));
+                r.ReturnDate.Should().Be(nextMonday.AddDays(2));
+            });
+        }
+
+        [Fact]
+        public async Task Return_Reservation_Fail_No_Reservation()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            Guid reservationId = Guid.Parse("6246f9ad-f300-45d5-a58f-7da3a94530fc");
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservationId))
+                .ReturnsAsync(AppErrors.FailedToFindReservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(new Reservation() { ProductId = reservation.ProductId, RenterId = reservation.RenterId, StartDate = reservation.StartDate, EndDate = reservation.EndDate, PickedUpDate = nextMonday.AddDays(1), ReturnDate = nextMonday.AddDays(2) });
+
+            // Act
+            var result = await _reservationService.PickupReservation(reservationId);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.FailedToFindReservation);
+            });
+        }
+
+        [Fact]
+        public async Task Return_Reservation_Fail_Update_Failed()
+        {
+            // Arrange
+            var nextMonday = _testData.GetNextMonday();
+            Guid reservationId = Guid.Parse("6246f9ad-f300-45d5-a58f-7da3a94530fc");
+            var reservation = new Reservation()
+            {
+                ProductId = product.Id,
+                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                StartDate = nextMonday,
+                EndDate = nextMonday.AddDays(3),
+            };
+
+            _mockReservationRepository
+                .Setup(s => s.GetReservationByReservationId(reservationId))
+                .ReturnsAsync(reservation);
+
+            _mockReservationRepository
+                .Setup(s => s.UpdateReservation(reservation))
+                .ReturnsAsync(AppErrors.FailedToSaveReservation);
+
+            // Act
+            var result = await _reservationService.PickupReservation(reservationId);
+
+            // Assert
+            result.ShouldBeLeft(r =>
+            {
+                r.Should().Be(AppErrors.FailedToSaveReservation);
+            });
+        }
     }
 }

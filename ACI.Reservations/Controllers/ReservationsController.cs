@@ -192,5 +192,35 @@ namespace ACI.Reservations.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("Pickup/{reservationId}")]
+        public async Task<IActionResult> PickupReservation(Guid reservationId)
+        {
+            if (reservationId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            var result = await _reservationService.PickupReservation(reservationId);
+
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => NotFound(err));
+        }
+
+        [HttpPost("Return/{reservationId}")]
+        public async Task<IActionResult> ReturnReservation(Guid reservationId)
+        {
+            if (reservationId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            var result = await _reservationService.ReturnReservation(reservationId);
+
+            return result
+                .Right<IActionResult>(value => Ok(value))
+                .Left(err => NotFound(err));
+        }
     }
 }
