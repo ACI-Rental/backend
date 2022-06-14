@@ -29,7 +29,7 @@ namespace ACI.Images.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "employee")]
+        // [Authorize(Roles = "employee")]
         public async Task<IActionResult> PostImage([FromForm] UploadImageRequest uploadImageRequest)
         {
             _logger.LogInformation("Uploading image blob {ProductImageBlob}", uploadImageRequest);

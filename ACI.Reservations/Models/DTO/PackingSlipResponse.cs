@@ -10,8 +10,10 @@ public class PackingSlipResponse
     public string RenterId { get; }
     public Guid ProductId { get; }
     public string ProductName { get; }
+    public string Location { get; }
+    public string RenterName { get; }
 
-    public PackingSlipResponse(Guid id, DateTime startDate, DateTime endDate, string renterId, Guid productId, string productName)
+    public PackingSlipResponse(Guid id, DateTime startDate, DateTime endDate, string renterId, Guid productId, string productName, string location, string renterName)
     {
         Id = id;
         StartDate = startDate;
@@ -19,8 +21,10 @@ public class PackingSlipResponse
         RenterId = renterId;
         ProductId = productId;
         ProductName = productName;
+        Location = location;
+        RenterName = renterName;
     }
 
     public static PackingSlipResponse MapFromModel(Reservation model) =>
-        new(model.Id, model.StartDate, model.EndDate, model.RenterId, model.ProductId, model.Product.Name);
+        new(model.Id, model.StartDate, model.EndDate, model.RenterId, model.ProductId, model.Product.Name, model.Product.Location, model.RenterName);
 }
