@@ -27,7 +27,6 @@ namespace ACI.Images.Data.Repositories
         public async Task<Either<IError, ProductImageBlob>> AddProductImageBlob(Guid productId, IFormFile image)
         {
             var productIdExists = await _context.Images.AnyAsync(x => x.ProductId.Equals(productId));
-
             
             string fileExtension = Path.GetExtension(image.FileName);
             string blobName = $"{productId}{fileExtension}";
@@ -83,6 +82,7 @@ namespace ACI.Images.Data.Repositories
             await blobClient.DeleteAsync();
 
             var productImageBlob = await _context.Images.FirstOrDefaultAsync(x => x.ProductId == blob.ProductId);
+            
             if (productImageBlob != null) _context.Images.Remove(productImageBlob);
             await _context.SaveChangesAsync();
 
