@@ -741,7 +741,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -773,7 +773,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -805,7 +805,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -837,7 +837,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -870,7 +870,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
@@ -902,7 +902,7 @@ namespace ACI.Reservations.Test.Unit
             var reservation = new Reservation()
             {
                 ProductId = product.Id,
-                RenterId = Guid.Parse("b57f1be4-30c9-45fd-9472-9abd9d82cad3"),
+                RenterId = "b57f1be4-30c9-45fd-9472-9abd9d82cad3",
                 StartDate = nextMonday,
                 EndDate = nextMonday.AddDays(3),
             };
