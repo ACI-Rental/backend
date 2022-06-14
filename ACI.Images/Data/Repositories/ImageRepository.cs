@@ -28,21 +28,21 @@ namespace ACI.Images.Data.Repositories
         {
             var productIdExists = await _context.Images.AnyAsync(x => x.ProductId.Equals(productId));
 
-            if (productIdExists)
-            {
-                _logger.LogInformation("Adding image {image} failed with error {Error}", productId, AppErrors.ProductIdAlreadyExistsError);
-                return AppErrors.ProductIdAlreadyExistsError;
-            }
-
+            
             string fileExtension = Path.GetExtension(image.FileName);
-            string blobName = $"{Guid.NewGuid()}{fileExtension}";
+            string blobName = $"{productId}{fileExtension}";
 
             var productImageBlob = new ProductImageBlob()
             {
                 ProductId = productId,
                 BlobId = blobName
             };
-
+            
+            if (productIdExists)
+            {
+                await DeleteImage(productImageBlob);
+            }
+            
             BlobClient blob = _blobContainerClient.GetBlobClient(productImageBlob.BlobId);
             await blob.UploadAsync(image.OpenReadStream());
             
@@ -80,9 +80,10 @@ namespace ACI.Images.Data.Repositories
         {
             BlobClient blobClient = _blobContainerClient.GetBlobClient(blob.BlobId);
 
-            blobClient.Delete();
+            await blobClient.DeleteAsync();
 
-            _context.Images.Remove(blob);
+            var productImageBlob = await _context.Images.FirstOrDefaultAsync(x => x.ProductId == blob.ProductId);
+            if (productImageBlob != null) _context.Images.Remove(productImageBlob);
             await _context.SaveChangesAsync();
 
             return Unit.Default;
