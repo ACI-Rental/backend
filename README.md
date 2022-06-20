@@ -19,6 +19,53 @@ This repository contains all the microservices of the ACI Rental project. All mi
 [![Build the UserService](https://github.com/ACI-Rental/backend/actions/workflows/build-user-service.yml/badge.svg)](https://github.com/ACI-Rental/backend/actions/workflows/build-user-service.yml)
 [![Release new UserService to Docker hub](https://github.com/ACI-Rental/backend/actions/workflows/release-user-service.yml/badge.svg)](https://github.com/ACI-Rental/backend/actions/workflows/release-user-service.yml)
 
+# Get started
+This section will guide you into setting  up this repository. 
+## Requirements
+ - Docker desktop version 20.x and above
+ - .NET SDK 6.0.102 and above
+ - Visual Studio Version 17.2 (2022)
+ - Surfconext client secret
+ - .ASP.NET Core Runtime 6.0
 
-# Contributing and getting started
+## Setup
+### Ensure the required dependencies are installed. 
+1. Ensure .NET SDK 6.0.102 or above has been installed. 
+Open a new terminal and run `dotnet --version`. If you don't see the `.NET SDK 6.0.102` please install it.
+
+2. Ensure ASP.NET Core Runtime is installed 
+Run `dotnet --list-runtimes` in the terminal, and ensure that `Microsoft.AspNetCore.App 6.0.` has been installed.
+
+3. Ensure Docker version 20 or above is installed .
+In a terminal run `docker --version` and validate the version.
+4. Obtain a client secret in the Surfconext environment.
+
+### Run the required dependencies.
+Open a terminal in the root of this repository. In that terminal run `docker compose up -d`. This will launch the following services: 
+- Azurite (Azure Blob Storage)
+- KeyCloak
+- RabbitMQ
+- MSSQL Server
+
+### Run the project
+1. Open the solution file in your desired IDE. For this example were using Visual Studio.
+
+2. Restore the the nuget packages in the solution by running `dotnet restore` in the terminal.
+
+---
+#### Run the migration scripts
+1. Open the package manager.
+
+2. Navigate to `ACI.Images` and run `Update-Database`
+
+3. Navigate to `ACI.Products` and run `Update-Database`
+
+4. Navigate to `ACI.Reservations` and run `Update-Database
+
+---
+3. Once everything has been set up run all the following projects: `ACI.Images`, `ACI.Products`, `ACI.Reservations`, `OcelotAPIGateWay` 
+
+The gateway will be available at `https://localhost:5001`
+
+# Contributing
 Please refer to the [CONTRIBUTING.md](https://github.com/ACI-Rental/docs/blob/main/CONTRIBUTING.md) in the [docs repository](https://github.com/ACI-Rental/docs) for more information
