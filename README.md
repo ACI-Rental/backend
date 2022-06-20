@@ -60,7 +60,7 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 
 3. Navigate to `ACI.Products` and run `Update-Database`
 
-4. Navigate to `ACI.Reservations` and run `Update-Database
+4. Navigate to `ACI.Reservations` and run `Update-Database`
 
 ---
 3. Once everything has been set up run all the following projects: `ACI.Images`, `ACI.Products`, `ACI.Reservations`, `OcelotAPIGateWay` 
