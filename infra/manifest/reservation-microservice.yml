@@ -27,6 +27,15 @@ spec:
     spec:
       containers:
       - name: aci-reservations
-        image: acirentalservice/reservations
+        image: acirentalservice/reservations:0.0.3
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: secrets
+          mountPath: app/appsettings.json
+          subPath: appsettings.json
+      volumes:
+      - name: secrets
+        secret:
+          secretName: reservations-appsettings
+          optional: false 

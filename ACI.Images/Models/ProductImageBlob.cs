@@ -13,8 +13,8 @@ namespace ACI.Images.Models
         [Required]
         public Guid Id { get; set; }
 
-        [Required]
         // The blobs name is the ID ex: f5eac4f1-fa02-491b-8340-1947d6557558.png
+        [Required]
         public string BlobId { get; set; }
 
         [FromBody]

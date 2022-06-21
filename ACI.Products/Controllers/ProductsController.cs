@@ -87,7 +87,7 @@ public class ProductsController : BaseController
     }
 
     [HttpPut("Edit")]
-    //[Authorize(Roles = "employee")]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> EditProduct([FromBody] ProductUpdateRequest request)
     {
         if (!ModelState.IsValid)

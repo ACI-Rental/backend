@@ -15,6 +15,11 @@ namespace ACI.Images.Helpers
             _extensions = extensions.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
+        public string GetErrorMessage()
+        {
+            return $"This extension is not allowed";
+        }
+
         protected override ValidationResult IsValid(
             object? value, ValidationContext validationContext)
         {
@@ -29,11 +34,6 @@ namespace ACI.Images.Helpers
             }
 
             return ValidationResult.Success;
-        }
-
-        public string GetErrorMessage()
-        {
-            return $"This extension is not allowed";
         }
     }
 }

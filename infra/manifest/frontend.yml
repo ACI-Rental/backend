@@ -66,6 +66,6 @@ spec:
     spec:
       containers:
       - name: aci-frontend
-        image: acirentalservice/frontend:1.4
+        image: acirentalservice/frontend:1.5
         ports:
         - containerPort: 80

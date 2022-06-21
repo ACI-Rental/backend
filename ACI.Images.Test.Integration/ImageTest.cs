@@ -24,10 +24,7 @@ namespace Aci.Images.Test.Integration
         {
             await using var stream = System.IO.File.OpenRead("./TestPhoto/camera.jpg");
 
-            var payload = new
-            {
-                ProductId = "62FA647C-AD54-4BCC-A860-E5A2664B019F"
-            };
+            var payload = new { ProductId = "62FA647C-AD54-4BCC-A860-E5A2664B019F" };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, "image");
 
@@ -52,10 +49,10 @@ namespace Aci.Images.Test.Integration
         {
             await using var stream = System.IO.File.OpenRead("./TestPhoto/camera.jpg");
 
+            // Image with this productId should already exist
             var payload = new
             {
-                //image with this productId should already exist
-                ProductId = "62FA647C-AD54-4BCC-A860-E5A2664B019D" 
+                ProductId = "62FA647C-AD54-4BCC-A860-E5A2664B019D",
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, "image");
@@ -103,7 +100,7 @@ namespace Aci.Images.Test.Integration
         public async void GetImageByProductId_Returns_ErrorResult()
         {
             // Arrange
-            var productId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019E"); //Should be no image with this guid
+            var productId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019E"); // Should be no image with this guid
 
             // Act
             var result = await _apiClient.GetImageByProductId(productId);
@@ -122,7 +119,7 @@ namespace Aci.Images.Test.Integration
         public async void DeleteImageByProductId_Returns_ErrorResult()
         {
             // Arrange
-            var productId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019E"); //No image with this productId
+            var productId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019E"); // No image with this productId
 
             // Act
             var result = await _apiClient.DeleteImageByProductId(productId);

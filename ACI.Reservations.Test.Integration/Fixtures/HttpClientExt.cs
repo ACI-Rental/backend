@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 using ACI.Reservations.Models.DTO;
 
@@ -32,9 +28,9 @@ namespace ACI.Reservations.Test.Integration.Fixtures
             return await client.GetAsync($"Reservations/{productId}");
         }
 
-        public static async Task<HttpResponseMessage> ReserveProduct(this HttpClient client, ReservationDTO ReservationDTO)
+        public static async Task<HttpResponseMessage> ReserveProduct(this HttpClient client, ReservationDTO reservationDTO)
         {
-            return await client.PostAsJsonAsync("Reservations/reserveproduct", ReservationDTO);
+            return await client.PostAsJsonAsync("Reservations/reserveproduct", reservationDTO);
         }
 
         public static async Task<HttpResponseMessage> ExecuteReservationAction(this HttpClient client, ReservationActionDTO reservationActionDTO)

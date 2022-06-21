@@ -47,7 +47,7 @@ namespace ACI.Images.Data.Repositories
             var productImageBlob = new ProductImageBlob()
             {
                 ProductId = productId,
-                BlobId = blobName
+                BlobId = blobName,
             };
 
             BlobClient blob = _blobContainerClient.GetBlobClient(productImageBlob.BlobId);
@@ -77,23 +77,19 @@ namespace ACI.Images.Data.Repositories
 
             var blobUri = blob.Uri.ToString();
 
-            if (blobUri == string.Empty) return Option<string>.None;
-
-            return blobUri;
-
+            return blobUri == string.Empty ? Option<string>.None : blobUri;
         }
 
         public async Task<Either<IError, Unit>> DeleteImage(ProductImageBlob blob)
         {
             BlobClient blobClient = _blobContainerClient.GetBlobClient(blob.BlobId);
 
-            blobClient.Delete();
+            await blobClient.DeleteAsync();
 
             _context.Images.Remove(blob);
             await _context.SaveChangesAsync();
 
             return Unit.Default;
         }
-
     }
 }

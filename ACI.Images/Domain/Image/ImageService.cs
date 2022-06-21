@@ -26,12 +26,11 @@ namespace ACI.Images.Domain.Image
         {
             var result = await _imageRepository.AddProductImageBlob(request.ProductId, request.Image);
 
-            return result.Map(blobResponse =>
+            return result.Map(blobResponse => new ImageResponse
             {
-                return new ImageResponse() {
-                    Id = blobResponse.Id,
-                    ProductId = blobResponse.ProductId,
-                    BlobUrl = $"{_urlPrefix}/{blobResponse.BlobId}" };
+                Id = blobResponse.Id,
+                ProductId = blobResponse.ProductId,
+                BlobUrl = $"{_urlPrefix}/{blobResponse.BlobId}",
             });
         }
 
@@ -59,7 +58,7 @@ namespace ACI.Images.Domain.Image
                 {
                     Id = productImageBlob.Id,
                     ProductId = productImageBlob.ProductId,
-                    BlobUrl = blobUri.ValueUnsafe()
+                    BlobUrl = blobUri.ValueUnsafe(),
                 };
             });
         }
@@ -85,6 +84,5 @@ namespace ACI.Images.Domain.Image
             await _imageRepository.DeleteImage(blob);
             return Unit.Default;
         }
-
     }
 }

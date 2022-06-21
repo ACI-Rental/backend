@@ -9,7 +9,7 @@ namespace ACI.Images.Test.Integration.Fixtures
     public class DbSetup
     {
         public const int Images = 1;
-        
+
         public static void InitializeForTests(ImageContext db)
         {
             db.Images.AddRange(GetImages());
@@ -23,7 +23,7 @@ namespace ACI.Images.Test.Integration.Fixtures
             return new Faker<ProductImageBlob>()
                 .RuleFor(p => p.Id, f => f.Random.Guid())
                 .RuleFor(p => p.BlobId, "testString")
-                .RuleFor(p => p.ProductId, guid)    
+                .RuleFor(p => p.ProductId, guid)
                 .Generate(amount);
         }
     }

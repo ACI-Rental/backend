@@ -27,6 +27,6 @@ spec:
     spec:
       containers:
       - name: aci-images
-        image: acirentalservice/images
+        image: acirentalservice/images:0.0.3
         ports:
         - containerPort: 80

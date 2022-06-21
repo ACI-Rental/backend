@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: aci-products
-        image: acirentalservice/products:1.0
+        image: acirentalservice/products:0.0.3
         ports:
         - containerPort: 80
         volumeMounts:

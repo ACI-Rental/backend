@@ -27,6 +27,6 @@ spec:
       - name: secrets
         secret:
           secretName: {{ $microservice.name }}-appsettings
-          optional: false 
+          optional: false
 # --- etc ---
 {{- end }}

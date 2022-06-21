@@ -39,8 +39,6 @@ void Run()
     var ocelotConfig = builder.Environment.IsDevelopment() ? "ocelot.Development.json" : "ocelot.json";
     builder.Configuration.AddJsonFile(ocelotConfig);
 
-
-
     builder.Services.AddControllers();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

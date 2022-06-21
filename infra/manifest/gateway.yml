@@ -27,6 +27,6 @@ spec:
     spec:
       containers:
       - name: aci-gateway
-        image: acirentalservice/gateway:1.1
+        image: acirentalservice/gateway:0.0.3
         ports:
         - containerPort: 80
