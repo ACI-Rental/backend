@@ -1,0 +1,71 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aci-frontend
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: letsencrypt-http
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect@kubernetescrd
+
+spec:
+  tls:
+    - secretName: test-aci-rach-id-tls
+      hosts:
+        - test.aci.rach.id
+    - secretName: test-aci-backend-rach-id-tls
+      hosts:
+        - test.aci-backend.rach.id
+  rules:
+  - host: test.aci.rach.id
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aci-frontend
+            port:
+              number: 80
+  - host: test.aci-backend.rach.id
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aci-gateway
+            port:
+              number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aci-frontend
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: aci-frontend
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aci-frontend
+spec:
+  selector:
+    matchLabels:
+      app: aci-frontend
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: aci-frontend
+    spec:
+      containers:
+      - name: aci-frontend
+        image: acirentalservice/frontend:1.5
+        ports:
+        - containerPort: 80

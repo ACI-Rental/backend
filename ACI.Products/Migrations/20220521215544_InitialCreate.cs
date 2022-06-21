@@ -15,7 +15,7 @@ namespace ACI.Products.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
                 },
                 constraints: table =>
                 {
@@ -34,7 +34,7 @@ namespace ACI.Products.Migrations
                     RequiresApproval = table.Column<bool>(type: "bit", nullable: false),
                     CreatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    CatalogPosition = table.Column<int>(type: "int", nullable: false)
+                    CatalogPosition = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -56,7 +56,7 @@ namespace ACI.Products.Migrations
                     AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TextContent = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
                     CreatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                 },
                 constraints: table =>
                 {

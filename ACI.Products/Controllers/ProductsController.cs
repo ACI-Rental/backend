@@ -55,6 +55,7 @@ public class ProductsController : BaseController
     {
         _logger.LogInformation("Getting all products");
         var result = await _service.GetAllProducts();
+        HttpContext.Response.Headers["Location"] = "https://localhost:5010/products/all";
         return Ok(result);
     }
 
@@ -86,7 +87,7 @@ public class ProductsController : BaseController
     }
 
     [HttpPut("Edit")]
-    //[Authorize(Roles = "employee")]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> EditProduct([FromBody] ProductUpdateRequest request)
     {
         if (!ModelState.IsValid)

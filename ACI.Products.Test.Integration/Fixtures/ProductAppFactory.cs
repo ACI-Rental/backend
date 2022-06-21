@@ -9,7 +9,7 @@ namespace ACI.Products.Test.Integration.Fixtures;
 
 public class ProductAppFactory : WebApplicationFactory<Program>
 {
-    public static string DefaultUserId = "urn:schac:personalUniqueCode:nl:local:example.edu:employeeid:x12-3456";
+    public const string DefaultUserId = "urn:schac:personalUniqueCode:nl:local:example.edu:employeeid:x12-3456";
 
     protected override IHost CreateHost(IHostBuilder builder)
     {

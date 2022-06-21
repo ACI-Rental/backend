@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using ACI.Products.Test.Integration.Fixtures.Auth;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -14,14 +9,14 @@ namespace ACI.Reservations.Test.Integration.Fixtures
 {
     public class ReservationAppFactory : WebApplicationFactory<Program>
     {
-        public static string DefaultUserId = "urn:schac:personalUniqueCode:nl:local:example.edu:employeeid:x12-3456";
+        private static string DefaultUserId = "urn:schac:personalUniqueCode:nl:local:example.edu:employeeid:x12-3456";
 
         protected override IHost CreateHost(IHostBuilder builder)
         {
             builder.ConfigureServices(serviceCollection =>
             {
                 serviceCollection.UseTestDatabase();
-                
+
                 serviceCollection.Configure<TestAuthHandlerOptions>(options => options.DefaultUserId = DefaultUserId);
 
                 serviceCollection.AddAuthentication(options =>

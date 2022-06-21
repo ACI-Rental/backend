@@ -1,4 +1,4 @@
-name: Build, test and analyze the ImageService
+name: Build/Test/Analyze ACI.Images
 
 on:
   push:

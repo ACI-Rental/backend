@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aci-images
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: aci-images
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aci-images
+spec:
+  selector:
+    matchLabels:
+      app: aci-images
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: aci-images
+    spec:
+      containers:
+      - name: aci-images
+        image: acirentalservice/images:0.0.3
+        ports:
+        - containerPort: 80

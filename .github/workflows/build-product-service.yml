@@ -1,4 +1,4 @@
-name: Build, test and analyze the ProductService
+name: Build/Test/Analyze ACI.Products
 
 on:
   push:

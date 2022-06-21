@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using ACI.Images.Helpers;
+using Microsoft.AspNetCore.Http;
 
 namespace ACI.Images.Models.DTO
 {

@@ -23,7 +23,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-Log.Information("Starting ACI.Reservations microservice");
+Log.Information("Starting ACI.Reservations (version {Version})", AppUtils.GetVersion());
 
 try
 {
@@ -42,6 +42,8 @@ finally
 void Run()
 {
     var builder = WebApplication.CreateBuilder(args);
+    builder.Configuration
+        .AddEnvironmentVariables("ACI_");
 
     builder.Host.AddAciLogging();
 

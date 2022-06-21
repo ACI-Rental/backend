@@ -9,14 +9,14 @@ namespace ACI.Images.Test.Integration.Fixtures
 {
     public class ImageAppFactory : WebApplicationFactory<Program>
     {
-        public static string DefaultUserId = "urn:schac:personalUniqueCode:nl:local:example.edu:employeeid:x12-3456";
-        
+        private static string DefaultUserId = "urn:schac:personalUniqueCode:nl:local:example.edu:employeeid:x12-3456";
+
         protected override IHost CreateHost(IHostBuilder builder)
         {
             builder.ConfigureServices(serviceCollection =>
             {
                 serviceCollection.UseTestDatabase();
-                
+
                 serviceCollection.Configure<TestAuthHandlerOptions>(options => options.DefaultUserId = DefaultUserId);
 
                 serviceCollection.AddAuthentication(options =>

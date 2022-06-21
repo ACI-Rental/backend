@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace ACI.Images.Helpers
 {
@@ -8,6 +13,11 @@ namespace ACI.Images.Helpers
         public AllowedExtensionsAttribute(string extensions)
         {
             _extensions = extensions.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
+
+        public string GetErrorMessage()
+        {
+            return $"This extension is not allowed";
         }
 
         protected override ValidationResult IsValid(
@@ -24,11 +34,6 @@ namespace ACI.Images.Helpers
             }
 
             return ValidationResult.Success;
-        }
-
-        public string GetErrorMessage()
-        {
-            return $"This extension is not allowed";
         }
     }
 }

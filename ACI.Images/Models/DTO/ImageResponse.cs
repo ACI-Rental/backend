@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace ACI.Images.Models.DTO
 {
     public class ImageResponse
