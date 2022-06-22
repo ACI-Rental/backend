@@ -18,7 +18,7 @@ This repository contains the entire ACI-Rental project.
 [![Release new ReservationService to Docker hub](https://github.com/ACI-Rental/backend/actions/workflows/release-reservation-service.yml/badge.svg)](https://github.com/ACI-Rental/backend/actions/workflows/release-reservation-service.yml)
 
 # Get started
-This section will guide you into running the project in a local environment. 
+This section will guide you into running the project in a local environment. The image below represents the architecture you will achieve while following this guide. 
 ![Software Architecture](https://i.imgur.com/4s6zQk8.png)
 ## Requirements
  - Docker desktop version 20.x and above
