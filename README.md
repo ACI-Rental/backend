@@ -34,7 +34,7 @@ This section will guide you into running the project in a local environment.
 Open a new terminal and run `dotnet --version`. If you don't see the `.NET SDK 6.0.102` please install it.
 
 2. Ensure ASP.NET Core Runtime is installed 
-Run `dotnet --list-runtimes` in the terminal, and ensure that `Microsoft.AspNetCore.App 6.0.` has been installed.
+Run `dotnet --list-runtimes` in the terminal, and ensure that `Microsoft.AspNetCore.App 6.0.x` has been installed.
 
 3. Ensure Docker version 20 or above is installed .
 In a terminal run `docker --version` and validate the version.
