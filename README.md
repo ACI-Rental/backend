@@ -46,6 +46,13 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 - RabbitMQ
 - MSSQL Server
 
+### Add your SurfConext secret to KeyCloak
+1. Open your desired web browser and navigate to `localhost:8080/auth/`
+2. On the left side click on `Identity-Providers`
+3. Click on SurfConext
+4. Scroll down to `Client Secret` and enter in your SurfConext client secret.
+5. Press save at the bottom.
+
 ### Run the project
 1. Open the solution file in your desired IDE. For this example were using Visual Studio.
 
@@ -62,7 +69,7 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 4. Navigate to `ACI.Reservations` and run `Update-Database`
 
 ---
-3. Once everything has been set up run all the following projects: `ACI.Images`, `ACI.Products`, `ACI.Reservations`, `OcelotAPIGateWay` 
+3. Once everything has been set up, run the following projects: `ACI.Images`, `ACI.Products`, `ACI.Reservations`, `OcelotAPIGateWay` 
 
 The gateway will be available at `https://localhost:5001`
 
