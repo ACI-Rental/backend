@@ -49,7 +49,7 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 - RabbitMQ
 - MSSQL Server
 
-### Add your SurfConext secret to KeyCloak
+### Setup Keycloak
 1. Open your desired web browser and navigate to `localhost:8080/auth/`
 2. Login with username: `admin` and password: `admin`
 3. On the left side click on `Identity-Providers`
