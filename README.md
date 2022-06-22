@@ -51,10 +51,11 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 
 ### Add your SurfConext secret to KeyCloak
 1. Open your desired web browser and navigate to `localhost:8080/auth/`
-2. On the left side click on `Identity-Providers`
-3. Click on SurfConext
-4. Scroll down to `Client Secret` and enter in your SurfConext client secret.
-5. Press save at the bottom.
+2. Login with username: `admin` and password `admin`
+3. On the left side click on `Identity-Providers`
+4. Click on SurfConext
+5. Scroll down to `Client Secret` and enter in your SurfConext client secret.
+6. Press save at the bottom.
 
 ### Run the frontend
 1. Create a new terminal from the root of the repository.
