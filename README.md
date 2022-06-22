@@ -26,6 +26,7 @@ This section will guide you into running the project in a local environment.
  - Visual Studio Version 17.2 (2022)
  - Surfconext client secret
  - .ASP.NET Core Runtime 6.0
+ - NodeJS 16.x.x
 
 ## Setup
 ### Ensure the required dependencies are installed. 
@@ -64,23 +65,24 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 ##### Method 1
 1. Open the package manager.
 
-2. In the package manager console set `Default Project` to `ACI.Images` and run `Update-Database`
+2. In the package manager console set `Default Project` to `ACI.Images` and run `Update-Database`.
 
-3. Change the `Default Project` to `ACI.Products` and run `Update-Database`
+3. Change the `Default Project` to `ACI.Products` and run `Update-Database`.
 
-4. Change the `Default Project` to `ACI.Reservations` and run `Update-Database`
+4. Change the `Default Project` to `ACI.Reservations` and run `Update-Database`.
 
 #### Method 2
 1. In a new terminal run `dotnet ef --version` to ensure dotnet ef CLI tools are installed. 
 If they're not installed run `dotnet tool install --global dotnet-ef` and update it after with `dotnet toolupdate --global dotnet-ef`. 
-2. Inside a terminal navigate to `ACI.Images` and run `dotnet ef update-database`
-4. Inside a terminal navigate to `ACI.Products` and run `dotnet ef update-database`
-5. Inside a terminal navigate to `ACI.Reservations` and run `dotnet ef update-database`
+2. Inside a terminal navigate to `ACI.Images` and run `dotnet ef update-database`.
+4. Inside a terminal navigate to `ACI.Products` and run `dotnet ef update-database`.
+5. Inside a terminal navigate to `ACI.Reservations` and run `dotnet ef update-database`.
 
 ---
-3. Once everything has been set up, run the following projects: `ACI.Images`, `ACI.Products`, `ACI.Reservations`, `OcelotAPIGateWay` 
-
-The gateway will be available at `https://localhost:5001`
+3. Once everything has been set up, run the following projects: `ACI.Images`, `ACI.Products`, `ACI.Reservations`, `ACI.Gateway` .
+4. Once you navigate to `localhost:3000`. And click on `SurfConext`.
+5. Navigate to `SurfConext test IDP` and login with username: `staff1` and password `staff1`.
+6. You are now logged in.
 
 # Contributing
 Please refer to the [CONTRIBUTING.md](https://github.com/ACI-Rental/docs/blob/main/CONTRIBUTING.md) in the [docs repository](https://github.com/ACI-Rental/docs) for more information
