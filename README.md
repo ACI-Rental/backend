@@ -56,6 +56,12 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 4. Scroll down to `Client Secret` and enter in your SurfConext client secret.
 5. Press save at the bottom.
 
+### Run the frontend
+1. Create a new terminal from the root of the repository.
+2. Navigate to `ACI.Frontend`
+3. Run `npm install`.
+4. Run `npm run start`.
+
 ### Run the microservices
 1. Open the solution file in your desired IDE. For this example were using Visual Studio.
 
