@@ -21,7 +21,7 @@ This repository contains the entire ACI-Rental project.
 This section will guide you into running the project in a local environment. The image below represents the architecture you will achieve while following this guide. 
 ![Software Architecture](https://i.imgur.com/4s6zQk8.png)
 ## Requirements
- - Docker desktop version 20.x and above
+ - Docker version 20.x and above
  - .NET SDK 6.0.102 and above
  - Visual Studio Version 17.2 (2022)
  - Surfconext client secret
