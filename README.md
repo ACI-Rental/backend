@@ -90,6 +90,3 @@ If they're not installed run `dotnet tool install --global dotnet-ef` and update
 4. Once you navigate to `localhost:3000`. And click on `SurfConext`.
 5. Navigate to `SurfConext test IDP` and login with username: `staff1` and password `staff1`.
 6. You are now logged in.
-
-# Contributing
-Please refer to the [CONTRIBUTING.md](https://github.com/ACI-Rental/docs/blob/main/CONTRIBUTING.md) in the [docs repository](https://github.com/ACI-Rental/docs) for more information
