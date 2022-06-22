@@ -1,5 +1,5 @@
-# Introduction 
-This repository contains all the microservices of the ACI Rental project. All microservices have their own project and Dockerfile. 
+# ACI-Rental
+This repository contains all the entire ACI-Rental project. 
 
 [![Build the ImageService](https://github.com/ACI-Rental/backend/actions/workflows/build-image-service.yml/badge.svg)](https://github.com/ACI-Rental/backend/actions/workflows/build-image-service.yml)
 
@@ -39,6 +39,8 @@ Run `dotnet --list-runtimes` in the terminal, and ensure that `Microsoft.AspNetC
 3. Ensure Docker version 20 or above is installed .
 In a terminal run `docker --version` and validate the version.
 4. Obtain a client secret in the Surfconext environment.
+5. Ensure NodeJS version 16 or above is installed.
+In a terminal run `node --version` and validate the version
 
 ### Run the required dependencies.
 Open a terminal in the root of this repository. In that terminal run `docker compose up -d`. This will launch the following services: 
@@ -54,14 +56,13 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 4. Scroll down to `Client Secret` and enter in your SurfConext client secret.
 5. Press save at the bottom.
 
-### Run the project
+### Run the microservices
 1. Open the solution file in your desired IDE. For this example were using Visual Studio.
 
 2. Restore the the nuget packages in the solution by running `dotnet restore` in the terminal.
 
 ---
 #### Run the migration scripts
-
 ##### Method 1
 1. Open the package manager.
 
@@ -71,7 +72,7 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 
 4. Change the `Default Project` to `ACI.Reservations` and run `Update-Database`.
 
-#### Method 2
+##### Method 2
 1. In a new terminal run `dotnet ef --version` to ensure dotnet ef CLI tools are installed. 
 If they're not installed run `dotnet tool install --global dotnet-ef` and update it after with `dotnet toolupdate --global dotnet-ef`. 
 2. Inside a terminal navigate to `ACI.Images` and run `dotnet ef update-database`.
