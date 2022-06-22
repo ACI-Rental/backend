@@ -1,5 +1,5 @@
 # ACI-Rental
-This repository contains all the entire ACI-Rental project. 
+This repository contains the entire ACI-Rental project. 
 
 [![Build the ImageService](https://github.com/ACI-Rental/backend/actions/workflows/build-image-service.yml/badge.svg)](https://github.com/ACI-Rental/backend/actions/workflows/build-image-service.yml)
 
