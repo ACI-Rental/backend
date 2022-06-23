@@ -82,9 +82,9 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 ##### Method 2
 1. In a new terminal run `dotnet ef --version` to ensure dotnet ef CLI tools are installed. 
 If they're not installed run `dotnet tool install --global dotnet-ef` and update it after with `dotnet tool update --global dotnet-ef`. 
-2. Inside a terminal navigate to `ACI.Images` and run `dotnet ef update-database`.
-4. Inside a terminal navigate to `ACI.Products` and run `dotnet ef update-database`.
-5. Inside a terminal navigate to `ACI.Reservations` and run `dotnet ef update-database`.
+2. Inside a terminal navigate to `ACI.Images` and run `dotnet ef database update.
+4. Inside a terminal navigate to `ACI.Products` and run `dotnet ef database update.
+5. Inside a terminal navigate to `ACI.Reservations` and run `dotnet ef database update`.
 
 ---
 3. Once everything has been set up, run the following projects: `ACI.Images`, `ACI.Products`, `ACI.Reservations`, `ACI.Gateway` .
