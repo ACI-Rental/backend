@@ -1,37 +1,39 @@
-name: Build the OcelotAPIGateway
+name: Build ACI.Gateway
 
 on:
   push:
     branches:
       - main
     paths:
-      - "OcelotAPIGateway/**"
+      - "ACI.Gateway/**"
       - ".github/workflows/build-api-gateway.yml"
   pull_request:
-    branches: 
+    branches:
       - main
       - dev
+      - S6_S2022_dev
     paths:
-      - "OcelotAPIGateway/**"
+      - "ACI.Gateway/**"
       - ".github/workflows/build-api-gateway.yml"
 
 env:
-  PROJECT_PATH: 'OcelotAPIGateway/OcelotAPIGateway.csproj'
+  PROJECT_PATH: 'ACI.Gateway/ACI.Gateway.csproj'
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  build:
+  build-and-lint:
     runs-on: ubuntu-latest
     steps:
-    - name: 'Checkout'
-      uses: actions/checkout@v2
+      - name: 'Checkout'
+        uses: actions/checkout@v2
 
-    - name: 'Install dotnet'
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.x'
+      - name: 'Install dotnet'
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
 
-    - name: 'Restore packages'
-      run: dotnet restore ${{ env.PROJECT_PATH }}
+      - name: 'Restore packages'
+        run: dotnet restore ${{ env.PROJECT_PATH }}
 
-    - name: 'Build project'
-      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
+      - name: 'Compile and run code style checks'
+        run: dotnet build ${{ env.PROJECT_PATH }} /p:TreatWarningsAsErrors=true --no-restore --configuration Release -clp:NoSummary

@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aci-ingress
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: letsencrypt-http
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect@kubernetescrd
+
+spec:
+  tls:
+    - secretName: {{ printf "%s-tls" .Values.hosts.frontend | replace "." "-"}}
+      hosts:
+        - {{ .Values.hosts.frontend }}
+    - secretName: {{ printf "%s-tls" .Values.hosts.gateway | replace "." "-"}}
+      hosts:
+        - {{ .Values.hosts.gateway }}
+
+  rules:
+  - host: {{ .Values.hosts.frontend }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aci-{{ .Values.frontend.name }}
+            port:
+              number: 80
+  - host: {{ .Values.hosts.gateway }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            {{- with index .Values.microservices 0 }}
+            name: aci-{{ .name }}
+            {{- end }}
+            port:
+              number: 80

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aci-{{ .Values.frontend.name }}
+spec:
+  selector:
+    matchLabels:
+      app: aci-{{ .Values.frontend.name }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: aci-{{ .Values.frontend.name }}
+    spec:
+      containers:
+      - name: aci-{{ .Values.frontend.name }}
+        image: {{ .Values.frontend.image }}
+        ports:
+        - containerPort: 80

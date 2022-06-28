@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aci-{{ .Values.frontend.name }}
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: aci-{{ .Values.frontend.name }}

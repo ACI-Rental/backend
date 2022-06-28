@@ -1,0 +1,30 @@
+# Default values for aci-rental-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+hosts:
+  frontend: test.aci.rach.id
+  gateway: test.aci-backend.rach.id
+
+letsencrypt:
+  email: fhict-aci@fontys.nl
+
+frontend:
+  name: frontend
+  image: acirentalservice/frontend:1.4
+
+microservices:
+  - name: gateway
+    image: acirentalservice/gateway:0.0.3
+
+  - name: products
+    image: acirentalservice/products:0.0.3
+
+  - name: reservations
+    image: acirentalservice/reservations:0.0.3
+
+  - name: images
+    image: acirentalservice/images:0.0.3
+
