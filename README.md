@@ -54,12 +54,13 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 2. Login with username: `admin` and password: `admin`
 3. On the left side click on `Identity-Providers`
 4. Click on SurfConext
-5. Scroll down to `Client Secret` and enter in your SurfConext client secret.
+5. Scroll down to `Client Secret` and enter in your SurfConext client secret. 
+If you no longer have this, you can reset it at the [SurfConext SelfService Portal](https://sp.surfconext.nl/).
 6. Press save at the bottom.
 
 ### Run the frontend
-1. Create a new terminal from the root of the repository.
-2. Navigate to `ACI.Frontend`
+1. Clone the [Frontend repository](https://github.com/ACI-Rental/front-end) 
+2. Follow the instructions in the Frontend README
 3. Run `npm install`.
 4. Run `npm run start`.
 
@@ -70,7 +71,7 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 
 ---
 #### Run the migration scripts
-##### Method 1
+##### Method 1 (Using Visual Studio)
 1. Open the package manager.
 
 2. In the package manager console set `Default Project` to `ACI.Images` and run `Update-Database`.
@@ -79,7 +80,7 @@ Open a terminal in the root of this repository. In that terminal run `docker com
 
 4. Change the `Default Project` to `ACI.Reservations` and run `Update-Database`.
 
-##### Method 2
+##### Method 2 (Using the command line interface)
 1. In a new terminal run `dotnet ef --version` to ensure dotnet ef CLI tools are installed. 
 If they're not installed run `dotnet tool install --global dotnet-ef` and update it after with `dotnet tool update --global dotnet-ef`. 
 2. Inside a terminal navigate to `ACI.Images` and run `dotnet ef database update`.

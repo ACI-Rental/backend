@@ -1,0 +1,32 @@
+version: "3.2"
+
+services:
+    mssql:
+        image: mcr.microsoft.com/mssql/server
+        ports:
+            - "127.0.0.1:1433:1433"
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=AdminACI321
+            - MSSQL_PID=Developer
+    mssqlscripts:
+        image: mcr.microsoft.com/mssql-tools
+        depends_on:
+            - mssql
+        command: /bin/bash -c 'until /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P "AdminACI321" -Q "create database Keycloak"; do sleep 5; done'
+    keycloak:
+        image: jboss/keycloak:latest
+        depends_on:
+            - mssql
+            - mssqlscripts
+        ports:
+            - "127.0.0.1:8080:8080"
+        environment:
+            - KEYCLOAK_USER=admin
+            - KEYCLOAK_PASSWORD=admin
+            - DB_VENDOR=mssql
+            - DB_USER=sa
+            - DB_PASSWORD=AdminACI321
+            - DB_ADDR=mssql
+            - DB_DATABASE=Keycloak
+            - PROXY_ADDRESS_FORWARDING=true
